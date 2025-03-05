@@ -45,3 +45,6 @@ ID: MMLPXXR <br>
 Example: 01HC01L = 1st low-resolution slice of coronal Head-Thorax image of mouse 1<br>
 <br>
 BLACKLIST.json contains IDs in format: MMLPXX (where resolution parameter is dropped (because both get blacklisted))
+
+## Data
+**Data/ directory on onedrive**
