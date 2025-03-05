@@ -2,7 +2,7 @@
 Development of a Denoising Deep Learning framework for micro-MRI
 
 ## Used file structure:
-
+<pre>
 |_ Data
     |_ DICOM
         |_ HIGH RES
@@ -30,17 +30,18 @@ Development of a Denoising Deep Learning framework for micro-MRI
     |_ BLACKLIST.json
 |_ PRE-PROCESSING
    |_ Visualizer.py
+</pre>
 
 **Use Visualizer.py to inspect and remove slices**
 
 ## Used slice ID format:
-ID: MMLPXXR
--> MM: Mouse ID
--> L: Location     H = HEAD-THORAX; T = THORAX-ABDOMEN
--> P: Plane        C = Coronal; S = Sagittal; T = Transax
--> XX: Slice ID
--> R: Resoulution  H = HIGH RES; L = LOW RES
-
-Example: 01HC01L = 1st low-resolution slice of coronal Head-Thorax image of mouse 1
-
+ID: MMLPXXR <br>
+-> MM: Mouse ID <br>
+-> L: Location     H = HEAD-THORAX; T = THORAX-ABDOMEN <br>
+-> P: Plane        C = Coronal; S = Sagittal; T = Transax <br>
+-> XX: Slice ID <br>
+-> R: Resoulution  H = HIGH RES; L = LOW RES <br>
+<br>
+Example: 01HC01L = 1st low-resolution slice of coronal Head-Thorax image of mouse 1<br>
+<br>
 BLACKLIST.json contains IDs in format: MMLPXX (where resolution parameter is dropped (because both get blacklisted))
