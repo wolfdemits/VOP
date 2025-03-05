@@ -48,4 +48,4 @@ BLACKLIST.json contains IDs in format: MMLPXX (where resolution parameter is dro
 
 ## Data
 **Data/ directory on onedrive**:
-https://ugentbe-my.sharepoint.com/:f:/r/personal/wolf_demits_ugent_be/Documents/VOP/Data?csf=1&web=1&e=xaTFnX
+https://ugentbe-my.sharepoint.com/:f:/r/personal/florencemarie_muller_ugent_be/Documents/2025_VOP_Project_MicroMRI/Data?csf=1&web=1&e=6nPbnh
