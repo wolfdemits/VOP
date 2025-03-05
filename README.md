@@ -47,4 +47,5 @@ Example: 01HC01L = 1st low-resolution slice of coronal Head-Thorax image of mous
 BLACKLIST.json contains IDs in format: MMLPXX (where resolution parameter is dropped (because both get blacklisted))
 
 ## Data
-**Data/ directory on onedrive**
+**Data/ directory on onedrive**:
+https://ugentbe-my.sharepoint.com/:f:/r/personal/wolf_demits_ugent_be/Documents/VOP/Data?csf=1&web=1&e=xaTFnX
