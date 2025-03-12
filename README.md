@@ -6,22 +6,24 @@ Development of a Denoising Deep Learning framework for micro-MRI
 |_ Data
     |_ DICOM
         |_ HIGH RES
-            |_ MOUSE[i]
-                |_ HEAD-THORAX
+            |_ HEAD-THORAX
+                |_ MOUSE[i]
                     |_ Coronal
                     |_ Sagittal
                     |_ Transax
-                |_ THORAX-ABDOMEN
+            |_ THORAX-ABDOMEN
+                |_ MOUSE[i]
                     |_ Coronal
                     |_ Sagittal
                     |_ Transax
         |_ LOW RES
-            |_ MOUSE[i]
-                |_ HEAD-THORAX
+            |_ HEAD-THORAX
+                |_ MOUSE[i]
                     |_ Coronal
                     |_ Sagittal
                     |_ Transax
-                |_ THORAX-ABDOMEN
+            |_ THORAX-ABDOMEN
+                |_ MOUSE[i]
                     |_ Coronal
                     |_ Sagittal
                     |_ Transax
