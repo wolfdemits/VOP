@@ -1,5 +1,5 @@
 # Vakoverschrijdend project
-Development of a Denoising Deep Learning framework for micro-MRI
+Development of a Denoising and Super-resolution Deep Learning framework for micro-MRI
 
 ## Used file structure:
 <pre>
