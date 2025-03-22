@@ -34,7 +34,7 @@ Development of a Denoising and Super-resolution Deep Learning framework for micr
     |_ preprocessing.py
 </pre>
 
-# Zarr array file structure:
+### Zarr array file structure:
 Resolution -> location -> mouse -> plane -> index (same as DICOM structure)
 
 **Use Visualizer.py to inspect and remove slices**
