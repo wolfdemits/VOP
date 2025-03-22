@@ -1,6 +1,7 @@
 import numpy as np
 import pathlib
 from Slicemanager import Slice_manager
+import traceback
 
 DATA_PATH = pathlib.Path('../Data')
 
@@ -95,6 +96,11 @@ def cropping(lr_scan, hr_scan, threshold=12, padding=2, min_shape=16):
         left_edge = left_edge if left_edge != 0 else None
                 
         cropped_lr.append(lr_scan[upper_edge:lower_edge,right_edge:left_edge,d])
+        # hr images should be cropped twice as much as lr images because dimensions of hr ar twice as big
+        upper_edge = upper_edge * 2 if upper_edge else None
+        lower_edge = lower_edge * 2 if lower_edge else None
+        right_edge = right_edge * 2 if right_edge else None
+        left_edge = left_edge * 2 if left_edge else None
         cropped_hr.append(hr_scan[upper_edge:lower_edge,right_edge:left_edge,d])
 
     return cropped_lr, cropped_hr
@@ -115,18 +121,17 @@ while slicemanager.current_mouse_ID <= last_mouse_id:
 
     try: 
         processed_lr, processed_hr = preprocess_scan(*slicemanager.remove_blacklisted())
-        slicemanager.store_scan(processed_lr, 'LOW RES')
         print(f'{bcolors.OKGREEN}Succesfully preprocessed scan: {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}')
+        try:
+            slicemanager.store_scan(processed_lr, 'LOW RES')
+            slicemanager.store_scan(processed_hr, 'HIGH RES')
+            print(f'{bcolors.OKGREEN}Succesfully stored scan {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}')
+        except Exception as e:
+            print(f'{bcolors.WARNING}Encountered an error while saving scan: {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}')
+            traceback.print_exc()
     except Exception as e:
         print(f'{bcolors.WARNING}Encountered an error while preprocessing scan: {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}')
-        print(e)
-
-    try:
-        slicemanager.store_scan(processed_hr, 'HIGH RES')
-        print(f'{bcolors.OKGREEN}Succesfully stored scan {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}')
-    except Exception as e:
-        print(f'{bcolors.WARNING}Encountered an error while saving scan: {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}')
-        print(e)
+        traceback.print_exc()
 
     print('')
 
