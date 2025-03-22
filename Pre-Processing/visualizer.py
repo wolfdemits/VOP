@@ -108,9 +108,9 @@ def refresh_screen():
     st_lr = slicemanager.lr_metadata['st']
     st_label_val_lr.configure(text=f'{st_lr} mm')
 
-    shape_hr = slicemanager.hr_metadata['shape'][:-1]
+    shape_hr = slicemanager.hr_3D.shape[:-1]
     dim_label_val_hr.configure(text=f'{shape_hr[0]}x{shape_hr[1]} pixels')
-    shape_lr = slicemanager.lr_metadata['shape'][:-1]
+    shape_lr = slicemanager.lr_3D.shape[:-1]
     dim_label_val_lr.configure(text=f'{shape_lr[0]}x{shape_lr[1]} pixels')
 
     slicemanager.check_blacklisted()
@@ -237,17 +237,29 @@ def play():
         play_button.configure(text='‖')
 
 play_button = customtkinter.CTkButton(text="▷", master=root, corner_radius=5, command=lambda: play())
-play_button.place(relx=0.80, rely=0.09, relwidth=0.05, anchor=tkinter.CENTER)
+play_button.place(relx=0.80, rely=0.035, relwidth=0.05, anchor=tkinter.CENTER)
 
-speed_label = customtkinter.CTkLabel(text="Automatic", master=root, text_color="#366abf", font=(None,18))
-speed_label.place(relx = 0.74, rely=0.01)
+speed_label = customtkinter.CTkLabel(text="Automatic:", master=root, text_color="#366abf", font=(None,18))
+speed_label.place(relx = 0.65, rely=0.01)
 def slider_event_speed(value):
     speed_label_value.configure(text=f'speed (interval): {round(10**(value) * 100)/100}s')
 speed_slider = customtkinter.CTkSlider(master=root, from_=0.3, to=-1, command=slider_event_speed, number_of_steps=10)
-speed_slider.place(relx=0.70, rely=0.12, relwidth=0.20)
+speed_slider.place(relx=0.64, rely=0.07, relwidth=0.20)
 speed_slider.set(0.3)
 speed_label_value = customtkinter.CTkLabel(text=f'speed (interval): {round(10**(0.3) * 100)/100}s', master=root, fg_color="transparent", text_color="#5ab098")
-speed_label_value.place(relx=0.71, rely=0.15)
+speed_label_value.place(relx=0.65, rely=0.10)
+
+# Zarr mode
+zarr_label = customtkinter.CTkLabel(text="View Preprocessed:", master=root, text_color="#366abf", font=(None,18))
+zarr_label.place(relx = 0.62, rely=0.17)
+
+def zarr_mode_event():
+    slicemanager.toggle_zarr_mode()
+    refresh_screen()
+    return
+
+zarr_box = customtkinter.CTkCheckBox(text="", width=10, master=root, command=zarr_mode_event)
+zarr_box.place(relx=0.85, rely=0.175)
 
 # Blacklist
 blacklist_label = customtkinter.CTkLabel(text="Blacklist slice: ", master=root, text_color='#c92477', font=(None,18))

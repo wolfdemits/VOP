@@ -31,9 +31,9 @@ import zarr
 #         |_ ... (same as DICOM)
 #     |_ BLACKLIST.json
 # |_ PRE-PROCESSING
-#    |_ Visualizer.py
+#    |_ visualizer.py
 #    |_ Slicemanager.py
-#    |_ Preprocessing.py
+#    |_ preprocessing.py
 
 ## Use Visualizer.py to inspect and remove slices
 
@@ -52,6 +52,17 @@ import zarr
 ## Zarr array file structure:
 # Resolution -> location -> mouse -> plane -> index (same as DICOM structure)
 
+# utility class for colored print outputs
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 class Slice_manager:
     ## Slice manager is a class to navigate through the files containing the MRI images according to the filestructure specified above. 
@@ -80,29 +91,49 @@ class Slice_manager:
         self.hr_3D = None
         self.lr_3D = None
         
+        # load in first scan
         self.get_scan_dicom()
         
         self.load_blacklisted()
+
+        # variable that determines wether the slicemanager will search through DICOM or ZARR files (default: DICOM)
+        self.manage_zarr = False
     
     def get_scan_dicom(self):
-        # open and load current slice
+        # open and load current slice into class variables
         
         # create path object for directory to look in
-        path_hr = self.DATA_PATH / 'DICOM' / 'HIGH RES' / self.current_loc / self.mouse_list[self.current_mouse_ID]  / self.current_plane
+        path_hr = self.DATA_PATH / 'DICOM' / 'HIGH RES' / self.current_loc / self.mouse_list[self.current_mouse_ID] / self.current_plane
         path_lr = self.DATA_PATH / 'DICOM' / 'LOW RES'  / self.current_loc / self.mouse_list[self.current_mouse_ID] / self.current_plane
+
+        def failed_to_load():
+            self.hr_3D = np.zeros((1,1,1))
+            self.lr_3D = np.zeros((1,1,1))
+            self.current_slice_list = [0]
+            self.hr_metadata = { "ps": 'N/A', "st": 'N/A', "shape": ('N/A','N/A','N/A'), "mouse": 'N/A', "loc": 'N/A', "plane": 'N/A'}
+            self.lr_metadata = { "ps": 'N/A', "st": 'N/A', "shape": ('N/A','N/A','N/A'), "mouse": 'N/A', "loc": 'N/A', "plane": 'N/A'}
+            return
+
+        # check if directory exists
+        if not(path_hr.exists() and path_lr.exists()):
+            print(f'{bcolors.WARNING}DICOM path doesn\'t exist, id: {self.get_slice_ID()}{bcolors.ENDC}')
+            failed_to_load()
+            return False
 
         # get a list of all slices in directory
         hr_slices = [f.name for f in path_hr.iterdir() if f.is_file()]
         lr_slices = [f.name for f in path_lr.iterdir() if f.is_file()]
         
         if not (np.array(hr_slices)==np.array(lr_slices)).all():
-            print('Error: LR and HR directory do not correspond')
+            print(f'{bcolors.FAIL}Error: LR and HR directory do not correspond{bcolors.ENDC}')
+            failed_to_load()
             return False
         self.current_slice_list = hr_slices
         self.current_slice = 0
 
         if len(hr_slices) == 0 or len(lr_slices) == 0:
-            print('Error: No slices found in directory')
+            print(f'{bcolors.FAIL}Error: No slices found in directory, id: {self.get_slice_ID()[:-2]}{bcolors.ENDC}')
+            failed_to_load()
             return False
 
         # get some metadata
@@ -131,6 +162,77 @@ class Slice_manager:
 
         return True
     
+    def toggle_zarr_mode(self):
+        if self.manage_zarr:
+            self.manage_zarr = False
+            self.get_scan_dicom()
+        else:
+            self.manage_zarr = True
+            self.get_scan_zarr()
+
+        return
+    
+    def get_scan_zarr(self):
+        # open and load current slice into class variables
+        # ! not the same as load_scan(), which just returns it, but doesn't load into active class variables self.lr and self.hr !
+
+        # create path object for directory to look in
+        path_hr = self.DATA_PATH / 'ZARR_PREPROCESSED' / 'HIGH RES' / self.current_loc / self.mouse_list[self.current_mouse_ID] / self.current_plane
+        path_lr = self.DATA_PATH / 'ZARR_PREPROCESSED' / 'LOW RES'  / self.current_loc / self.mouse_list[self.current_mouse_ID] / self.current_plane
+
+        def failed_to_load():
+            self.hr_3D = np.zeros((1,1,1))
+            self.lr_3D = np.zeros((1,1,1))
+            self.current_slice_list = [0]
+            return
+
+        # check if directory exists
+        if not(path_hr.exists() and path_lr.exists()):
+            print(f'{bcolors.WARNING}Zarr path doesn\'t exist, id: {self.get_slice_ID()}{bcolors.ENDC}')
+            failed_to_load()
+            return False
+
+        # get a list of all slices in directory
+        hr_slices = sorted([f.name for f in path_hr.iterdir() if f.is_dir()])
+        lr_slices = sorted([f.name for f in path_lr.iterdir() if f.is_dir()])
+
+        if not (np.array(hr_slices).shape==np.array(lr_slices).shape):
+            print(f'{bcolors.FAIL}Error: LR and HR directory do not correspond{bcolors.ENDC}')
+            failed_to_load()
+            return False
+        
+        if not (np.array(hr_slices)==np.array(lr_slices)).all():
+            print(f'{bcolors.FAIL}Error: LR and HR directory do not correspond{bcolors.ENDC}')
+            failed_to_load()
+            return False
+        self.current_slice_list = hr_slices
+        self.current_slice = 0
+
+        if len(hr_slices) == 0 or len(lr_slices) == 0:
+            print(f'{bcolors.FAIL}Error: No slices found in directory, id: {self.get_slice_ID()}{bcolors.ENDC}')
+            failed_to_load()
+            return False
+        
+        # create 3D image arrays
+        self.lr_3D = np.zeros((self.lr_metadata.get('shape')[0], self.lr_metadata.get('shape')[1], len(lr_slices)))
+        self.hr_3D = np.zeros((self.hr_metadata.get('shape')[0], self.hr_metadata.get('shape')[1], len(hr_slices)))
+
+        # get scan arrays
+        for i in range(len(lr_slices)):
+            s = self.load_scan('LOW RES', i=i)
+            w = self.lr_metadata.get('shape')[0] - s.shape[0]
+            h = self.lr_metadata.get('shape')[1] - s.shape[1]
+            self.lr_3D[:,:,i] = np.pad(s, ((w - w//2, w//2), (h - h//2, h//2)))
+
+        for i in range(len(hr_slices)):
+            s = self.load_scan('HIGH RES', i=i)
+            w = self.hr_metadata.get('shape')[0] - s.shape[0]
+            h = self.hr_metadata.get('shape')[1] - s.shape[1]
+
+            self.hr_3D[:,:,i] = np.pad(s, ((w - w//2, w//2), (h - h//2, h//2)))
+
+        return True
+    
     def get_slice(self):
         # get current slice array
         return self.lr_3D[:,:,self.current_slice], self.hr_3D[:,:,self.current_slice]
@@ -155,7 +257,9 @@ class Slice_manager:
                         self.current_mouse_ID = self.current_mouse_ID + 1
                     
             # update image
-            self.get_scan_dicom()
+            if self.manage_zarr: self.get_scan_zarr()
+            else: self.get_scan_dicom()
+
             self.current_slice = 0
         else:
             self.current_slice = self.current_slice + 1
@@ -182,7 +286,9 @@ class Slice_manager:
                         self.current_mouse_ID = self.current_mouse_ID - 1
                     
             # update image
-            self.get_scan_dicom()
+            if self.manage_zarr: self.get_scan_zarr()
+            else: self.get_scan_dicom()
+
             self.current_slice = len(self.current_slice_list) - 1
         else:
             self.current_slice = self.current_slice - 1
@@ -193,13 +299,14 @@ class Slice_manager:
         # set current location and load in slices
         # loc is either 'HEAD-THORAX' or 'THORAX-ABDOMEN'
         if not (loc == 'HEAD-THORAX' or loc == 'THORAX-ABDOMEN'):
-            print('Error: invalid location given')
+            print(f'{bcolors.FAIL}Error: invalid location given{bcolors.ENDC}')
             return
         
         self.current_loc = loc
         
         # update image
-        self.get_scan_dicom()
+        if self.manage_zarr: self.get_scan_zarr()
+        else: self.get_scan_dicom()
         
         return
     
@@ -207,38 +314,41 @@ class Slice_manager:
         # set current plane and load in slices
         # plane is either 'Coronal', 'Sagittal' or 'Transax'
         if not (plane == 'Coronal' or plane == 'Sagittal' or plane == 'Transax'):
-            print('Error: invalid plane given')
+            print(f'{bcolors.FAIL}Error: invalid plane given{bcolors.ENDC}')
             return
         
         self.current_plane = plane
         
         # update image
-        self.get_scan_dicom()
+        if self.manage_zarr: self.get_scan_zarr()
+        else: self.get_scan_dicom()
         
         return
     
     def set_slice(self, slice_i):
         # set current slice number and load in slices
         if slice_i >= len(self.current_slice_list) - 1:
-            print('Error: invalid slice id given')
+            print(f'{bcolors.FAIL}Error: invalid slice id given{bcolors.ENDC}')
             return
         
         self.current_slice = slice_i
         
         # update image
-        self.get_scan_dicom()
+        if self.manage_zarr: self.get_scan_zarr()
+        else: self.get_scan_dicom()
         
         return
     
     def set_mouse_id(self, mouse_i):
         if mouse_i >= len(self.mouse_list) - 1:
-            print('Error: invalid slice id given')
+            print(f'{bcolors.FAIL}Error: invalid slice id given{bcolors.ENDC}')
             return
         
         self.current_mouse_ID = mouse_i
         
         # update image
-        self.get_scan_dicom()
+        if self.manage_zarr: self.get_scan_zarr()
+        else: self.get_scan_dicom()
         
         return
     
@@ -250,7 +360,8 @@ class Slice_manager:
             self.current_mouse_ID = self.current_mouse_ID + 1
 
         # update image
-        self.get_scan_dicom()
+        if self.manage_zarr: self.get_scan_zarr()
+        else: self.get_scan_dicom()
         
         return
     
@@ -262,7 +373,8 @@ class Slice_manager:
             self.current_mouse_ID = self.current_mouse_ID - 1
     
         # update image
-        self.get_scan_dicom()
+        if self.manage_zarr: self.get_scan_zarr()
+        else: self.get_scan_dicom()
         
         return
     
@@ -325,7 +437,9 @@ class Slice_manager:
                     self.current_mouse_ID = self.current_mouse_ID + 1
                 
         # update image
-        self.get_scan_dicom()
+        if self.manage_zarr: self.get_scan_zarr()
+        else: self.get_scan_dicom()
+        
         self.current_slice = 0
             
         return
@@ -350,7 +464,9 @@ class Slice_manager:
                     self.current_mouse_ID = self.current_mouse_ID - 1
                 
         # update image
-        self.get_scan_dicom()
+        if self.manage_zarr: self.get_scan_zarr()
+        else: self.get_scan_dicom()
+
         self.current_slice = len(self.current_slice_list) - 1
             
         return
@@ -389,7 +505,7 @@ class Slice_manager:
         res_group = root.require_group(resolution)
         loc_group = res_group.require_group(loc)
         mouse_group = loc_group.require_group(mouse)
-        plane_group = mouse_group.require_group(plane)
+        plane_group = mouse_group.require_group(plane, overwrite=True)
 
         for i, s in enumerate(scan):
             name = str(i)
@@ -403,14 +519,12 @@ class Slice_manager:
         return
     
     def load_scan(self, resolution, loc=None, mouse=None, plane=None, i=None):
-        # loads current scan from preprocessed zarr array
+        # returns current scan from preprocessed zarr array
 
         loc = loc if loc else self.current_loc 
         mouse = mouse if mouse else self.mouse_list[self.current_mouse_ID]
         plane = plane if plane else self.current_plane
         i = i if i else self.current_slice
-
-        print(loc)
         
         # open root store as a group
         root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED'), mode='r')
