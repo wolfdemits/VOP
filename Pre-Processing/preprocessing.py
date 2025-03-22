@@ -4,6 +4,7 @@ from Slicemanager import Slice_manager
 
 DATA_PATH = pathlib.Path('../Data')
 
+# cropping settings
 CROPPING_THRESHOLD = 12
 CROPPING_PADDING = 2
 MIN_CROPPING_SHAPE = 16
