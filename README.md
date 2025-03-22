@@ -6,33 +6,36 @@ Development of a Denoising and Super-resolution Deep Learning framework for micr
 |_ Data
     |_ DICOM
         |_ HIGH RES
-            |_ HEAD-THORAX
-                |_ MOUSE[i]
+            |_ MOUSE[i]
+                |_ HEAD-THORAX
                     |_ Coronal
                     |_ Sagittal
                     |_ Transax
-            |_ THORAX-ABDOMEN
-                |_ MOUSE[i]
+                |_ THORAX-ABDOMEN
                     |_ Coronal
                     |_ Sagittal
                     |_ Transax
         |_ LOW RES
-            |_ HEAD-THORAX
-                |_ MOUSE[i]
+            |_ MOUSE[i]
+                |_ HEAD-THORAX
                     |_ Coronal
                     |_ Sagittal
                     |_ Transax
-            |_ THORAX-ABDOMEN
-                |_ MOUSE[i]
+                 |_ THORAX-ABDOMEN
                     |_ Coronal
                     |_ Sagittal
                     |_ Transax
-    |_ ZARR_NON-PREPROCESSED
     |_ ZARR_PREPROCESSED
+        |_ ... (same as DICOM)
     |_ BLACKLIST.json
 |_ PRE-PROCESSING
-   |_ Visualizer.py
+    |_ visualizer.py
+    |_ Slicemanager.py
+    |_ preprocessing.py
 </pre>
+
+Zarr array file structure: <br>
+Resolution -> location -> mouse -> plane -> index (same as DICOM structure)
 
 **Use Visualizer.py to inspect and remove slices**
 
