@@ -114,7 +114,7 @@ def preprocess_scan(scan_lr, scan_hr):
 # init slicemanager -> puts current slice at beginning, i.e.: 01HC01
 slicemanager = Slice_manager()
 
-last_mouse_id = 0 # ATTENTION: change to 22 on hpc
+last_mouse_id = 1 # ATTENTION: change to 22 on hpc
 
 while slicemanager.current_mouse_ID <= last_mouse_id:
     print( f'{bcolors.OKCYAN}Processing mouse: {slicemanager.mouse_list[slicemanager.current_mouse_ID]}, loc: {slicemanager.current_loc}, plane: {slicemanager.current_plane}{bcolors.ENDC}')
