@@ -8,22 +8,24 @@ import zarr
 # |_ Data
 #     |_ DICOM
 #         |_ HIGH RES
-#             |_ MOUSE[i]
-#                 |_ HEAD-THORAX
+#             |_HEAD-THORAX
+#                 |_ MOUSE[i]
 #                     |_ Coronal
 #                     |_ Sagittal
 #                     |_ Transax
-#                 |_ THORAX-ABDOMEN
+#             |_ THORAX-ABDOMEN
+#                 |_ MOUSE[i]
 #                     |_ Coronal
 #                     |_ Sagittal
 #                     |_ Transax
 #         |_ LOW RES
-#             |_ MOUSE[i]
-#                 |_ HEAD-THORAX
+#             |_HEAD-THORAX
+#                 |_ MOUSE[i]
 #                     |_ Coronal
 #                     |_ Sagittal
 #                     |_ Transax
-#                 |_ THORAX-ABDOMEN
+#             |_ THORAX-ABDOMEN
+#                 |_ MOUSE[i]
 #                     |_ Coronal
 #                     |_ Sagittal
 #                     |_ Transax
@@ -98,6 +100,8 @@ class Slice_manager:
 
         # variable that determines wether the slicemanager will search through DICOM or ZARR files (default: DICOM)
         self.manage_zarr = False
+
+        self.ENABLE_CROPPING = True
     
     def get_scan_dicom(self):
         # open and load current slice into class variables
@@ -507,7 +511,10 @@ class Slice_manager:
         plane = self.current_plane
         
         # open root store as a group
-        root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED'), mode='a')
+        if self.ENABLE_CROPPING == False:
+            root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED_UNCROPPED'), mode='a')
+        else:
+            root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED'), mode='a')
 
         # ensure all groups exist
         res_group = root.require_group(resolution)
@@ -535,7 +542,10 @@ class Slice_manager:
         i = i if i else self.current_slice
         
         # open root store as a group
-        root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED'), mode='r')
+        if self.ENABLE_CROPPING == False:
+            root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED_UNCROPPED'), mode='r')
+        else:
+            root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED'), mode='r')
 
         arr = root[resolution][loc][mouse][plane][str(i)]
 

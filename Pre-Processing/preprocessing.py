@@ -5,6 +5,8 @@ import traceback
 
 DATA_PATH = pathlib.Path('../Data')
 
+ENABLE_CROPPING = False
+
 # cropping settings
 CROPPING_THRESHOLD = 12
 CROPPING_PADDING = 2
@@ -28,7 +30,7 @@ def cropping(lr_scan, hr_scan, threshold=12, padding=2, min_shape=16):
     min_val = np.min(lr_scan)
     max_val = np.max(lr_scan)
     
-    slices_norm = np.uint8((lr_scan - min_val) / (max_val - min_val) * 255) #normalize to 0-255 range, + eps to account for divide by zero
+    slices_norm = np.uint8((lr_scan - min_val) / (max_val - min_val) * 255) #normalize to 0-255 range
 
     H, W, D = slices_norm.shape
     cropped_lr = []
@@ -106,31 +108,37 @@ def cropping(lr_scan, hr_scan, threshold=12, padding=2, min_shape=16):
     return cropped_lr, cropped_hr
 
 def preprocess_scan(scan_lr, scan_hr):
-    # cropping
-    processed_lr, processed_hr = cropping(scan_lr, scan_hr, threshold=CROPPING_THRESHOLD, padding=CROPPING_PADDING, min_shape=MIN_CROPPING_SHAPE)
-
-    return processed_lr, processed_hr
+    if ENABLE_CROPPING:
+        # cropping
+        processed_lr, processed_hr = cropping(scan_lr, scan_hr, threshold=CROPPING_THRESHOLD, padding=CROPPING_PADDING, min_shape=MIN_CROPPING_SHAPE)
+        return processed_lr, processed_hr
+    else: 
+        processed_lr = [scan_lr[:,:,i] for i in range(scan_lr.shape[2])]
+        processed_hr = [scan_hr[:,:,i] for i in range(scan_hr.shape[2])]
+        return processed_lr, processed_hr
 
 # init slicemanager -> puts current slice at beginning, i.e.: 01HC01
 slicemanager = Slice_manager()
+slicemanager.ENABLE_CROPPING = ENABLE_CROPPING
 
-last_mouse_id = 1 # ATTENTION: change to 22 on hpc
+number_of_mice = 7 # ATTENTION: change to len(slicemanager.mouse_list)
+print(f'Total amount of mice: {number_of_mice}')
 
-while slicemanager.current_mouse_ID <= last_mouse_id:
-    print( f'{bcolors.OKCYAN}Processing mouse: {slicemanager.mouse_list[slicemanager.current_mouse_ID]}, loc: {slicemanager.current_loc}, plane: {slicemanager.current_plane}{bcolors.ENDC}')
+for i in range(number_of_mice*6):
+    print(f'{bcolors.OKCYAN}Processing mouse: {slicemanager.mouse_list[round(np.floor(i/6))]}, loc: {slicemanager.current_loc}, plane: {slicemanager.current_plane}{bcolors.ENDC}', flush=True)
 
     try: 
         processed_lr, processed_hr = preprocess_scan(*slicemanager.remove_blacklisted())
-        print(f'{bcolors.OKGREEN}Succesfully preprocessed scan: {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}')
+        print(f'{bcolors.OKGREEN}Succesfully preprocessed scan: {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}', flush=True)
         try:
             slicemanager.store_scan(processed_lr, 'LOW RES')
             slicemanager.store_scan(processed_hr, 'HIGH RES')
-            print(f'{bcolors.OKGREEN}Succesfully stored scan {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}')
+            print(f'{bcolors.OKGREEN}Succesfully stored scan {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}', flush=True)
         except Exception as e:
-            print(f'{bcolors.WARNING}Encountered an error while saving scan: {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}')
+            print(f'{bcolors.WARNING}Encountered an error while saving scan: {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}', flush=True)
             traceback.print_exc()
     except Exception as e:
-        print(f'{bcolors.WARNING}Encountered an error while preprocessing scan: {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}')
+        print(f'{bcolors.WARNING}Encountered an error while preprocessing scan: {slicemanager.get_slice_ID()[:-2]}{bcolors.ENDC}', flush=True)
         traceback.print_exc()
 
     print('')
@@ -138,4 +146,4 @@ while slicemanager.current_mouse_ID <= last_mouse_id:
     # go to next scan
     slicemanager.next_scan()
 
-print(f'{bcolors.OKBLUE}Preprocessing script finished. {bcolors.ENDC}')
+print(f'{bcolors.OKBLUE}Preprocessing script finished. {bcolors.ENDC}', flush=True)

@@ -15,9 +15,11 @@ from Slicemanager import Slice_manager
 
 DATA_PATH = pathlib.Path('../Data')
 BLACKLIST_PATH = DATA_PATH / 'BLACKLIST.json'
+ENABLE_CROPPING = True
     
 ## visualizer init
 slicemanager = Slice_manager(DATA_PATH, BLACKLIST_PATH)
+slicemanager.ENABLE_CROPPING = ENABLE_CROPPING
     
 ## interface
 root = customtkinter.CTk()
