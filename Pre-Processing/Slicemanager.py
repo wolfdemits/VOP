@@ -77,7 +77,7 @@ class Slice_manager:
 
         # get all mice ID by looking in data directory:
         path_mouse_list = self.DATA_PATH / 'DICOM' / 'HIGH RES' / 'HEAD-THORAX'
-        self.mouse_list = [f.name for f in path_mouse_list.iterdir() if f.is_dir()]
+        self.mouse_list = sorted([f.name for f in path_mouse_list.iterdir() if f.is_dir()])
         
         self.current_mouse_ID = 0
         self.current_loc = 'HEAD-THORAX'
@@ -123,11 +123,17 @@ class Slice_manager:
         # get a list of all slices in directory
         hr_slices = [f.name for f in path_hr.iterdir() if f.is_file()]
         lr_slices = [f.name for f in path_lr.iterdir() if f.is_file()]
+
+        if not (len(np.array(hr_slices)) == len(np.array(lr_slices))):
+            print(f'{bcolors.FAIL}Error: LR and HR directory do not correspond{bcolors.ENDC}')
+            failed_to_load()
+            return False
         
         if not (np.array(hr_slices)==np.array(lr_slices)).all():
             print(f'{bcolors.FAIL}Error: LR and HR directory do not correspond{bcolors.ENDC}')
             failed_to_load()
             return False
+        
         self.current_slice_list = hr_slices
         self.current_slice = 0
 
@@ -196,6 +202,11 @@ class Slice_manager:
         hr_slices = sorted([f.name for f in path_hr.iterdir() if f.is_dir()])
         lr_slices = sorted([f.name for f in path_lr.iterdir() if f.is_dir()])
 
+        if not (len(np.array(hr_slices)) == len(np.array(lr_slices))):
+            print(f'{bcolors.FAIL}Error: LR and HR directory do not correspond{bcolors.ENDC}')
+            failed_to_load()
+            return False
+
         if not (np.array(hr_slices).shape==np.array(lr_slices).shape):
             print(f'{bcolors.FAIL}Error: LR and HR directory do not correspond{bcolors.ENDC}')
             failed_to_load()
@@ -233,9 +244,10 @@ class Slice_manager:
 
         return True
     
-    def get_slice(self):
+    def get_slice(self, i=None):
         # get current slice array
-        return self.lr_3D[:,:,self.current_slice], self.hr_3D[:,:,self.current_slice]
+        i = self.current_slice if i == None else i
+        return self.lr_3D[:,:,i], self.hr_3D[:,:,i]
     
     def next_slice(self):
         # go to next mouse and load in slices
@@ -332,10 +344,6 @@ class Slice_manager:
             return
         
         self.current_slice = slice_i
-        
-        # update image
-        if self.manage_zarr: self.get_scan_zarr()
-        else: self.get_scan_dicom()
         
         return
     
