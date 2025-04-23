@@ -1,10 +1,13 @@
 import shutil
-import torch # type: ignore
+import torch
 import numpy as np
-from tensorboardX import SummaryWriter # type: ignore
+from tensorboardX import SummaryWriter
 import matplotlib
 import matplotlib.pyplot as plt
 from pathlib import Path
+from pytorch_msssim import ssim
+import scipy
+import torch.nn.functional as F
 
 from DatasetClasses_MicroMRI import Mean_Normalisation
 
@@ -36,12 +39,13 @@ def Logbook_Initialization(dim, logbook_pathname, logbook_params, model_params):
             ## Run params
             'NameRun': logbook_params[0], 
             'PlanesData': logbook_params[1],
+            'RegionsData': logbook_params[2],
             
             ## Training Params
-            'num_in_channels': logbook_params[2], 
-            'batch_size': logbook_params[3],
-            'learn_rate': logbook_params[4],         
-            'LR_decay': logbook_params[5],
+            'num_in_channels': logbook_params[3], 
+            'batch_size': logbook_params[4],
+            'learn_rate': logbook_params[5],         
+            'LR_decay': logbook_params[6],
             
             ## Model UNet
             'dimension': model_params[0],
@@ -143,3 +147,61 @@ def Intermediate_Visualization(batch, LR_Img, DL_Img, HR_Img, EpochNumber, num_i
             plt.close(fig)
 
     return
+
+def ssim_loss(img1, img2):
+    return 1 - ssim(img1, img2)
+
+class HybridLoss(torch.nn.Module):
+    def __init__(self, alpha=0.8):
+        """
+        Hybrid loss function combining MSE and SSIM.
+        Args:
+            alpha (float): Weight for MSE loss (default = 0.8)
+        """
+        super(HybridLoss, self).__init__()
+        self.alpha = alpha
+        self.mse = torch.nn.MSELoss()
+
+    def forward(self, img1, img2):
+        mse_loss = self.mse(img1, img2)
+        ssim_value = ssim_loss(img1, img2)
+        return self.alpha * mse_loss + (1 - self.alpha) * ssim_value  # (1 - SSIM)
+    
+def Power(x):
+    s = np.sum(x**2)
+    return s/x.size
+
+def compute_SNR2(LR, HR):
+    # this function is only applicable for groundtruth or model output highres images! other inputs will give incorrect outputs!
+    #normalise = lambda x: (x - np.mean(x)) / np.std(x)
+    normalise = lambda x: (x - x.mean()) / x.std()
+    HR_norm = normalise(HR)
+    LR_norm = normalise(LR)
+    LR_int = scipy.ndimage.zoom(LR_norm, zoom=2, order=0)
+    return Power(HR_norm) /  Power(LR_int - HR_norm)
+
+def compute_SNR(LR, HR):
+    # Ensure both tensors are on the same device
+    device = LR.device
+    HR = HR.to(device)
+
+    # Resize HR to match LR if needed
+    if HR.shape != LR.shape:
+        HR = F.interpolate(HR, size=LR.shape[2:], mode='bilinear', align_corners=False)
+
+    # Normalize both to [0, 1]
+    HR_min, HR_max = HR.amin(dim=(1, 2, 3), keepdim=True), HR.amax(dim=(1, 2, 3), keepdim=True)
+    LR_min, LR_max = LR.amin(dim=(1, 2, 3), keepdim=True), LR.amax(dim=(1, 2, 3), keepdim=True)
+
+    HR_norm = (HR - HR_min) / (HR_max - HR_min + 1e-8)
+    LR_norm = (LR - LR_min) / (LR_max - LR_min + 1e-8)
+
+    # Compute noise and SNR
+    noise = HR_norm - LR_norm
+    signal_power = torch.mean(HR_norm ** 2, dim=(1, 2, 3))
+    noise_power = torch.mean(noise ** 2, dim=(1, 2, 3))
+    
+    snr_batch = 10 * torch.log10(signal_power / (noise_power + 1e-8))
+
+    # Return average SNR over batch
+    return snr_batch.mean().item()
