@@ -1,13 +1,9 @@
 """ Training Script for Micro-MRI Super-Resolution """
-#%%
-
-
 # Import necessary modules
 import datetime
 import pathlib
 import numpy as np
-import torch # type: ignore
-
+import torch
 
 # Import created functions and classes
 from Helper_Functions_MRI import Tensorboard_Initialization, Logbook_Initialization
@@ -16,23 +12,21 @@ from DatasetClasses_MicroMRI import Get_DataLoaders
 from UNet_Model_MRI import UNet, count_model_parameters
 
 # Path Definitions
+DATA_PATH_LOCAL = pathlib.Path('./Data/ZARR_PREPROCESSED')
+RESULT_PATH_LOCAL = pathlib.Path('./ML Model/Without_SR_Module')
 
-CODE_PATH_LOCAL = pathlib.Path('C:\\Users\\daanv\\Ugent\\vop\\Existing_Scripts\\Existing_Scripts')
-DATA_PATH_LOCAL = pathlib.Path('C:\\Users\\daanv\\Ugent\\vop\\VOP-main\\Data\\ZARR_PREPROCESSED')
-RESULT_PATH_LOCAL = pathlib.Path('C:\\Users\\daanv\\Ugent\\vop\\Existing_Scripts')
-
-
+# TODO: change
 CODE_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
 DATA_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
 RESULT_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
 
+LOCAL = True
 
-if CODE_PATH_LOCAL.exists():    # If you want to run locally 
-    CODE_PATH = CODE_PATH_LOCAL
+if LOCAL:    # If you want to run locally
     DATA_PATH = DATA_PATH_LOCAL
     RESULT_PATH = RESULT_PATH_LOCAL
 
-elif CODE_PATH_UGENT.exists():  # If you want to run on the HPC 
+else:  # If you want to run on the HPC 
     CODE_PATH = CODE_PATH_UGENT
     DATA_PATH = DATA_PATH_UGENT
     RESULT_PATH = RESULT_PATH_UGENT
@@ -53,13 +47,16 @@ path2zarr = DATA_PATH
 #####################
 
 # Enter list of trainings subjects
-SubjTrain = ['Mouse01_Head_Thorax', 'Mouse01_Thorax_Abdomen']
+SubjTrain = ['Mouse01']
 
 # Enter list of validation subjects
-SubjVal = ['Mouse02_Head_Thorax','Mouse02_Thorax_Abdomen']
+SubjVal = ['Mouse02']
 
 # Enter planes
 PlanesData = ['Coronal', 'Sagittal', 'Transax']
+
+# Enter planes
+RegionsData = ['HEAD-THORAX', 'THORAX-ABDOMEN']
 
 # Give your run a name
 NAME_RUN = 'NAME_' + str(datetime.datetime.now().strftime("%Y%m%d_%H_%M_%S")) 
@@ -101,7 +98,7 @@ SUBJECTS_TO_SHOW = [SubjTrain[0], SubjVal[0]]
 
 print('Dataset Definition', flush=True)
 
-TrainLoader, ValLoader = Get_DataLoaders(SubjTrain, SubjVal, path2zarr, PlanesData, batch_size, num_in_channels)
+TrainLoader, ValLoader = Get_DataLoaders(SubjTrain, SubjVal, path2zarr, PlanesData, RegionsData, batch_size, num_in_channels)
 
 
 #--------------------------------------------------------------------------------------------------------------------
@@ -124,11 +121,13 @@ print('# parameters = ', count_model_parameters(DL_Model), flush=True)  # Print 
 # Load Model: Check if CUDA-compatible GPU is availble for use
 
 if torch.cuda.is_available():
+    print('Using CUDA')
     device = torch.device('cuda')
     MIXED_PRECISION = True      # uses both 16-bit and 32-bit floating point operations during training
                                 # -> This can speed up training by using half-precision arithmetic (16-bit) where possible
                                 #    and uses less memory. 
 else:        
+    print('Using cpu')
     device  = torch.device('cpu')
     MIXED_PRECISION = False
 
@@ -148,7 +147,7 @@ loss_criterion = torch.nn.MSELoss()
 
 # Initialize LogBook
 
-LogBook_Params = [NAME_RUN, PlanesData, num_in_channels, batch_size, LEARN_RATE, LR_DECAY]
+LogBook_Params = [NAME_RUN, PlanesData, RegionsData, num_in_channels, batch_size, LEARN_RATE, LR_DECAY]
 ModelUNet_Params = [dim, num_in_channels, features_main, features_skip, conv_kernel_size, down_mode, up_mode, activation, residual_connection] 
 Logbook_Initialization(dim, path2logbook, LogBook_Params, ModelUNet_Params) 
 
@@ -208,7 +207,7 @@ for current_epoch in range(start_epoch, EPOCHS):
         optimizer.zero_grad()
 
         if MIXED_PRECISION:
-            with torch.amp.GradScaler('cuda'):
+            with torch.amp.autocast('cuda'):
                 DL_Img = DL_Model(LR_Img)   
                 loss = loss_criterion(DL_Img, HR_Img)  
             grad_scaler.scale(loss).backward() 
@@ -272,7 +271,7 @@ for current_epoch in range(start_epoch, EPOCHS):
 
         with torch.no_grad(): 
             if MIXED_PRECISION:
-                with torch.amp.GradScaler('cuda'):
+                with torch.amp.autocast('cuda'):
                     DL_Img = DL_Model(LR_Img) 
                     loss = loss_criterion(DL_Img, HR_Img)
             else:

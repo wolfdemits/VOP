@@ -38,12 +38,13 @@ class Dataset2D_MicroMRI(torch.utils.data.Dataset):
         * getitem  --> defines a dictionary with all info about a certain pair
     """
 
-    def __init__(self, PathZarr, SubjList, Planes, num_input_slices, RandomFlip=False):
+    def __init__(self, PathZarr, SubjList, num_input_slices, RandomFlip=False, Planes = ["Coronal", "Sagittal", "Transax"], Regions=["THORAX-ABDOMEN", "HEAD-THORAX"]):
         
         # Define the "self" variables so that they can be called in the "getitem"
         self.PathZarr = PathZarr
         self.SubjList = SubjList
         self.Planes = Planes
+        self.Regions = Regions
         self.RandomFlip = RandomFlip 
         self.num_input_slices = num_input_slices
 
@@ -56,23 +57,25 @@ class Dataset2D_MicroMRI(torch.utils.data.Dataset):
             
             for Plane in Planes:
 
-                # Now you are in a folder with maps for each slice --> need to enter each slice map and get first file
-                
-                # Paths to HR images
-                
-                region = (Subj.split('_')[1] + '-' + Subj.split('_')[2]).upper()
-                id = Subj.split('_')[0]
-                
-                self.path2slices_HR = PathZarr / 'HIGH RES' / region / id / Plane
-                self.path2slices_HR = Path(self.path2slices_HR).absolute()
-                slicesFolder_HR = [path for path in self.path2slices_HR.iterdir() if not path.name.startswith('.')] 
+                for Region in Regions:
 
-                # Paths to LR images
-                self.path2slices_LR = PathZarr / 'LOW RES' / region / id / Plane
-                self.path2slices_LR = Path(self.path2slices_LR)
+                    # Now you are in a folder with maps for each slice --> need to enter each slice map and get first file
+                    
+                    # Paths to HR images
+                    
+                    # region = (Subj.split('_')[1] + '-' + Subj.split('_')[2]).upper()
+                    # id = Subj.split('_')[0]
+                    
+                    self.path2slices_HR = PathZarr / 'HIGH RES' / Region / Subj / Plane
+                    self.path2slices_HR = Path(self.path2slices_HR).absolute()
+                    slicesFolder_HR = [path for path in self.path2slices_HR.iterdir() if not path.name.startswith('.')] 
 
-                for SliceIndex, _ in enumerate(slicesFolder_HR): 
-                    self.search.append((Subj, Plane, SliceIndex))
+                    # Paths to LR images
+                    self.path2slices_LR = PathZarr / 'LOW RES' / Region / Subj / Plane
+                    self.path2slices_LR = Path(self.path2slices_LR)
+
+                    for SliceIndex, _ in enumerate(slicesFolder_HR): 
+                        self.search.append((Subj, Plane, SliceIndex))
 
         
 
@@ -186,7 +189,7 @@ class CollateFn2D_MicroMRI():
 ### Dataloader ###
 ##################
 
-def Get_DataLoaders(SubjTrain, SubjVal, PathZarr, Planes, batch_size, num_in_channels):
+def Get_DataLoaders(SubjTrain, SubjVal, PathZarr, Planes, Regions, batch_size, num_in_channels):
     
     # Load training data
     
@@ -194,6 +197,7 @@ def Get_DataLoaders(SubjTrain, SubjVal, PathZarr, Planes, batch_size, num_in_cha
                 PathZarr = PathZarr,
                 SubjList = SubjTrain,
                 Planes = Planes,
+                Regions=Regions,
                 num_input_slices = num_in_channels,
                 RandomFlip = True)
     
@@ -206,6 +210,7 @@ def Get_DataLoaders(SubjTrain, SubjVal, PathZarr, Planes, batch_size, num_in_cha
                 PathZarr = PathZarr,
                 SubjList = SubjVal,
                 Planes = Planes,
+                Regions=Regions,
                 num_input_slices = num_in_channels,
                 RandomFlip = True)
     

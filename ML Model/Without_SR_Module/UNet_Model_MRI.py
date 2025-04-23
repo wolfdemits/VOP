@@ -248,6 +248,7 @@ class UpSample(nn.Module):
         super().__init__()
 
         self.dim = dim
+
         mode = 'bilinear' if dim=='2d' else 'trilinear'
 
         self.Up = nn.Upsample(scale_factor=2, mode=mode, align_corners=True)

@@ -36,12 +36,13 @@ def Logbook_Initialization(dim, logbook_pathname, logbook_params, model_params):
             ## Run params
             'NameRun': logbook_params[0], 
             'PlanesData': logbook_params[1],
+            'RegionsData': logbook_params[2],
             
             ## Training Params
-            'num_in_channels': logbook_params[2], 
-            'batch_size': logbook_params[3],
-            'learn_rate': logbook_params[4],         
-            'LR_decay': logbook_params[5],
+            'num_in_channels': logbook_params[3], 
+            'batch_size': logbook_params[4],
+            'learn_rate': logbook_params[5],         
+            'LR_decay': logbook_params[6],
             
             ## Model UNet
             'dimension': model_params[0],
