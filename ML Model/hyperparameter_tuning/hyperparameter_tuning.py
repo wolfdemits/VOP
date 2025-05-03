@@ -71,7 +71,7 @@ print(NAME_RUN, flush=True)
 
 ### Tuning Hyperparameters / constant hyperparameters ###
 num_epochs = 1 #5
-batch_size = 8
+batch_size = 8 #32
 dim = '2d'
 num_in_channels = 1
 LR_DECAY = 0.9 #adapt?
