@@ -75,19 +75,19 @@ print(NAME_RUN, flush=True)
 
 dim = '2d'
 num_in_channels = 1                     # Can be adjusted if wanted
-features_main = [64, 128, 256, 512]     # Can be adjusted if wanted
-features_skip = [64, 128, 256]          # Can be adjusted if wanted
+features_main = [128, 256, 256]     # Can be adjusted if wanted
+features_skip = features_main[:-1]          # Can be adjusted if wanted
 conv_kernel_size = 3                   
-down_mode = 'maxpool'                 ## Options: maxpool, meanpool, convStrided
-up_mode = 'upsample'                  ## Options: upsample, upconv
+down_mode = 'convStrided'                 ## Options: maxpool, meanpool, convStrided
+up_mode = 'upconv'                  ## Options: upsample, upconv
 activation = 'ReLU'                   ## Options: ReLU, LeakyReLU, PReLU
-residual_connection = True
+residual_connection = False
 
 
 # Training Hyperparameters
 
-batch_size = 16
-LEARN_RATE = 1e-5
+batch_size = 32
+LEARN_RATE = 0.004113034307474023
 LR_DECAY = 1
 EPOCHS = 200
 
@@ -143,13 +143,13 @@ DL_Model = DL_Model.to(device)
 
 # Set-up 
 
-optimizer = torch.optim.Adam(DL_Model.parameters(), lr=LEARN_RATE)
-scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, LR_DECAY)
+optimizer = torch.optim.RMSprop(DL_Model.parameters(), lr=LEARN_RATE)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, LR_DECAY)
 #grad_scaler = torch.amp.GradScaler('cuda')
 grad_scaler = GradScaler()
 
 
-loss_criterion = torch.nn.MSELoss()
+loss_criterion = torch.nn.HybridLoss(alpha=0.6)
 
 
 #--------------------------------------------------------------------------------------------------------------------

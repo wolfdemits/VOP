@@ -228,7 +228,7 @@ def ssim_loss(img1, img2):
 
 # Define Hybrid Loss Function
 class HybridLoss(torch.nn.Module):
-    def __init__(self, alpha=0.8):
+    def __init__(self, alpha=0.3):
         """
         Hybrid loss function combining MSE and SSIM.
         Args:
