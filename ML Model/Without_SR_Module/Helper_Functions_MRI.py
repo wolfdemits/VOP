@@ -1,10 +1,12 @@
 import shutil
-import torch # type: ignore
+import torch
 import numpy as np
-from tensorboardX import SummaryWriter # type: ignore
+from tensorboardX import SummaryWriter
 import matplotlib
 import matplotlib.pyplot as plt
 from pathlib import Path
+import scipy
+import torch.nn.functional as F
 
 from DatasetClasses_MicroMRI import Mean_Normalisation
 
@@ -144,3 +146,99 @@ def Intermediate_Visualization(batch, LR_Img, DL_Img, HR_Img, EpochNumber, num_i
             plt.close(fig)
 
     return
+    
+def Power(x):
+    s = np.sum(x**2)
+    return s/x.size
+
+def compute_SNR2(LR, HR):
+    # this function is only applicable for groundtruth or model output highres images! other inputs will give incorrect outputs!
+    #normalise = lambda x: (x - np.mean(x)) / np.std(x)
+    normalise = lambda x: (x - x.mean()) / x.std()
+    HR_norm = normalise(HR)
+    LR_norm = normalise(LR)
+    LR_int = scipy.ndimage.zoom(LR_norm, zoom=2, order=0)
+    return Power(HR_norm) /  Power(LR_int - HR_norm)
+
+def compute_SNR(LR, HR):
+    # Ensure both tensors are on the same device
+    device = LR.device
+    HR = HR.to(device)
+
+    # Resize HR to match LR if needed
+    if HR.shape != LR.shape:
+        HR = F.interpolate(HR, size=LR.shape[2:], mode='bilinear', align_corners=False)
+
+    # Normalize both to [0, 1]
+    HR_min, HR_max = HR.amin(dim=(1, 2, 3), keepdim=True), HR.amax(dim=(1, 2, 3), keepdim=True)
+    LR_min, LR_max = LR.amin(dim=(1, 2, 3), keepdim=True), LR.amax(dim=(1, 2, 3), keepdim=True)
+
+    HR_norm = (HR - HR_min) / (HR_max - HR_min + 1e-8)
+    LR_norm = (LR - LR_min) / (LR_max - LR_min + 1e-8)
+
+    # Compute noise and SNR
+    noise = HR_norm - LR_norm
+    signal_power = torch.mean(HR_norm ** 2, dim=(1, 2, 3))
+    noise_power = torch.mean(noise ** 2, dim=(1, 2, 3))
+    
+    snr_batch = 10 * torch.log10(signal_power / (noise_power + 1e-8))
+
+    # Return average SNR over batch
+    return snr_batch.mean().item()
+
+# Define SSIM function
+def _gaussian_window(channels, kernel_size=11, sigma=1.5, device='cpu'):
+    coords = torch.arange(kernel_size, device=device) - kernel_size//2
+    g = torch.exp(-(coords**2) / (2 * sigma**2))
+    g = (g / g.sum()).unsqueeze(1) @ (g / g.sum()).unsqueeze(0)
+    return g.expand(channels, 1, kernel_size, kernel_size)
+
+def ssim_index(x, y, data_range=1.0, window_size=11, sigma=1.5, K=(0.01, 0.03)):
+    """
+    x, y: [B, C, H, W], float tensors, in [0, data_range]
+    returns: scalar SSIM index averaged over batch and channels
+    """
+    C = x.shape[1]
+    win = _gaussian_window(C, window_size, sigma, device=x.device)
+
+    # means
+    mu_x = F.conv2d(x, win, padding=window_size//2, groups=C)
+    mu_y = F.conv2d(y, win, padding=window_size//2, groups=C)
+
+    mu_x2 = mu_x * mu_x
+    mu_y2 = mu_y * mu_y
+    mu_xy = mu_x * mu_y
+
+    # variances / covariances
+    sigma_x2 = F.conv2d(x * x, win, padding=window_size//2, groups=C) - mu_x2
+    sigma_y2 = F.conv2d(y * y, win, padding=window_size//2, groups=C) - mu_y2
+    sigma_xy = F.conv2d(x * y, win, padding=window_size//2, groups=C) - mu_xy
+
+    C1 = (K[0] * data_range) ** 2
+    C2 = (K[1] * data_range) ** 2
+
+    num = (2 * mu_xy + C1) * (2 * sigma_xy + C2)
+    den = (mu_x2 + mu_y2 + C1) * (sigma_x2 + sigma_y2 + C2)
+    ssim_map = num / den
+
+    return ssim_map.mean()
+
+def ssim_loss(img1, img2):
+    return 1- ssim_index(img1,img2)
+
+# Define Hybrid Loss Function
+class HybridLoss(torch.nn.Module):
+    def __init__(self, alpha=0.8):
+        """
+        Hybrid loss function combining MSE and SSIM.
+        Args:
+            alpha (float): Weight for MSE loss (default = 0.😎
+        """
+        super(HybridLoss, self).__init__()
+        self.alpha = alpha
+        self.mse = torch.nn.MSELoss()
+
+    def forward(self, img1, img2):
+        mse_loss = self.mse(img1, img2)
+        ssim_value = ssim_loss(img1, img2)
+        return self.alpha * mse_loss + (1 - self.alpha) * ssim_value  # (1 - SSIM)

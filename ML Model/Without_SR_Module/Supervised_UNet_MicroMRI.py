@@ -4,23 +4,30 @@ import datetime
 import pathlib
 import numpy as np
 import torch
+from torch.cuda.amp import GradScaler
 
 # Import created functions and classes
 from Helper_Functions_MRI import Tensorboard_Initialization, Logbook_Initialization
 from Helper_Functions_MRI import Intermediate_Visualization
 from DatasetClasses_MicroMRI import Get_DataLoaders
 from UNet_Model_MRI import UNet, count_model_parameters
+from Helper_Functions_MRI import HybridLoss
 
 # Path Definitions
 DATA_PATH_LOCAL = pathlib.Path('./Data/ZARR_PREPROCESSED')
 RESULT_PATH_LOCAL = pathlib.Path('./ML Model/Without_SR_Module')
 
 # TODO: change
-CODE_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
-DATA_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
-RESULT_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
+#CODE_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
+#DATA_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
+#RESULT_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
 
-LOCAL = True
+CODE_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Without_SR_Module')
+DATA_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Data/ZARR_PREPROCESSED')
+RESULT_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Without_SR_Module/Results')
+
+
+LOCAL = False
 
 if LOCAL:    # If you want to run locally
     DATA_PATH = DATA_PATH_LOCAL
@@ -46,11 +53,11 @@ path2zarr = DATA_PATH
 ## START OF SCRIPT ##
 #####################
 
-# Enter list of trainings subjects
-SubjTrain = ['Mouse01']
+# Enter list of training subjects
+SubjTrain = ['Mouse01', 'Mouse02', 'Mouse03', 'Mouse04', 'Mouse05', 'Mouse08', 'Mouse09', 'Mouse11', 'Mouse12','Mouse13', 'Mouse14', 'Mouse15', 'Mouse17', 'Mouse18', 'Mouse19', 'Mouse20', 'Mouse21', 'Mouse23']
 
 # Enter list of validation subjects
-SubjVal = ['Mouse02']
+SubjVal = ['Mouse10', 'Mouse06']
 
 # Enter planes
 PlanesData = ['Coronal', 'Sagittal', 'Transax']
@@ -79,7 +86,7 @@ residual_connection = True
 
 # Training Hyperparameters
 
-batch_size = 4
+batch_size = 16
 LEARN_RATE = 1e-5
 LR_DECAY = 1
 EPOCHS = 200
@@ -90,7 +97,7 @@ RESUME_CKPT = False  # IF TRUE, we resume training from last checkpoint
 # Selection of Slices and Subjects to visualise during training for tracking progress
 
 SLICES_TO_SHOW = range(0, 25, 300)
-SUBJECTS_TO_SHOW = [SubjTrain[0], SubjVal[0]]
+SUBJECTS_TO_SHOW = [SubjTrain[0], SubjTrain[-1], SubjVal[0], SubjVal[-1]]
 
 
 #--------------------------------------------------------------------------------------------------------------------
@@ -138,7 +145,10 @@ DL_Model = DL_Model.to(device)
 
 optimizer = torch.optim.Adam(DL_Model.parameters(), lr=LEARN_RATE)
 scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, LR_DECAY)
-grad_scaler = torch.amp.GradScaler('cuda')
+#grad_scaler = torch.amp.GradScaler('cuda')
+grad_scaler = GradScaler()
+
+
 loss_criterion = torch.nn.MSELoss()
 
 
