@@ -73,9 +73,9 @@ class Slice_manager:
     ## and provides functions that keep track of which slices have been blacklisted. 
     ## The class can also manage loading and storing of zarr arrays, and load dicom files. 
     
-    def __init__(self, DATA_PATH=pathlib.Path('../Data'), BLACKLIST_PATH=pathlib.Path('../Data') / 'BLACKLIST.json'):
+    def __init__(self, DATA_PATH=pathlib.Path('../Data')):
         self.DATA_PATH = DATA_PATH
-        self.BLACKLIST_PATH = BLACKLIST_PATH
+        self.BLACKLIST_PATH = DATA_PATH / 'BLACKLIST.json'
 
         # get all mice ID by looking in data directory:
         path_mouse_list = self.DATA_PATH / 'DICOM' / 'HIGH RES' / 'HEAD-THORAX'
@@ -101,7 +101,7 @@ class Slice_manager:
         # variable that determines wether the slicemanager will search through DICOM or ZARR files (default: DICOM)
         self.manage_zarr = False
 
-        self.ENABLE_CROPPING = True
+        self.DIFFUSION = False
     
     def get_scan_dicom(self):
         # open and load current slice into class variables
@@ -511,8 +511,8 @@ class Slice_manager:
         plane = self.current_plane
         
         # open root store as a group
-        if self.ENABLE_CROPPING == False:
-            root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED_UNCROPPED'), mode='a')
+        if self.DIFFUSION == True:
+            root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED_DIFFUSION'), mode='a')
         else:
             root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED'), mode='a')
 
@@ -542,8 +542,8 @@ class Slice_manager:
         i = i if i else self.current_slice
         
         # open root store as a group
-        if self.ENABLE_CROPPING == False:
-            root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED_UNCROPPED'), mode='r')
+        if self.DIFFUSION == True:
+            root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED_DIFFUSION'), mode='r')
         else:
             root = zarr.open_group(str(self.DATA_PATH / 'ZARR_PREPROCESSED'), mode='r')
 
