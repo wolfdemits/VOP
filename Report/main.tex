@@ -455,6 +455,33 @@ In addition to quantitative measurements, a visual inspection can also be done t
 
 \section{Results}
 \subsection{First results}
+First the model without superresolution was runned on the hpc to check if everything went correctly. With this first running the pre-processing steps could be verified and the first results could be observed. 
+The training was done on the accelgor cluster. Mouse 1 until mouse 17 were used as training, while mouse 18 until mouse 23 were used as validation.  
+The features\_main were set to [64, 128, 256, 512], with corresponding features\_skip values of [64, 128, 256]. Max pooling was used for downsampling, and upsampling was applied for the upsampling steps. The activation function was ReLU, and residual connections were enabled True.
+The model was trained with a batch size of 16 and a learning rate of 1e-5. The learning rate decay factor was set to 1. Training was conducted over 200 epochs. The Adam optimizer was used along with an ExponentialLR scheduler. MSE was employed as the loss function.
+
+In Figure \ref{fig:coronal_first}, Figure \ref{fig:transax_first} and Figure \ref{fig:sagittal_first} the results can be observed. Each image depicts another plane of the mouse.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse01_Coronal_1_epoch_11.png}
+    \caption{First results of mouse 1 coronal plane slice 1 after 11th epoch.}
+    \label{fig:coronal_first}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse01_Transax_24_epoch_11.png}
+    \caption{First results of mouse 1 transaxial plane slice 24 after 11th epoch.}
+    \label{fig:transax_first}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse18_Sagittal_11_epoch_11.png}
+    \caption{First results of mouse 18 sagittal plane slice 11 after 11th epoch.}
+    \label{fig:sagittal_first}
+\end{figure*}
 
 \subsection{Trained hyperparameters}
 The hyperparameter optimization process conducted with Oputna evaluated multiple architertural and training configurations for a U-Net based model. Trail 54 emerges as the best-performing configuration, achieving a validation MSE of 0.0984. 
@@ -467,6 +494,12 @@ This combination of hyperparameters resulted in the lowest validation MSE across
 
 \section{Discussion}
 \subsection{First results}
+After obtaining the first results, a visual validation was made. At first sight, the results were very promising. 
+Looking at the Figure \ref{fig:coronal_first}, Figure \ref{fig:transax_first} and Figure \ref{fig:sagittal_first} shows that the deep learning (DL), in the middle, has clearly higher quality and sharper details compared to the low resolution (LR) image at the left side. The DL image approaches the high resolution (HR), but still has noise and structures that are not totally visible. In all planes the mean intensity is consistent, which suggest that the model does not systematically over- or underpredict intensity values. The mean intensity is always 1 for all images in all planes.
+In Figure \ref{fig:coronal_first}, the maximum intensity of the DL image is the same as that of the LR, which both have an intensity of 5, while the maximum intensity of the HR is higher with an intensity of 6. This indicates small intensity bias or scaling difference. This is in contrast with Figure \ref{fig:sagittal_first} were the maximum intensity (equal to 4) is lower than in the LR and HR images, where the mean value is 5. This due to the liver that is smeared out and more depicted gray as in both low and HR scans.
+Looking at the edges of the DL images it shows that these are generally more smeared out and less sharp than in the HR images. 
+The noise of the LR is reduced in all planes with minimal loss important structural information. In some case there is some loss of information in the DL image eg in the sagittal plane it can be observed that the rib cage is not totally depicted well.
+As said, the results are very promising but there is also room for improvement. The first step in this process is training the hyperparameters. 
 
 \subsection{Trained hyperparameters}
 Trial 54 achieved a strong validation MSE of 0.0984. Several key hyperparameter choices reflect current best practices in deep learning for medical image restoration, while others diverge in notable ways. 
