@@ -452,16 +452,21 @@ A higher CNR value indicates better differentiation of the region of interest fr
 
 \subsection{Visual comparison}
 In addition to quantitative measurements, a visual inspection can also be done to evaluate the quality of the reconstructed images. The visual comparision will compare the residuals of high-resolution and low-resolution images to the residuals of high-resolution and deep-learning images. Ideally the residual of high-resolution and deep-learning images should be close to zero in most regions, indicating an accurate reconstruction. 
+
 \section{Results}
+\subsection{First results}
 
 \subsection{Trained hyperparameters}
 The hyperparameter optimization process conducted with Oputna evaluated multiple architertural and training configurations for a U-Net based model. Trail 54 emerges as the best-performing configuration, achieving a validation MSE of 0.0984. 
 This model uses a structure with convolutional feature depths of 128,256,256 for the main layers. Downsampling was performed using strided convolutions and upsampling with transposed convolutions. The ReLU activation function was used and residual output connections were disabled. Optimization was done using the RMSprop algorithm with initial learning rate of 0.04112 in combination with the ReduceLROnPlateau learning rate scheduler. The model was trained using a hybrid loss function that combines MSE and SSIM with the weighting controlled by a parameter $\alpha=0.3$.
 This combination of hyperparameters resulted in the lowest validation MSE across all evaluated trials, indicating strong performance in reconstructing high-resolution images. 
 
+\subsection{Results after hyperparameter training}
 
+\subsection{Validation}
 
 \section{Discussion}
+\subsection{First results}
 
 \subsection{Trained hyperparameters}
 Trial 54 achieved a strong validation MSE of 0.0984. Several key hyperparameter choices reflect current best practices in deep learning for medical image restoration, while others diverge in notable ways. 
@@ -481,8 +486,9 @@ The learning rate was set to 0.004113 which is relatively high initial value. Th
 
  The optimization process solely relied on MSE for validation. This decision may introduce some form of metric bias. MSE disproportionately penalizes large pixel errors, which often lead to overly smooth outputs. In denoising tasks, this can result in models that reduce noise effectively in terms of pixel accuracy but at the cosy of signal preservation, leading to a lower signal-to-noise (SNR) in practice. MSE is also sensitive to outliers and intensity shifts, while being oblivious to perceptual structure and contrast consistency \cite{1284395}. Future work could benefit from using alternative validation metrics, such as SNR or perceptual similarity measures, to better guide model selection and ensure outputs are both quantitatively accurate and visually informative \cite{chavhan2009t2star}. Metrics such as LPIPS offer a promising alternative by leveraging deep features that align more closely with human perception and quality \cite{zhang2018unreasonableeffectivenessdeepfeatures}.
 
+\subsection{Results after hyperparameter training}
 
-
+\subsection{Validation}
 
 \section{Conclusion}
 
