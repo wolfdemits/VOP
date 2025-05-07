@@ -14,6 +14,7 @@
 \usepackage{pgfgantt}
 \usepackage{booktabs}
 \usepackage{rotating}
+\usepackage{makecell}
 \usepackage{pgfplots}
 \pgfplotsset{width=10cm,compat=1.9}
 \usepackage{csquotes}
@@ -660,6 +661,23 @@ The revised optimization yielded different best performing parameters.
 
 
 \subsection{Results after hyperparameter training}
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ |c|c|c|c| } 
+        \hline
+        - & Training & Validation & Testing \\
+        \hline
+        Mouse & \makecell{1, 2, 3, 4, 5, 8 \\ 9, 11, 12, 13, 14, 15 \\ 17, 18, 19, 20, 21, 23} 
+              & \makecell{6, 10}
+              & \makecell{7, 16, 22} \\
+        \hline
+    \end{tabular}
+    \caption{Mouse distribution across training, validation, and testing sets.}
+    \end{table}
+    
+    
 
 \subsection{APDDM}
 
