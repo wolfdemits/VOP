@@ -659,8 +659,7 @@ The revised optimization yielded different best performing parameters.
 \subsection{Results after hyperparameter training}
 
 
-\begin{table}[h]
-    \centering
+\begin{table}
     \begin{tabular}{ |c|c|c|c| } 
         \hline
         - & Training & Validation & Testing \\
@@ -682,11 +681,11 @@ The revised optimization yielded different best performing parameters.
 \section{Discussion}
 \subsection{First results}
 After obtaining the first results, a visual validation was made. At first sight, the results were very promising. 
-Looking at the Figure \ref{fig:transax1l_first} and Figure \ref{fig:transax2_first} shows that the deep learning (DL), in the middle, has clearly higher quality and sharper details compared to the low resolution (LR) image at the left side. 
+Looking at the Figure \ref{fig:transax1_first} and Figure \ref{fig:transax2_first} shows that the deep learning (DL), in the middle, has clearly higher quality and sharper details compared to the low resolution (LR) image at the left side. 
 The DL image approaches the high resolution (HR), but still has noise and structures that are not totally visible. 
-In Figure \ref{fig:transax1_first_first}, the maximum intensity of the DL image is the same as that of the LR, which both have an intensity of 5, while the maximum intensity of the HR is higher with an intensity of 6. 
+In Figure \ref{fig:transax1_first}, the maximum intensity of the DL image is the same as that of the LR, which both have an intensity of 5, while the maximum intensity of the HR is higher with an intensity of 6. 
 This indicates small intensity bias or scaling difference. 
-This is in contrast with Figure \ref{fig:transax2_first_first} where the maximum intensity (equal to 4) is lower than in the LR and HR images, where the mean value is 5. 
+This is in contrast with Figure \ref{fig:transax2_first} where the maximum intensity (equal to 4) is lower than in the LR and HR images, where the mean value is 5. 
 This can be due to the liver that is smeared out and more depicted gray as in both LR and HR scans.
 Looking at the edges of the DL images it shows that these are generally more smeared out and less sharp than in the HR images. 
 The noise of the LR is reduced with minimal loss of important structural information. 
