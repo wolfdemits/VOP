@@ -664,7 +664,7 @@ Trail 54 emerges as the best-performing configuration, achieving a validation MS
 This model uses a structure with convolutional feature depths of 128,256,256 for the main layers. 
 Downsampling was performed using strided convolutions and upsampling with transposed convolutions. 
 The ReLU activation function was used and residual output connections were disabled. 
-Optimization was done using the RMSprop algorithm with initial learning rate of 0.04112 in combination with the ReduceLROnPlateau learning rate scheduler. 
+Optimization was done using the RMSprop algorithm with initial learning rate of 0.004112 in combination with the ReduceLROnPlateau learning rate scheduler. 
 The model was trained using a hybrid loss function that combines MSE and SSIM with the weighting controlled by a parameter $\alpha=0.3$.
 This combination of hyperparameters resulted in the lowest validation MSE across all evaluated trials, indicating strong performance in reconstructing high-resolution images. 
 
