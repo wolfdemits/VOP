@@ -460,7 +460,7 @@ Each of these methods reduce the size of the feature map but with different stra
 \end{figure}
 
 \subsubsection{Learning rate}
-The pace in which the weights are updates during training depends on the learning rate. 
+The pace in which the weights are updated during training depends on the learning rate. 
 A learning rate value which is too high can lead to instability and poor convergence, while a value too low might slow down the training of the model or it can even get stuck in a local minima as can be seen on Figure \ref{fig:Learnrate} \cite{jordan_2018_setting}. 
 Optuna was used to search across a continuous range of values [1E-2, 1E-6] to find the optimal balance between convergence and stability.
 
