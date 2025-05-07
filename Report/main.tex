@@ -490,6 +490,8 @@ This combination of hyperparameters resulted in the lowest validation MSE across
 
 \subsection{Results after hyperparameter training}
 
+\subsection{APDDM}
+
 \subsection{Validation}
 
 \section{Discussion}
@@ -520,6 +522,8 @@ The learning rate was set to 0.004113 which is relatively high initial value. Th
  The optimization process solely relied on MSE for validation. This decision may introduce some form of metric bias. MSE disproportionately penalizes large pixel errors, which often lead to overly smooth outputs. In denoising tasks, this can result in models that reduce noise effectively in terms of pixel accuracy but at the cosy of signal preservation, leading to a lower signal-to-noise (SNR) in practice. MSE is also sensitive to outliers and intensity shifts, while being oblivious to perceptual structure and contrast consistency \cite{1284395}. Future work could benefit from using alternative validation metrics, such as SNR or perceptual similarity measures, to better guide model selection and ensure outputs are both quantitatively accurate and visually informative \cite{chavhan2009t2star}. Metrics such as LPIPS offer a promising alternative by leveraging deep features that align more closely with human perception and quality \cite{zhang2018unreasonableeffectivenessdeepfeatures}.
 
 \subsection{Results after hyperparameter training}
+
+\subsection{APDDM}
 
 \subsection{Validation}
 
