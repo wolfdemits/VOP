@@ -75,7 +75,7 @@ class Dataset2D_MicroMRI(torch.utils.data.Dataset):
                     self.path2slices_LR = Path(self.path2slices_LR)
 
                     for SliceIndex, _ in enumerate(slicesFolder_HR): 
-                        self.search.append((Subj, Plane, SliceIndex))
+                        self.search.append((Subj, Plane, SliceIndex, Region))
 
         
 
@@ -87,12 +87,17 @@ class Dataset2D_MicroMRI(torch.utils.data.Dataset):
 
     def __getitem__(self, index): 
         
-        Subject, Plane, SliceIndex  = self.search[index] 
+        Subj, Plane, SliceIndex, Region  = self.search[index] 
         if SliceIndex != 0:
             SliceIndex -=1 #cheap fix
+
+        print(Subj, Region, Plane, SliceIndex)
+
+        path2slices_HR = self.PathZarr / 'HIGH RES' / Region / Subj / Plane
+        path2slices_LR = self.PathZarr / 'LOW RES' / Region / Subj / Plane
         
-        zf_LR = zarr.open(str(self.path2slices_LR))
-        zf_HR = zarr.open(str(self.path2slices_HR))
+        zf_LR = zarr.open(str(path2slices_LR))
+        zf_HR = zarr.open(str(path2slices_HR))
 
         
         LR_Img = zf_LR[str(SliceIndex)][:]
@@ -101,9 +106,6 @@ class Dataset2D_MicroMRI(torch.utils.data.Dataset):
         # Interpolation of the LR Image for Image Size to Match 
         #   Use: scipy.ndimage.zoom -> zoom = 2 (incr resolution with factor 2) & order = 0 (nearest neighbor interpolation is used)
         LR_Img = zoom(LR_Img, zoom=2, order=0)  
-
-
-
 
         ## Normalization
         LR_Img, LR_NormFactor = Mean_Normalisation(LR_Img)
@@ -130,7 +132,7 @@ class Dataset2D_MicroMRI(torch.utils.data.Dataset):
 
         item = {'LR_Img': LR_Img, 
                 'HR_Img': HR_Img,
-                'Subject': Subject, 
+                'Subject': Subj,
                 'Plane': Plane, 
                 'SliceIndex': SliceIndex, 
                 'LR_NormFactor': LR_NormFactor}
