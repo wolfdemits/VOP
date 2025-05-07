@@ -454,14 +454,14 @@ Each of these methods reduce the size of the feature map but with different stra
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\linewidth]{ConvStrided.jpg}
+    \includegraphics[width=1\linewidth]{ConvStrided_new.png}
     \caption{Downsampling - convStrided}
     \label{fig:convStrided}
 \end{figure}
 
 \subsubsection{Learning rate}
-The pace in which the weights are updated during training depends on the learning rate. 
-A learning rate value which is too high can lead to instability and poor convergence, while a value too low might slow down the training of the model or it can even get stuck in a local minima as can be seen on Figure \ref{fig:Learnrate} \cite{jordan_2018_setting}. 
+The pace in which the weights are updates during training depends on the learning rate. 
+A learning rate value which is too high can lead to instability and poor convergence, while a value too low might slow down the training of the model  as can be seen on Figure \ref{fig:Learnrate} or it can even get stuck in a local minima \cite{jordan_2018_setting}. 
 Optuna was used to search across a continuous range of values [1E-2, 1E-6] to find the optimal balance between convergence and stability.
 
 \begin{figure}
