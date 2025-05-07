@@ -3,14 +3,12 @@ import datetime
 import pathlib
 import numpy as np
 import torch
-import optuna
-import torch.nn as nn
-import torch.optim as optim
 
 # Import created functions and classes
+from Helper_Functions_MRI import Tensorboard_Initialization, Logbook_Initialization
+from Helper_Functions_MRI import Intermediate_Visualization
 from DatasetClasses_MicroMRI import Get_DataLoaders
-from Helper_Functions_MRI import HybridLoss
-from UNet_Model_MRI import UNet  # Assuming your U-Net code is in "unet.py"
+from UNet_Model_MRI import UNet, count_model_parameters
 
 # utility class for colored print outputs
 class bcolors:

@@ -149,8 +149,6 @@ class DownBlock_Pool(nn.Module):
         
         elif pool_mode == 'meanpool':
             pool_operation = nn.AvgPool2d if dim == '2d' else nn.AvgPool3d
-
-            #convstrided TOEVOEGEN DAAN 
         
         # Use double convolutional block
         double_conv = DoubleConvBlock(dim, in_channel, out_channel, out_channel, conv_kernel, activation)
@@ -237,7 +235,7 @@ Two cases:
 
 """
 
-class UpSample_bilinear(nn.Module):
+class UpSample(nn.Module):
     
     def __init__(self, dim, num_main_channel, num_skip_channel, num_channel_out, conv_kernel, activation):
         
@@ -250,6 +248,7 @@ class UpSample_bilinear(nn.Module):
         super().__init__()
 
         self.dim = dim
+
         mode = 'bilinear' if dim=='2d' else 'trilinear'
 
         self.Up = nn.Upsample(scale_factor=2, mode=mode, align_corners=True)
@@ -285,106 +284,6 @@ class UpSample_bilinear(nn.Module):
         x = self.DoubleConv(x)
         
         return x
-
-class UpSample_nearest(nn.Module):
-    
-    def __init__(self, dim, num_main_channel, num_skip_channel, num_channel_out, conv_kernel, activation):
-        
-        """
-        - num_main_channel = amount of input channels before the upsampling
-        - num_skip_channel = amount of input channels before the skip path
-        - num_channels_out = amount of channels after the double convolution
-        """
-        
-        super().__init__()
-
-        self.dim = dim
-        mode = 'nearest' 
-
-        self.Up = nn.Upsample(scale_factor=2, mode=mode)
-
-        # Initialise the number of input channels before the double convolution 
-        # (Note: no skip --> in_channels = num_main_channel)
-        in_channel = num_main_channel + num_skip_channel 
-        
-
-        # Initialise amount of channels for the double convolution 
-        
-        if num_skip_channel != 0: # with skip connections
-            self.skip_connection = True
-            mid_channel = num_main_channel
-            out_channel = num_channel_out
-            
-        elif num_skip_channel == 0: # no skip connections
-            self.skip_connection = False
-            mid_channel = num_channel_out
-            out_channel = num_channel_out
-        
-        # Initialise convolutional path
-        self.DoubleConv = DoubleConvBlock(dim, in_channel, mid_channel, out_channel, conv_kernel, activation)
-    
-    
-    def forward(self, x, x_encode, PadValue):
-
-        x = self.Up(x)
-
-        if (self.skip_connection): # if skip connection, then concatenate
-            x = Concat_SkipConnection(self.dim, x_out_skip=x_encode, x_decode=x, PadValue=PadValue)
-
-        x = self.DoubleConv(x)
-        
-        return x
-    
-class UpSample_bicubic(nn.Module):
-    
-    def __init__(self, dim, num_main_channel, num_skip_channel, num_channel_out, conv_kernel, activation):
-        
-        """
-        - num_main_channel = amount of input channels before the upsampling
-        - num_skip_channel = amount of input channels before the skip path
-        - num_channels_out = amount of channels after the double convolution
-        """
-        
-        super().__init__()
-
-        self.dim = dim
-        mode = 'bicubic' if dim=='2d' else 'trilinear'
-
-        self.Up = nn.Upsample(scale_factor=2, mode=mode, align_corners=True)
-
-        # Initialise the number of input channels before the double convolution 
-        # (Note: no skip --> in_channels = num_main_channel)
-        in_channel = num_main_channel + num_skip_channel 
-        
-
-        # Initialise amount of channels for the double convolution 
-        
-        if num_skip_channel != 0: # with skip connections
-            self.skip_connection = True
-            mid_channel = num_main_channel
-            out_channel = num_channel_out
-            
-        elif num_skip_channel == 0: # no skip connections
-            self.skip_connection = False
-            mid_channel = num_channel_out
-            out_channel = num_channel_out
-        
-        # Initialise convolutional path
-        self.DoubleConv = DoubleConvBlock(dim, in_channel, mid_channel, out_channel, conv_kernel, activation)
-    
-    
-    def forward(self, x, x_encode, PadValue):
-
-        x = self.Up(x)
-
-        if (self.skip_connection): # if skip connection, then concatenate
-            x = Concat_SkipConnection(self.dim, x_out_skip=x_encode, x_decode=x, PadValue=PadValue)
-
-        x = self.DoubleConv(x)
-        
-        return x
-
-
 
 
 class UpConv(nn.Module):
@@ -491,7 +390,7 @@ class UNet(nn.Module):
 
         if (up_mode == 'upsample'):
             self.Ups = nn.ModuleList([
-                            UpSample_bilinear(dim, 
+                            UpSample(dim, 
                                      features_main[i+1],
                                      features_skip[i],
                                      features_main[i],
@@ -508,30 +407,6 @@ class UNet(nn.Module):
                                    conv_kernel_size,
                                    activation)
                             for i in reversed(range(self.depth))])
-
-            
-        elif (up_mode == "nearest"):
-            self.Ups = nn.ModuleList([
-                            UpSample_nearest(dim, 
-                                     features_main[i+1],
-                                     features_skip[i],
-                                     features_main[i],
-                                     conv_kernel_size,
-                                     activation)
-                            for i in reversed(range(self.depth))])
-            
-        elif (up_mode == "bicubic"):
-            self.Ups = nn.ModuleList([
-                            UpSample_bicubic(dim, 
-                                     features_main[i+1],
-                                     features_skip[i],
-                                     features_main[i],
-                                     conv_kernel_size,
-                                     activation)
-                            for i in reversed(range(self.depth))])
-            
-  
-        
         
 
         # OUT: Conv1x1 && Add ReLU (enforce non-negativity)
@@ -574,7 +449,7 @@ class UNet(nn.Module):
         else: 
             x_out = x
         
-        x = self.out_ReLU(x)
+        x_out = self.out_ReLU(x)
         
         return x_out
     
@@ -583,13 +458,13 @@ class UNet(nn.Module):
 
 if __name__ == '__main__':
     
-    random2Dtensor = torch.rand(1, 1, 123, 76)
+    random2Dtensor = torch.rand(1, 3, 123, 76)
 
     model = UNet(
         dim = '2d', 
-        num_in_channels = 1, 
-        features_main = [64, 128, 256, 512], 
-        features_skip = [64, 128, 256], 
+        num_in_channels = 3, 
+        features_main = [64, 128, 256, 512, 1024], 
+        features_skip = [64, 128, 256, 512], 
         conv_kernel_size = 3, 
         down_mode = 'maxpool',
         up_mode = 'upconv', 
@@ -600,3 +475,5 @@ if __name__ == '__main__':
     output = model(random2Dtensor)
     print(output.shape)
 
+
+# %%

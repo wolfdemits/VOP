@@ -8,6 +8,10 @@ from pathlib import Path
 import scipy
 import torch.nn.functional as F
 
+import pydicom
+from pydicom.dataset import Dataset, FileDataset
+import datetime
+
 from DatasetClasses_MicroMRI import Mean_Normalisation
 
 
@@ -44,7 +48,7 @@ def Logbook_Initialization(dim, logbook_pathname, logbook_params, model_params):
             'num_in_channels': logbook_params[3], 
             'batch_size': logbook_params[4],
             'learn_rate': logbook_params[5],         
-            'LR_decay': logbook_params[6],
+            #'LR_decay': logbook_params[6],
             
             ## Model UNet
             'dimension': model_params[0],
@@ -68,57 +72,62 @@ def Logbook_Initialization(dim, logbook_pathname, logbook_params, model_params):
 
 def PlotComparison(LR_Img, DL_Img, HR_Img, Norm_Factor, FigTitle):
     
-    matplotlib.rcParams.update({'font.size': 16})
+    matplotlib.rcParams.update({'font.size': 14})
     
-    LR_Img = LR_Img.cpu().detach().numpy() 
+    LR_Img = LR_Img.cpu().detach().numpy()
     DL_Img = DL_Img.cpu().detach().numpy()
     HR_Img = HR_Img.cpu().detach().numpy()
 
-    # LR_Img, _ = Mean_Normalisation(LR_Img, Norm_Factor, inverse=True)
-    # DL_Img, _ = Mean_Normalisation(DL_Img, Norm_Factor, inverse=True)
-    # HR_Img, _ = Mean_Normalisation(HR_Img, Norm_Factor, inverse=True)
-
+    # Calculate max and mean for the images
     maxValue_LR, meanValue_LR = np.round(np.max(LR_Img)), np.round(np.mean(LR_Img))
     maxValue_DL, meanValue_DL = np.round(np.max(DL_Img)), np.round(np.mean(DL_Img))
     maxValue_HR, meanValue_HR = np.round(np.max(HR_Img)), np.round(np.mean(HR_Img))
 
-    
-    ## Create Figure 
+    # Compute the residuals
+    residual_lr = HR_Img - LR_Img
+    residual_dl = DL_Img - HR_Img
 
-    fig, ax = plt.subplots(ncols=3, figsize=(24,10))
-    
-    im0 = ax[0].imshow(LR_Img, vmin=0, vmax=1, cmap='gray')
-    ax[0].set_title('Input: Low Resolution')
-    ax[0].grid(False)
-    ax[0].invert_xaxis()
-    ax[0].invert_yaxis()
-    ax[0].set_xlabel('Max = {} \n Mean = {}'.format(maxValue_LR, meanValue_LR))
-    ax[0].get_yaxis().set_visible(False)
-    fig.colorbar(im0, ax=ax[0])
-            
-    im1 = ax[1].imshow(DL_Img, vmin=0, vmax=1, cmap='gray')
-    ax[1].set_title('DL Image')
-    ax[1].grid(False)
-    ax[1].invert_xaxis()
-    ax[1].invert_yaxis()
-    ax[1].set_xlabel('Max = {} \n Mean = {}'.format(maxValue_DL, meanValue_DL))
-    ax[1].get_yaxis().set_visible(False)
-    fig.colorbar(im1, ax=ax[1])
-            
-    im2 = ax[2].imshow(HR_Img, vmin=0, vmax=1, cmap='gray')
-    ax[2].set_title('Target: High Resolution')
-    ax[2].grid(False)
-    ax[2].invert_xaxis()
-    ax[2].invert_yaxis()
-    ax[2].set_xlabel('Max = {} \n Mean = {}'.format(maxValue_HR, meanValue_HR))
-    ax[2].get_yaxis().set_visible(False)
-    fig.colorbar(im2, ax=ax[2])
-    
-    fig.suptitle(FigTitle) 
-    #plt.show()
-    
-    return fig
+    # Calculate max and mean for residuals
+    maxValue_residual_lr, meanValue_residual_lr = np.round(np.max(residual_lr)), np.round(np.mean(residual_lr))
+    maxValue_residual_dl, meanValue_residual_dl = np.round(np.max(residual_dl)), np.round(np.mean(residual_dl))
 
+    # Create the figure and plot
+    fig, ax = plt.subplots(ncols=5, figsize=(25, 8))
+    titles = ['Low Resolution', 'DL Output', 'High Resolution',
+              'HR - LR', 'DL - HR']
+    images = [LR_Img, DL_Img, HR_Img, residual_lr, residual_dl]
+
+    # Plot the images and add the statistics as x-axis labels
+    for i in range(5):
+        im = ax[i].imshow(images[i], cmap='gray')
+        #ax[i].axis('off')
+        ax[i].tick_params(left=False, bottom=False, labelleft=False)  # Hide ticks and y-labels only
+
+        # Set the title for each image
+        ax[i].set_title(titles[i])
+
+        # Set the x-axis label with max and mean values
+        if i == 0:  # Low Resolution Image
+            ax[i].set_xlabel(f'Max = {maxValue_LR} \nMean = {meanValue_LR}')
+        elif i == 1:  # DL Image
+            ax[i].set_xlabel(f'Max = {maxValue_DL} \nMean = {meanValue_DL}')
+        elif i == 2:  # High Resolution Image
+            ax[i].set_xlabel(f'Max = {maxValue_HR} \nMean = {meanValue_HR}')
+        elif i == 3:  # Residual: HR - LR
+            ax[i].set_xlabel(f'Max = {maxValue_residual_lr} \nMean = {meanValue_residual_lr}')
+        elif i == 4:  # Residual: DL - HR
+            ax[i].set_xlabel(f'Max = {maxValue_residual_dl} \nMean = {meanValue_residual_dl}')
+
+        # Add colorbar to each image
+        fig.colorbar(im, ax=ax[i], shrink=0.6)
+
+    # Set the super title for the figure
+    fig.suptitle(FigTitle)
+
+    # Adjust layout for better spacing
+    plt.tight_layout()
+
+    return fig, DL_Img  # return DL_Img for saving as DICOM
 
 def Intermediate_Visualization(batch, LR_Img, DL_Img, HR_Img, EpochNumber, num_in_channels, ShowSlices, TensorboardWriter, ShowSubject, Path_FigSave):
 
@@ -128,12 +137,60 @@ def Intermediate_Visualization(batch, LR_Img, DL_Img, HR_Img, EpochNumber, num_i
                 
             name = '{}_{}_{}_epoch_{}'.format(Subject, Plane, SliceIndex, EpochNumber)
                 
-            fig = PlotComparison(
-                        LR_Img = LR_Img[idx][num_in_channels//2], 
-                        DL_Img = DL_Img[idx][0], 
-                        HR_Img = HR_Img[idx][0],
-                        Norm_Factor = Norm_Factor,
-                        FigTitle = name) 
+            fig, dl_img_np = PlotComparison(LR_Img=LR_Img[idx][num_in_channels//2],DL_Img=DL_Img[idx][0],HR_Img=HR_Img[idx][0],Norm_Factor=Norm_Factor,FigTitle=name)
+                        
+            # Create save path
+            dicom_save_dir = Path(Path_FigSave) / 'DICOM_DL' / f'epoch_{EpochNumber}'
+            dicom_save_dir.mkdir(parents=True, exist_ok=True)
+
+            # DICOM metadata
+            file_meta = pydicom.Dataset()
+            file_meta.MediaStorageSOPClassUID = pydicom.uid.SecondaryCaptureImageStorage
+            file_meta.MediaStorageSOPInstanceUID = pydicom.uid.generate_uid()
+            file_meta.ImplementationClassUID = pydicom.uid.PYDICOM_IMPLEMENTATION_UID
+
+            dt = datetime.datetime.now()
+            dicom_filename = f"{Subject}_{Plane}_{SliceIndex}_DL.dcm"
+            filepath = dicom_save_dir / dicom_filename
+
+            ds = FileDataset(str(filepath), {}, file_meta=file_meta, preamble=b"\0" * 128)
+            ds.Modality = 'OT'
+            ds.ContentDate = dt.strftime('%Y%m%d')
+            ds.ContentTime = dt.strftime('%H%M%S.%f')
+
+            # Add some minimal required DICOM attributes
+            ds.PatientName = str(Subject)
+            ds.PatientID = str(Subject)
+            ds.StudyInstanceUID = pydicom.uid.generate_uid()
+            ds.SeriesInstanceUID = pydicom.uid.generate_uid()
+            ds.SOPInstanceUID = file_meta.MediaStorageSOPInstanceUID
+            ds.SOPClassUID = file_meta.MediaStorageSOPClassUID
+
+            # DL_Img is normalized [0,1] -> convert to 8-bit for DICOM
+            DL_Img_uint8 = (dl_img_np * 255).astype(np.uint8)
+            ds.Rows, ds.Columns = DL_Img_uint8.shape
+            ds.SamplesPerPixel = 1
+            ds.PhotometricInterpretation = "MONOCHROME2"
+            ds.BitsAllocated = 8
+            ds.BitsStored = 8
+            ds.HighBit = 7
+            ds.PixelRepresentation = 0
+            ds.PixelData = DL_Img_uint8.tobytes()
+
+            ds.save_as(filepath)
+            
+            # Residuals for DICOM saving
+            residual_hr_lr = HR_Img[idx][0].cpu().numpy() - LR_Img[idx][num_in_channels // 2].cpu().numpy()
+            #residual_hr_dl = HR_Img[idx][0].cpu().numpy() - DL_Img[idx][0].cpu().numpy()
+            #residual_hr_dl = HR_Img[idx][0].detach().cpu().numpy() - DL_Img[idx][0].detach().cpu().numpy()
+            residual_hr_dl = DL_Img[idx][0].detach().cpu().numpy() - HR_Img[idx][0].detach().cpu().numpy()
+
+            residual_diff = residual_hr_lr - residual_hr_dl
+            # Save residuals
+            save_residual_as_dicom(residual_hr_lr, Subject, Plane, SliceIndex, EpochNumber, 'hr_lr', dicom_save_dir)
+            save_residual_as_dicom(residual_hr_dl, Subject, Plane, SliceIndex, EpochNumber, 'hr_dl', dicom_save_dir)
+            save_residual_as_dicom(residual_diff, Subject, Plane, SliceIndex, EpochNumber, 'diff', dicom_save_dir)
+
                 
             TensorboardWriter.add_figure(name, fig, EpochNumber)
 
@@ -146,6 +203,46 @@ def Intermediate_Visualization(batch, LR_Img, DL_Img, HR_Img, EpochNumber, num_i
             plt.close(fig)
 
     return
+    
+def save_residual_as_dicom(image_array, subject, plane, slice_index, epoch_number, residual_type, save_root):
+    image_array = np.clip(image_array, 0, 1)
+    image_uint8 = (image_array * 255).astype(np.uint8)
+
+    # Setup DICOM metadata
+    file_meta = pydicom.Dataset()
+    file_meta.MediaStorageSOPClassUID = pydicom.uid.SecondaryCaptureImageStorage
+    file_meta.MediaStorageSOPInstanceUID = pydicom.uid.generate_uid()
+    file_meta.ImplementationClassUID = pydicom.uid.PYDICOM_IMPLEMENTATION_UID
+
+    dt = datetime.datetime.now()
+    dicom_filename = f"{subject}_{plane}_{slice_index}_{residual_type}.dcm"
+    save_dir = Path(save_root) / f"residual_{residual_type}" / f"epoch_{epoch_number}"
+    save_dir.mkdir(parents=True, exist_ok=True)
+    filepath = save_dir / dicom_filename
+
+    ds = FileDataset(str(filepath), {}, file_meta=file_meta, preamble=b"\0" * 128)
+    ds.Modality = 'OT'
+    ds.ContentDate = dt.strftime('%Y%m%d')
+    ds.ContentTime = dt.strftime('%H%M%S.%f')
+
+    ds.PatientName = str(subject)
+    ds.PatientID = str(subject)
+    ds.StudyInstanceUID = pydicom.uid.generate_uid()
+    ds.SeriesInstanceUID = pydicom.uid.generate_uid()
+    ds.SOPInstanceUID = file_meta.MediaStorageSOPInstanceUID
+    ds.SOPClassUID = file_meta.MediaStorageSOPClassUID
+
+    ds.InstanceNumber = int(slice_index)
+    ds.Rows, ds.Columns = image_uint8.shape
+    ds.SamplesPerPixel = 1
+    ds.PhotometricInterpretation = "MONOCHROME2"
+    ds.BitsAllocated = 8
+    ds.BitsStored = 8
+    ds.HighBit = 7
+    ds.PixelRepresentation = 0
+    ds.PixelData = image_uint8.tobytes()
+
+    ds.save_as(filepath)
     
 def Power(x):
     s = np.sum(x**2)
@@ -228,7 +325,7 @@ def ssim_loss(img1, img2):
 
 # Define Hybrid Loss Function
 class HybridLoss(torch.nn.Module):
-    def __init__(self, alpha=0.8):
+    def __init__(self, alpha=0.3):
         """
         Hybrid loss function combining MSE and SSIM.
         Args:
