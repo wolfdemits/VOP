@@ -449,7 +449,7 @@ class UNet(nn.Module):
         else: 
             x_out = x
         
-        x = self.out_ReLU(x)
+        x_out = self.out_ReLU(x)
         
         return x_out
     

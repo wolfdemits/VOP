@@ -25,7 +25,7 @@ RESULT_PATH_LOCAL = pathlib.Path('./ML Model/Without_SR_Module')
 
 CODE_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Without_SR_Module')
 DATA_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Data/ZARR_PREPROCESSED')
-RESULT_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Without_SR_Module/Results')
+RESULT_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Without_SR_Module/New_Results')
 
 
 LOCAL = False

@@ -284,70 +284,41 @@ def compute_SNR(LR, HR):
     return snr_batch.mean().item()
 
 # Define SSIM function
-def _gaussian_window(channels: int,
-                     kernel_size: int = 11,
-                     sigma: float = 1.5,
-                     device: str = 'cpu') -> torch.Tensor:
-    """
-    Create a 2D Gaussian kernel of shape [channels, 1, kernel_size, kernel_size].
-    Built in float32 so we can cast it to x.dtype later.
-    """
-    # 1D coordinates centered at zero
-    coords = torch.arange(kernel_size, device=device, dtype=torch.float32) - (kernel_size // 2)
-    # 1D Gaussian
-    g1d = torch.exp(-(coords**2) / (2 * sigma**2))
-    # outer product => 2D Gaussian
-    g2d = (g1d / g1d.sum()).unsqueeze(1) @ (g1d / g1d.sum()).unsqueeze(0)
-    # expand to [channels, 1, k, k]
-    return g2d.expand(channels, 1, kernel_size, kernel_size)
+def _gaussian_window(channels, kernel_size=11, sigma=1.5, device='cpu'):
+    coords = torch.arange(kernel_size, device=device) - kernel_size//2
+    g = torch.exp(-(coords**2) / (2 * sigma**2))
+    g = (g / g.sum()).unsqueeze(1) @ (g / g.sum()).unsqueeze(0)
+    return g.expand(channels, 1, kernel_size, kernel_size)
 
-def ssim_index(x: torch.Tensor,
-               y: torch.Tensor,
-               data_range: float = 1.0,
-               window_size: int = 11,
-               sigma: float = 1.5,
-               K: tuple = (0.01, 0.03),
-               eps: float = 1e-6) -> torch.Tensor:
+def ssim_index(x, y, data_range=1.0, window_size=11, sigma=1.5, K=(0.01, 0.03)):
     """
-    Compute the mean SSIM index between x and y.
-    x, y: [B, C, H, W], float tensors in [0, data_range].
-    Returns a scalar tensor SSIM.
+    x, y: [B, C, H, W], float tensors, in [0, data_range]
+    returns: scalar SSIM index averaged over batch and channels
     """
-    # If images are constant, SSIM=1
-    if data_range == 0:
-        return torch.tensor(1.0, device=x.device, dtype=x.dtype)
+    C = x.shape[1]
+    win = _gaussian_window(C, window_size, sigma, device=x.device)
 
-    B, C, H, W = x.shape
-    C1 = (K[0] * data_range) ** 2
-    C2 = (K[1] * data_range) ** 2
-
-    # Build Gaussian window in float32, then cast to x.dtype
-    win = _gaussian_window(C, window_size, sigma, device=x.device).to(x.dtype)
-    pad = window_size // 2
-
-    # Local means
-    mu_x = F.conv2d(x, win, padding=pad, groups=C)
-    mu_y = F.conv2d(y, win, padding=pad, groups=C)
+    # means
+    mu_x = F.conv2d(x, win, padding=window_size//2, groups=C)
+    mu_y = F.conv2d(y, win, padding=window_size//2, groups=C)
 
     mu_x2 = mu_x * mu_x
     mu_y2 = mu_y * mu_y
     mu_xy = mu_x * mu_y
 
-    # Local variances and covariance
-    sigma_x2 = F.conv2d(x * x, win, padding=pad, groups=C) - mu_x2
-    sigma_y2 = F.conv2d(y * y, win, padding=pad, groups=C) - mu_y2
-    sigma_xy = F.conv2d(x * y, win, padding=pad, groups=C) - mu_xy
+    # variances / covariances
+    sigma_x2 = F.conv2d(x * x, win, padding=window_size//2, groups=C) - mu_x2
+    sigma_y2 = F.conv2d(y * y, win, padding=window_size//2, groups=C) - mu_y2
+    sigma_xy = F.conv2d(x * y, win, padding=window_size//2, groups=C) - mu_xy
 
-    # Clamp tiny negatives from numerical error
-    sigma_x2 = torch.clamp(sigma_x2, min=0.0)
-    sigma_y2 = torch.clamp(sigma_y2, min=0.0)
+    C1 = (K[0] * data_range) ** 2
+    C2 = (K[1] * data_range) ** 2
 
-    # SSIM formula
     num = (2 * mu_xy + C1) * (2 * sigma_xy + C2)
     den = (mu_x2 + mu_y2 + C1) * (sigma_x2 + sigma_y2 + C2)
+    ssim_map = num / den
 
-    # Mean over all pixels, channels, batch
-    return (num / (den + eps)).mean()
+    return ssim_map.mean()
 
 def ssim_loss(img1, img2):
     return 1- ssim_index(img1,img2)
