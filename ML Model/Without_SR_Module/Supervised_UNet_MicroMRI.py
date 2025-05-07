@@ -13,6 +13,7 @@ from DatasetClasses_MicroMRI import Get_DataLoaders
 from UNet_Model_MRI import UNet, count_model_parameters
 from Helper_Functions_MRI import HybridLoss
 
+
 # Path Definitions
 DATA_PATH_LOCAL = pathlib.Path('./Data/ZARR_PREPROCESSED')
 RESULT_PATH_LOCAL = pathlib.Path('./ML Model/Without_SR_Module')
@@ -84,11 +85,12 @@ activation = 'ReLU'                   ## Options: ReLU, LeakyReLU, PReLU
 residual_connection = False
 
 
+
 # Training Hyperparameters
 
 batch_size = 32
 LEARN_RATE = 0.004113034307474023
-LR_DECAY = 1
+
 EPOCHS = 200
 
 RESUME_CKPT = False  # IF TRUE, we resume training from last checkpoint 
@@ -97,6 +99,7 @@ RESUME_CKPT = False  # IF TRUE, we resume training from last checkpoint
 # Selection of Slices and Subjects to visualise during training for tracking progress
 
 SLICES_TO_SHOW = range(0, 25, 300)
+#SUBJECTS_TO_SHOW = [SubjTrain[0], SubjVal[0]]
 SUBJECTS_TO_SHOW = [SubjTrain[0], SubjTrain[-1], SubjVal[0], SubjVal[-1]]
 
 
@@ -144,12 +147,13 @@ DL_Model = DL_Model.to(device)
 # Set-up 
 
 optimizer = torch.optim.RMSprop(DL_Model.parameters(), lr=LEARN_RATE)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, LR_DECAY)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer)
 #grad_scaler = torch.amp.GradScaler('cuda')
 grad_scaler = GradScaler()
 
 
-loss_criterion = torch.nn.HybridLoss(alpha=0.6)
+loss_criterion = torch.nn.MSELoss()    # or HybridLoss(alpha=0.3), but this returns nan
+
 
 
 #--------------------------------------------------------------------------------------------------------------------
@@ -157,7 +161,7 @@ loss_criterion = torch.nn.HybridLoss(alpha=0.6)
 
 # Initialize LogBook
 
-LogBook_Params = [NAME_RUN, PlanesData, RegionsData, num_in_channels, batch_size, LEARN_RATE, LR_DECAY]
+LogBook_Params = [NAME_RUN, PlanesData, RegionsData, num_in_channels, batch_size, LEARN_RATE] #, LR_DECAY]
 ModelUNet_Params = [dim, num_in_channels, features_main, features_skip, conv_kernel_size, down_mode, up_mode, activation, residual_connection] 
 Logbook_Initialization(dim, path2logbook, LogBook_Params, ModelUNet_Params) 
 
@@ -220,7 +224,7 @@ for current_epoch in range(start_epoch, EPOCHS):
             with torch.amp.autocast('cuda'):
                 DL_Img = DL_Model(LR_Img)   
                 loss = loss_criterion(DL_Img, HR_Img)  
-            grad_scaler.scale(loss).backward() 
+            grad_scaler.scale(loss).backward()
             grad_scaler.step(optimizer)                    
             grad_scaler.update()  
         
@@ -362,6 +366,6 @@ for current_epoch in range(start_epoch, EPOCHS):
             break
 
 
-    scheduler.step()
+    scheduler.step(val_loss)
 
 # %%
