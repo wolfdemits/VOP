@@ -19,7 +19,7 @@ from Helper_Functions_MRI import HybridLoss
 from UNet_Model_MRI import UNet  # Assuming your U-Net code is in "unet.py"
 
 # Path Definitions
-DATA_PATH_LOCAL = pathlib.Path('../../Data/ZARR_PREPROCESSED')
+DATA_PATH_LOCAL = pathlib.Path('./Data/ZARR_PREPROCESSED')
 RESULT_PATH_LOCAL = pathlib.Path('./Results')
 
 # Path Definitions
@@ -65,7 +65,7 @@ Regions = ['HEAD-THORAX'] #, 'THORAX-ABDOMEN']
 
 # Give your run a name
 # NAME_RUN = 'HYPERPARAMETERS_' + str(datetime.datetime.now().strftime("%Y%m%d_%H_%M_%S"))
-NAME_RUN = 'HYPERPARAMETERS_03-05'
+NAME_RUN = 'HYPERPARAMETERS_07-05'
 start_time_run = datetime.datetime.now()
 print(NAME_RUN, flush=True)
 
@@ -74,8 +74,10 @@ num_epochs = 1 #5
 batch_size = 8 #32
 dim = '2d'
 num_in_channels = 1
-LR_DECAY = 0.9 #adapt?
+ 
 conv_kernel_size = 3
+
+
 
 # configure device
 DISABLE_CUDA = False
@@ -102,27 +104,28 @@ def objective(trial):
 
     features_skip = features_main[:-1]  # Ensure skip connections align
 
-    down_mode = trial.suggest_categorical("down_mode", ["maxpool", "meanpool", "convStrided"]) 
-  
-    up_mode = trial.suggest_categorical("up_mode", ["upsample", "upconv", "nearest", "bicubic"])
+    # down_mode = trial.suggest_categorical("down_mode", ["maxpool", "meanpool", "convStrided"]) 
+    down_mode = 'convStrided'
+    # up_mode = trial.suggest_categorical("up_mode", ["upsample", "upconv", "nearest", "bicubic"])
+    up_mode = 'upconv'
+    # activation = trial.suggest_categorical("activation", ["ReLU", "PReLU", "LeakyReLU"])
+    activation = 'ReLU'
+    # residual_connection = trial.suggest_categorical("residual_connection", [True, False])
+    residual_connection = False
+    # LEARN_RATE = trial.suggest_float("lr", 1e-5, 1e-2)
+    LEARN_RATE = 0.004113034307474023
+    # ALPHA = trial.suggest_categorical("alpha", [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
+    ALPHA = 0.3
+    LR_DECAY = trial.suggest_categorical("lr_decay",[0.1, 0.3, 0.5])
 
-    activation = trial.suggest_categorical("activation", ["ReLU", "PReLU", "LeakyReLU"])
+    criterion_class = trial.suggest_categorical("criterium", ["MSELoss","L1Loss", "HybridLoss"])
+    if criterion_class == "MSELoss":
+       criterion = nn.MSELoss()
+    elif criterion_class == "L1Loss":
+       criterion = nn.L1Loss()
+    elif criterion_class == "HybridLoss":
+       criterion = HybridLoss(alpha=ALPHA)
 
-    residual_connection = trial.suggest_categorical("residual_connection", [True, False])
-
-    LEARN_RATE = trial.suggest_float("lr", 1e-5, 1e-2)
-
-    ALPHA = trial.suggest_categorical("alpha", [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
-
-    #criterion_class = trial.suggest_categorical("criterium", ["MSELoss","L1Loss", "HybridLoss"])
-    #if criterion_class == "MSELoss":
-    #    criterion = nn.MSELoss()
-    #elif criterion_class == "L1Loss":
-    #    criterion = nn.L1Loss()
-    #elif criterion_class == "HybridLoss":
-    #    criterion = HybridLoss(alpha=ALPHA)
-
-    criterion = HybridLoss(alpha=ALPHA)
 
     PadValue = 0  # Keep fixed
 
@@ -133,7 +136,8 @@ def objective(trial):
     model = UNet(dim, num_in_channels, features_main, features_skip, conv_kernel_size,
                  down_mode, up_mode, activation, residual_connection, PadValue)
     
-    optimizer_class = trial.suggest_categorical("optimizer", ["ADAM", "ADAMW", "SGD", "RMSprop"])
+    #optimizer_class = trial.suggest_categorical("optimizer", ["ADAM", "ADAMW", "SGD", "RMSprop"])
+    optimizer_class = "RMSprop"
 
     if optimizer_class == "ADAM":
         optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE)
