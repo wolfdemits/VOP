@@ -707,7 +707,7 @@ This progressive increase allows the network to capture abstract and complex ima
 The depth of the layers contributed to the model's ability to reconstruct finer details.
 
 ReLU was selected as activation function over other alternatives such as LeakyReLU or ELU. 
-While Relu is prone to "dying neurons", its simplicity, speed and effectiveness in networks make it a robust default choice \cite{relu}. 
+While ReLu is prone to "dying neurons", its simplicity, speed and effectiveness in networks make it a robust default choice \cite{relu}. 
 The absence of a relatively complex activation function suggests the network did not suffer from gradient issues that would call for alternatives. 
 Strided convolution (convStrided) was preferred over pooling for downsampling. 
 This aligns with expectations from common CNN practive. 
@@ -723,7 +723,7 @@ This allows effective feature reuse and reduces the need for a global residual l
 
 The learning rate was set to 0.004113 which is relatively high initial value. This enables faster early convergence. 
 The optimization setup combined RMSprop and ReduceLROnPlateau. 
-RMSprop adjust the learning rate for each parameter individually based on the recent history of the gradients \cite{9036442}. 
+RMSprop adjusts the learning rate for each parameter individually based on the recent history of the gradients \cite{9036442}. 
 This helps stabilize updates, especially when gradients vary in scale. 
 In parallel, the ReduceLROnPlateau scheduler monitors the validation loss and automatically lowers the global learning rate when improvements slow down. 
 Together these tools contribute to faster and more stable convergence, reducing the risk of overshooting or stagnation.
@@ -734,7 +734,7 @@ Such a loss is better suited in medical imaging tasks than pure MSE which can le
 
 The optimization process solely relied on MSE for validation. This decision may introduce some form of metric bias. 
 MSE disproportionately penalizes large pixel errors, which often lead to overly smooth outputs. 
-In denoising tasks, this can result in models that reduce noise effectively in terms of pixel accuracy but at the cosy of signal preservation, leading to a lower signal-to-noise (SNR) in practice. 
+In denoising tasks, this can result in models that reduce noise effectively in terms of pixel accuracy but at the cost of signal preservation, leading to a lower signal-to-noise (SNR) in practice. 
 MSE is also sensitive to outliers and intensity shifts, while being oblivious to perceptual structure and contrast consistency \cite{1284395}. 
 Future work could benefit from using alternative validation metrics, such as SNR or perceptual similarity measures, to better guide model selection and ensure outputs are both quantitatively accurate and visually informative \cite{chavhan2009t2star}. 
 Metrics such as LPIPS offer a promising alternative by leveraging deep features that align more closely with human perception and quality \cite{zhang2018unreasonableeffectivenessdeepfeatures}.
