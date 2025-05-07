@@ -91,8 +91,6 @@ class Dataset2D_MicroMRI(torch.utils.data.Dataset):
         if SliceIndex != 0:
             SliceIndex -=1 #cheap fix
 
-        print(Subj, Region, Plane, SliceIndex)
-
         path2slices_HR = self.PathZarr / 'HIGH RES' / Region / Subj / Plane
         path2slices_LR = self.PathZarr / 'LOW RES' / Region / Subj / Plane
         
