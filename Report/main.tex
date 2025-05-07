@@ -256,20 +256,6 @@ Then, the decoder builds an image of higher SNR based on the positional pixel da
     \label{fig:U-Net}
 \end{figure*}
 
-Lastly, it is also possible to achieve super-resolution by adding a final additional step in the decoder (see Figure~\ref{fig:U-Net superres}). 
-This is slightly different from the previously described model. The input does not need to be upsampled by interpolation beforehand. 
-This task is done by this final added step. The input is a low resolution 150x150 image, and the model creates an image with greater dimensions and a higher SNR. 
-This way denoising and super-resolution is achieved \cite{tran2025unet}. 
-
-\begin{figure*}
-    \centering
-    \includegraphics[width=0.85\linewidth]{U-Net with superresolution.jpg}
-    \caption{U-Net with superresolution.}
-    \label{fig:U-Net superres}
-\end{figure*}
-
-
-
 \subsection{Anchored Path Diffusion Denoising Model (APDDM)}
 To complement the direct image-to-image denoising approach, discussed in the previous section, a second model was implemented, the Anchored Path Diffusion Denoising Model (APDDM). This model is a diffusion based framework designed specifically for paired high and low SNR images. In this case the high-resolution (12-minute) scans and the low-resolution (1-minute) scan. Unlike conventional denoising diffusion models that corrupt clean images with artificial Gaussian noise, APDDM uses the actual low SNR image as the endpoint, allowing the model to incorporate real noise from the dataset into the forward process. 
 
