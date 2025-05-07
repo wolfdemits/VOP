@@ -220,12 +220,6 @@ Once bad slices were identified they were removed from the used dataset (see app
 Cropping is a commonly used image-manipulation process. The obtained MRI images contained lots of background noise which interferes with the performance of the model. 
 To counter this problem the images were cropped ensuring that our region of interest was intact and unnecessary areas were removed (see appendix \ref{Appendix: Figures Preprocessing}: Figure~\ref{fig:comparision-cropped}).  
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=0.85\linewidth]{comparision cropped vs non cropped.png}
-    \caption{The left figure shows the original slice, while the right figure is the cropped slice.}
-    \label{fig:comparision-cropped}
-\end{figure*}
 
 
 \subsection{Zarr arrays}
@@ -1043,4 +1037,3 @@ This result can be demonstrated by a simulation where beta is varied and the mea
 \end{appendices}
 
 \end{document}
-
