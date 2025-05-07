@@ -3,6 +3,7 @@
 \usepackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 \usepackage{derivative}
 \usepackage{amsmath,amssymb}
+\usepackage{subcaption}
 \usepackage{makecell}
 \usepackage{float}
 \usepackage[table]{xcolor}
@@ -211,19 +212,13 @@ This stage ensures the data is uniform and optimized for training.
 
 Some of the obtained images contained artifacts or noise, which cannot be fixed by cropping, these could negatively impact the model training. 
 To remove these bad slices from the data set, a visualization script was used to display the MRI slices allowing for manual inspection. 
-Once bad slices were identified they were removed from the used dataset (see Figure~\ref{fig:bad slice}). 6.7\% of the slices were removed.
+Once bad slices were identified they were removed from the used dataset (see appendix \ref{Appendix: Figures Preprocessing}: Figure~\ref{fig:bad slice}). 6.7\% of the slices were removed.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\linewidth]{bad_slice.png}
-    \caption{Example of a bad slice.}
-    \label{fig:bad slice}
-\end{figure}
 
 \subsection{Cropping of the image slices}
 
 Cropping is a commonly used image-manipulation process. The obtained MRI images contained lots of background noise which interferes with the performance of the model. 
-To counter this problem the images were cropped ensuring that our region of interest was intact and unnecessary areas were removed (see Figure~\ref{fig:comparision-cropped}).  
+To counter this problem the images were cropped ensuring that our region of interest was intact and unnecessary areas were removed (see appendix \ref{Appendix: Figures Preprocessing}: Figure~\ref{fig:comparision-cropped}).  
 
 \begin{figure*}
     \centering
@@ -842,7 +837,7 @@ Metrics such as LPIPS offer a promising alternative by leveraging deep features 
   \ganttbar{Scanning}{2}{4} \\
   \ganttbar{Intermediate report and presentation}{3}{6} \\
   \ganttbar{Introduction to AI and DL}{4}{6} \\
-  \ganttbar{Training hyperparameters}{7}{12} \\
+  \ganttbar{Training hyperparameters}{7}{13} \\
   \ganttbar{Anchored path diffusion}{7}{13} \\
   \ganttbar{Final report}{7}{13}\\
   \ganttbar{Poster}{10}{13}\\
@@ -851,6 +846,29 @@ Metrics such as LPIPS offer a promising alternative by leveraging deep features 
   
 
 \end{ganttchart}
+
+\newpage
+\section{Appendix: Figures Preprocessing}
+\label{Appendix: Figures Preprocessing}
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{bad_slice.png}
+        \caption{Example of a bad slice.}
+        \label{fig:bad_slice}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{comparision cropped vs non cropped.png}
+        \caption{The left figure shows the original slice, while the right figure is the cropped slice.}
+        \label{fig:comparision-cropped}
+    \end{minipage}
+\end{figure}
+
+
 
 \newpage
 \section{Appendix: Mathematics APDDM}
@@ -1020,6 +1038,9 @@ This result can be demonstrated by a simulation where beta is varied and the mea
 \FloatBarrier
 
 
+
+
 \end{appendices}
 
 \end{document}
+
