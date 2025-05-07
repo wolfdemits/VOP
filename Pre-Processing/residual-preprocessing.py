@@ -4,7 +4,19 @@ import numpy as np
 from Slicemanager import Slice_manager
 import scipy
 
-DATA_PATH = pathlib.Path('../Data')
+# Path Definitions
+DATA_PATH_LOCAL = pathlib.Path('../Data')
+
+# Path Definitions
+DATA_PATH_HPC = pathlib.Path('/kyukon/data/gent/gvo000/gvo00006/WalkThroughPET/2425_VOP/Project/Data')
+
+LOCAL = True
+
+if LOCAL:    # If you want to run locally
+    DATA_PATH = DATA_PATH_LOCAL
+
+else:  # If you want to run on the HPC
+    DATA_PATH = DATA_PATH_HPC
 
 RESIDUAL_PATH = DATA_PATH / 'ZARR_RESIDUALS'
 
@@ -22,8 +34,10 @@ class bcolors:
 
 slicemanager = Slice_manager()
 slicemanager.DIFFUSION = True
+slicemanager.manage_zarr = True
 
-subjList = ['Mouse01', 'Mouse02', 'Mouse03', 'Mouse04', 'Mouse05'] # CHANGE
+# IMPORTANT: only training dataset residuals!!
+subjList = ['Mouse01', 'Mouse02', 'Mouse03', 'Mouse04', 'Mouse05', 'Mouse08', 'Mouse09', 'Mouse11', 'Mouse12', 'Mouse13', 'Mouse14', 'Mouse15', 'Mouse17', 'Mouse18', 'Mouse19', 'Mouse20', 'Mouse21', 'Mouse23']
 print(f'{bcolors.OKBLUE}Total amount of mice: {len(subjList)}{bcolors.ENDC}')
 
 # open zarr store

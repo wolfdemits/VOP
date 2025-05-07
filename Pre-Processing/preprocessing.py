@@ -3,10 +3,6 @@ import pathlib
 from Slicemanager import Slice_manager
 import traceback
 
-DATA_PATH = pathlib.Path('../Data')
-
-ENABLE_CROPPING = False
-
 # cropping settings
 CROPPING_THRESHOLD = 12
 CROPPING_PADDING = 2
@@ -108,18 +104,13 @@ def cropping(lr_scan, hr_scan, threshold=12, padding=2, min_shape=16):
     return cropped_lr, cropped_hr
 
 def preprocess_scan(scan_lr, scan_hr):
-    if ENABLE_CROPPING:
-        # cropping
-        processed_lr, processed_hr = cropping(scan_lr, scan_hr, threshold=CROPPING_THRESHOLD, padding=CROPPING_PADDING, min_shape=MIN_CROPPING_SHAPE)
-        return processed_lr, processed_hr
-    else: 
-        processed_lr = [scan_lr[:,:,i] for i in range(scan_lr.shape[2])]
-        processed_hr = [scan_hr[:,:,i] for i in range(scan_hr.shape[2])]
-        return processed_lr, processed_hr
+    # cropping
+    processed_lr, processed_hr = cropping(scan_lr, scan_hr, threshold=CROPPING_THRESHOLD, padding=CROPPING_PADDING, min_shape=MIN_CROPPING_SHAPE)
+    
+    return processed_lr, processed_hr
 
 # init slicemanager -> puts current slice at beginning, i.e.: 01HC01
 slicemanager = Slice_manager()
-slicemanager.ENABLE_CROPPING = ENABLE_CROPPING
 
 number_of_mice = 7 # ATTENTION: change to len(slicemanager.mouse_list)
 print(f'Total amount of mice: {number_of_mice}')
