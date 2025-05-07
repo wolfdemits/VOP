@@ -659,19 +659,23 @@ The revised optimization yielded different best performing parameters.
 \subsection{Results after hyperparameter training}
 
 
-\begin{table}
-    \begin{tabular}{ |c|c|c|c| } 
-        \hline
-        - & Training & Validation & Testing \\
-        \hline
-        Mouse & \makecell{1, 2, 3, 4, 5, 8 \\ 9, 11, 12, 13, 14, 15 \\ 17, 18, 19, 20, 21, 23} 
+\begin{table}[h]
+    \centering
+    \resizebox{0.97\linewidth}{!}{  % Schaal de tabel tot 80% van de kolombreedte
+    \begin{tabular}{l|c|c|c}
+    \toprule
+     & \textbf{Training} & \textbf{Validation}& \textbf{Testing} \\
+    \hline
+    \midrule
+    Mouse & \makecell{1, 2, 3, 4, 5, 8 \\ 9, 11, 12, 13, 14, 15 \\ 17, 18, 19, 20, 21, 23} 
               & \makecell{6, 10}
               & \makecell{7, 16, 22} \\
-        \hline
+    \bottomrule
     \end{tabular}
-    \caption{Mouse distribution across training, validation, and testing sets.}
+    }
+    \caption{\label{tab:mouse_distribution} Mouse distribution across training, validation, and testing sets.}
     \end{table}
-    
+
     
 
 \subsection{APDDM}
