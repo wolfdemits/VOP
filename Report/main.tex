@@ -304,7 +304,7 @@ $}
 \end{equation}
 
 \subsubsection{Learning rate decay}
-The learning rate decay will decrease the learning rate when the training progresses and becomes more stable. It is used in the Scheduler algorithms as the step size (see \ref{subsec:Scheduler}). Here, the learning rate decay will be set at 1 as predefined by the students of the summer internship.
+The learning rate decay will decrease the learning rate when the training progresses and becomes more stable. It is used in the Scheduler algorithms as the step size (see \ref{subsec:Scheduler}). Here, the learning rate decay of 0.1, 0.,3 and 0.5 is tested.
 
 \subsubsection{Features main and features skip}
 To decide which main features are used, different powers of $2$ were used. For every component of features\_main matrix, a different power can be chosen. The next elements of the matrix will contain the next powers of $2$. It can be chosen how many elements will be used in the matrix. For the features\_skip, the same matrix as features main was chosen with the last element deleted. We conducted experiments using a setup where one value was selected from each of the defined categories. Specifically, features\_main\_1 was chosen from [32, 64, 128], features\_main\_2 from [64, 128, 256], and features\_main\_3 from [128, 256, 512]. This approach allowed us to systematically explore different combinations of feature sizes and assess their impact on the model's performance.
