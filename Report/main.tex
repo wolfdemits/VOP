@@ -646,7 +646,7 @@ The model was trained using a hybrid loss function that combines MSE and SSIM wi
 This combination of hyperparameters resulted in the lowest validation MSE across all evaluated trials, indicating strong performance in reconstructing high-resolution images. 
 
 \subsubsection{Disclaimer}
-It was later discovered that the optimzation function was not working as intended and this waas due to 2 reasons.
+It was later discovered that the optimzation function was not working as intended and this was due to 2 reasons.
 First the custom loss function did not function correctly. Second of all Optuna was run only on transaxial slices and only on 2 mice. 
 As a result, the hyperparameters and validation metrics do not generalize to the full dataset. 
 
