@@ -12,8 +12,6 @@ from pathlib import Path
 import numpy as np
 import os
 
-#1 tem 17 = train, 18 tem 20 = val, 21 - 23 = Tes
-
 
 
 
@@ -128,9 +126,9 @@ def validate(dl_root: Path, dicom_data_path: Path, seed: int = 42):
 
     # 3) split by mouse_id
     splits = {
-        'train': [r for r in records if  1 <= r['mouse_id'] <= 17],
-        'val':   [r for r in records if 18 <= r['mouse_id'] <= 20],
-        'test':  [r for r in records if 21 <= r['mouse_id'] <= 23],
+        'train': [r for r in records if  1 <= r['mouse_id'] <= 5 or 8 <= r['mouse_id'] <= 9 or 11 <= r['mouse_id'] <= 21 or r['mouse_id']==23],
+        'val':   [r for r in records if r['mouse_id'] == 6 or  r['mouse_id']==10],
+        'test':  [r for r in records if r['mouse_id']==16 or  r['mouse_id']==7 or  r['mouse_id']==22],
     }
 
     random.seed(seed)
