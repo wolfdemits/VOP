@@ -604,35 +604,51 @@ Ideally the residual of high-resolution and deep-learning images should be close
 \section{Results}
 \subsection{First results}
 First the model was runned on the hpc to check if everything went correctly. 
-An important note to make is that these findings are a result of using a code which only takes transaxial slices and only limited slices were used.
-These results are not a great representation for the full dataset.   
 With this first run, the pre-processing steps could be verified and the first results could be observed. 
 The training was done on the accelgor cluster. 
-Mouse 1 until mouse 17 were used as training, while mouse 18 until mouse 23 were used as validation.  
-The features\_main were set to [64, 128, 256, 512], with corresponding features\_skip values of [64, 128, 256]. 
-Max pooling was used for downsampling, and upsampling was applied for the upsampling steps. 
+The 11th epoch was the best one, as can be observed in Figure \ref{fig:first_loss}.
+In the best epoch the loss of the training is equal to 0.481, while the one of the validation equals 0.426.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{First_results_loss.png}
+    \caption{Visual representation of the loss function over different epochs. ER STAAN GEEN ASSEN OP DEZE FIGUUR!!!!!!}
+    \label{fig:first_loss}
+\end{figure}
+
+In this script the training, validation and test mice were defined. A detailed overview can be found in Table \ref{tab:mouse_distribution}.
+The features\_main were set to [64, 128, 256], with corresponding features\_skip values of [64, 128]. 
+Meanpooling was used for downsampling, and upconv was applied for the upsampling steps. 
 The activation function was ReLU, and residual connections were enabled True.
-The model was trained with a batch size of 16 and a learning rate of 1e-5. 
-The learning rate decay factor was set to 1. Training was conducted over 200 epochs. 
-The Adam optimizer was used along with an ExponentialLR scheduler. MSE was employed as the loss function.
+The model was trained with a batch size of 32 and a learning rate of 0.0001. Training was conducted over 200 epochs. 
+The RMSprop optimizer was used along with an ReduceLROnPlateau scheduler. MSE was employed as the loss function.
+These hyperparameters were chosen based on knowledge and guessing what the best one would be.
 
-In Figure \ref{fig:transax1_first} and Figure \ref{fig:transax2_first} the results can be observed. 
-Each image depicts another plane of the mouse.
-
+In Figure \ref{fig:first_sagittal}, Figure \ref{fig:first_transax} and Figure \ref{fig:first_coronal} the results can be observed, where each is an example of the training mice. 
+Since the output gave not all images back, Figure \ref{fig:first_coronal} is a result of the 13th epoch.
+Each image depicts another plane of the mouse. Also, images of the test mice can be found in Appendix \ref{Appendix: Figures Results}
 
 \begin{figure*}
     \centering
-    \includegraphics[width=1\linewidth]{Mouse01_Transax_24_epoch_11.png}
-    \caption{First results of mouse 1 transaxial plane slice 24 after 11th epoch.}
-    \label{fig:transax1_first}
+    \includegraphics[width=1\linewidth]{Mouse01_Sagittal_16_epoch_10.png}
+    \caption{First results of mouse 1 (training) sagittal plane slice 16 after 11th epoch.}
+    \label{fig:first_sagittal}
 \end{figure*}
 
 \begin{figure*}
     \centering
-    \includegraphics[width=1\linewidth]{Mouse18_Sagittal_11_epoch_11.png}
-    \caption{First results of mouse 18 transaxial plane slice 11 after 11th epoch.}
-    \label{fig:transax2_first}
+    \includegraphics[width=1\linewidth]{Mouse23_Transax_27_epoch_10.png}
+    \caption{First results of mouse 23 (training) transaxial plane slice 27 after 11th epoch.}
+    \label{fig:first_transax}
 \end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse23_Coronal_19_epoch_12.png}
+    \caption{First results of mouse 23 (training) coronal plane slice 19 after 13th epoch.}
+    \label{fig:first_coronal}
+\end{figure*}
+
 
 \subsection{Trained hyperparameters}
 \subsubsection{First optimization}
@@ -881,6 +897,7 @@ Metrics such as LPIPS offer a promising alternative by leveraging deep features 
 
 
 \newpage
+
 \section{Appendix: Mathematics APDDM}
 \label{appendix:Mathematics APDDM}
 \subsection{Ansatz: linear interpolation between image pair}
@@ -1038,7 +1055,7 @@ In terms of $\beta$:
 \\
 This result can be demonstrated by a simulation where beta is varied and the mean square error between $x_T$ and $x_T^*$ is computed over N diffusion path samples (Fig. \ref{fig:beta sweep}). We indeed observe that if $\beta$ is within the order of magnitude of $\beta_{crit}$, the diffusion process won't converge towards $x_T^*$ anymore, which manifests itself in an increase in the MSE. 
 
-\begin{figure}[h!]
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{beta_sweep.png}
     \caption{Plot of $MSE(x_T, x_T^*)$ against beta. }
@@ -1047,7 +1064,26 @@ This result can be demonstrated by a simulation where beta is varied and the mea
 
 \FloatBarrier
 
+\newpage
+\section{Appendix: Figures Results}
+\label{Appendix: Figures Results}
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_Sagittal_10_epoch_10.png}
+    \caption{First results of mouse 6 (test) sagittal plane slice 10 after 11th epoch.}
+\end{figure*}
 
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_Transax_28_epoch_10.png}
+    \caption{First results of mouse 6 (test) transaxial plane slice 28 after 11th epoch.}
+\end{figure*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse10_Coronal_0_epoch_10.png}
+    \caption{First results of mouse 10 (test) coronal plane slice 0 after 11th epoch.}
+\end{figure*}
 
 
 \end{appendices}
