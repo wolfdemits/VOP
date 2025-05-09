@@ -33,7 +33,7 @@
     {\Large Darío Conejo Rupp, Magali De Poortere, Wolf De Mits, Fea Suy, Daan Vleurick \par}
     \vspace{2cm}
 
-    {\large Research group: Infinity Lab and Medical Imaging and Signal Processing (Medisip) \par}
+    {\large Research group: Medical Imaging and Signal Processing (Medisip) \par}
     \vspace{0.2cm}
 
     {\large Promotors: Stefaan Vandenberghe, Christian Vanhove \par}
@@ -44,7 +44,6 @@
     \vspace{2cm}
 
     {\large {Project in het kader van het Vakoverschrijdend Projectvak in de bachelor Biomedische ingenieurstechnieken} \par}
-    {\large {VOP 1} \par}
     {\large \textbf{Academic year 2024-2025} \par}
 
     \vspace*{\fill}
@@ -76,9 +75,9 @@ In addition, a second model, namely anchored path diffusion denoising model, was
 \newpage
 \section*{Acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
-This project was carried out by a group of five individuals, including Darío Conejo Rupp, Magali De Poortere, Wolf De Mits, Fea Suy and Daan Vleurick. 
+This project was carried out by Darío Conejo Rupp, Magali De Poortere, Wolf De Mits, Fea Suy and Daan Vleurick. 
 The collaboration went smoothly and greatly contributed to achieve a successful result. Every Wednesday, the five of us came together to help each other and discuss the next steps towards our goal. 
-A detailed schedule and division of labor can be found in Appendix \ref{appendix:Division of tasks}. This schedule was made by the promotors and supervisors. 
+A detailed schedule and division of the work can be found in Appendix \ref{appendix:Division of tasks}. This schedule was made by the promotors and supervisors. 
 It was a feasible schedule so this schedule was followed.  \\
 
 Wolf focused on the anchored path diffusion. Fea and Magali focused on the literature study, report and organization. 
@@ -92,25 +91,25 @@ Finally, we would like to thank Niels Verhelst and Joran Courtens for acquiring 
 
 
 
-\newpage
+\twocolumn
 \section{Introduction}
 
-MRI is a non‐invasive imaging technique that uses magnetic fields and radio frequency pulses to generate detailed anatomical images. 
-Micro-MRI is a non-invasive preclinical imaging modality that provides excellent soft tissue contrast for anatomical visualization in rodent models. 
-To visualize the animal's anatomy with sufficient details a high spatial resolution is important. Reducing voxel size improves spatial resolution but also decreases the signal and lowers the SNR. 
+Magnetic resonance imaging (MRI) is a non‐invasive imaging technique that uses magnetic fields and radio frequency pulses to generate detailed anatomical images. 
+Dedicated micro-MRI systems are available for preclinical imaging that provides excellent soft tissue contrast for anatomical visualization in rodent models. 
+To visualize the animal's anatomy with sufficient details, a high spatial resolution is important. Reducing voxel size improves spatial resolution but also decreases the signal and lowers the SNR. 
 On the other hand, increasing acquisition time can enhance signal quality and SNR. However, this increases the risk of artefacts, blurring, and motion-related distortions. 
 Additionally, longer scan times are often impractical in real-life imaging workflows, where efficiency and throughput are essential. 
 A good balance between spatial resolution, acquisition time and SNR is needed.
-In recent years, deep learning has emerged as a tool to address this trade-off between scan duration, resolution and image quality. 
-While more traditional techniques relied on manual tuning or fixed algorithms, deep learning methods can learn to restore fine details and reduce noise directly from examples of high and low quality images. 
-The study of the cross-course project (vakoverschrijdend project) proposes to develop a deep learning model that can predict a high-resolution image (12 minutes acquisition time) from a low resolution image (obtained in just 1 minute of acquisition time). 
-This approach aims to reduce the acquisition time while achieving a good resolution and a high SNR \cite{brown2014magnetic}. 
+Image processing/restoration tools can be used to improve the quality of the acquired image, but traditional techniques relied on manual tuning or fixed
+algorithms. More recently, deep learning has emerged, deep learning can learn to restore fine details and reduce noise directly from
+examples of high and low quality images which has been demonstrated to provide better results. These models adress the trade-off between resolution and image quality \cite{brown2014magnetic}. 
 
-\twocolumn
-\section{Materials and Methods}
-\subsection{Safety measures}
+\section{Data collection}
+\subsection{Infinity lab}
 
-To avoid contamination of the lab, the operator must wear a hairnet, face mask, lab coat, latex gloves and shoe covers. 
+This research was conducted at Infinity, the pre-clinical imaging core facility of Ghent University. 
+The lab provides imaging systems of various modalities, including MRI, PET, SPECT.
+We used a Bruker pharmascan to acquire images for our DL network. To avoid contamination of the lab, the operator must wear a hairnet, face mask, lab coat, latex gloves and shoe covers. 
 Metallic objects can be pulled into the MRI or disrupt the magnetic field, so they should be left outside the MRI room. 
 The Infinity lab at UZ Ghent Hospital Campus where this research was conducted also contains X-ray and PET/SPECT systems. 
 While X-ray exposure is monitored with personal dosimeters, the Geiger counter at the lab exit is used to detect possible contamination from radioactive tracers used in PET/SPECT imaging.
@@ -118,10 +117,9 @@ While X-ray exposure is monitored with personal dosimeters, the Geiger counter a
 \subsection{Preparation and calibration }
 
 All imaging was performed using a Bruker PharmaScan system operating at 7 Tesla designed for small animal imaging \cite{bruker2025pharmascan}. 
-A rat brain surface coil from Rapid Biomedical was used for the scans that were already provided (see later) and the scans acquired during this project. 
-The coil remained unchanged throughout the experiment to maintain uniformity in data acquisition.
+A dataset of 19 mice was already acquired and provided to us. These made use of the rat brain surface coil. We made use of the same coil to obtain additional images to maintain uniformity in data acquisition
 Before the acquisition sequence began, the mouse needed to be placed inside the scanner properly. 
-The mouse was positioned with either the head-thorax region or thorax-abdomen region in the field of view (see Figure~\ref{fig:head-thorax}). 
+Each mouse was scanned twice; once with the head-thorax in the center of the FOV, and once with the thorax-abdomen region (see Figure~\ref{fig:head-thorax}). 
 Supports and tape were used to fixate the mouse. 
 
 \begin{figure}[H]
@@ -138,29 +136,29 @@ The acquisition sequence consisted of multiple steps to fine-tune the system bef
 This step is especially necessary when switching between different animal species, as the water content in the coil may vary. 
 If the same type of sample (e.g., the same mouse model) is used throughout the experiment, svWobble does not need to be repeated for following scans.
 \item Tripilot scan:  short, preliminary scan that allows the user to define the field-of-view (FOV) that needs to be acquired. 
-This step generates 3 orthogonal views: axial, sagittal and coronal. A boundary box is then manually defined to encompass the required FOV, ensuring the right structures are within the FOV. 
+This step generates 3 orthogonal views: axial, sagittal and coronal. A bounding box is then manually defined to encompass the required FOV, ensuring the right structures are within the FOV. 
 Especially important is the phase direction, where the FOV must cover the entire subject.
 \end{enumerate}
 
 \subsection{Performing the MRI scan}
 
-Once the mouse was correctly positioned and FOV was defined, the process of acquiring 3D MRI data was started. 
+Once the mouse was correctly positioned and the FOV was defined, the process of acquiring 3D MRI data was started. 
 This was done for each mouse for both the head-thorax region and the thorax-abdomen region. 
-The following sequence was performed: axial default, axial fast, coronal default, coronal fast, sagittal default and lastly sagittal fast. 
+To obtain matched high-low resolution data in all directions, the following sequence was performed: axial default, axial fast, coronal default, coronal fast, sagittal default and lastly sagittal fast. 
 In this case ``default'' stands for a 12-minute scan and ``fast'' for a 1-minute scan.
 
 All scans were acquired using a T2-weighted RARE (rapid acquisition with refocused echoes) sequence. 
-This sequence is often chosen in preclinical imaging because it produces images that have high contrast between different soft tissues. 
-T2-weighted images work by highlighting differences in transverse relaxation time, which reflects how quickly protons lose phase coherence after excitation by a radio frequency pulse. 
+This sequence is often used in preclinical imaging because it produces images that have high contrast between different soft tissues. 
+T2-weighted images highlight  differences in transverse relaxation time, which reflects how quickly protons lose phase coherence after excitation by a radio frequency pulse. 
 This signal decay changes depending on its interaction within different types of tissues. 
 Shorter T2's, found in tissues such as muscle and fat, mean that the signal will decay very fast while tissues with a longer T2, for example fluids, retain the signal longer. 
-This will result in fluids appearing brighter than muscle and fat in the image. 
+As a result, in fluids appearing brighter than muscle and fat in the image. 
 
-From a technical perspective, the T2-weighted contrast is created by correctly selecting the echo time (TE) and the repetition time (TR). 
+From a technical perspective, the T2-weighted contrast is created by selecting an appropriate echo time (TE) and repetition time (TR). 
 The echo time is the time between the initial radio frequency pulse and the measured MRI signal. 
 A longer TE allows more time for tissues with a short T2 to lose their signal, resulting in them looking darker on the image. 
 Tissues with longer T2 values maintain more signal and will look brighter. Repetition time (TR) refers to the time between successive excitations of the same tissue slice. 
-Specifically for T2-weighted images a longer TR is used, minimizing the influence of T1 relaxation. For this study a TE of 37.1ms and TR of 4000ms are used. 
+Specifically for T2-weighted images, a longer TR is used, minimizing the influence of T1 relaxation. For this study a TE of 37.1ms and TR of 4000ms are used. 
 This provides a strongly T2-weighted image \cite{chavhan2009t2star}\cite{mrimaster2024}.  
 
 
@@ -168,17 +166,17 @@ After each image sequence is completed, they are reviewed to check for any misal
 
 \subsection{Image Datasets}
 
-Below in Table ~\ref{tab:mri} the parameters can be found used for the 1-minute low resolution and 12-minute high resolution scans. 
-These values were selected in function of acquisition time, image quality and SNR. 
+In table ~\ref{tab:mri} the parameters can be found used for the 1-minute low resolution and 12-minute high resolution scans. 
+These values were selected in function of the desired acquisition time, image quality and SNR. 
 The matrix size determines the level of detail in an image with the high-resolution scan (300x300) capturing finer structures compared to that of the low-resolution scan (150x150). 
 Other parameters such as repetition time, echo time and thickness remained constant for consistency. The field of view also stays the same at 3 cm x 3 cm to capture the same region of interest. 
-An important difference between the two scans is the in-plane resolution. The lower this value the higher resolution the visualisation. 
+An important difference between the two scans is the in-plane resolution. The lower this value, the higher resolution the visualisation. 
 The 12-minute scan (0,01 cm/pixel) is more precise while the 1-minute scan (0,02 cm/pixel) is faster but has less detail. 
 To significantly enhance SNR by reducing noise, the high-resolution scan uses five averages per slice.\\
 \\
 In the summer of 2024 an internship was done by Verhelst Niels and Courtens Joran \cite{verhelst2025denoising}. 
-The data that they acquired was used in combination with the data acquired in this project. During the internship 19 mice were scanned. 
-In the project the data of 5 mice were acquired.
+The data that they acquired was used in combination with the data acquired in this project. During the internship, 19 mice were scanned. 
+In the project, the data of 5 mice were acquired.
  
 
 \begin{table}[h]
@@ -213,27 +211,29 @@ This stage ensures the data is uniform and optimized for training.
 
 Some of the obtained images contained artifacts or noise, which cannot be fixed by cropping, these could negatively impact the model training. 
 To remove these bad slices from the data set, a visualization script was used to display the MRI slices allowing for manual inspection. 
-Once bad slices were identified they were removed from the used dataset (see appendix \ref{Appendix: Figures Preprocessing}: Figure~\ref{fig:bad slice}). 6.7\% of the slices were removed.
-
+Once bad slices were identified, they were removed from the used dataset (see appendix \ref{Appendix: Figures Preprocessing}: Figure~\ref{fig:bad_slice}). 6.7\% of the slices were removed. 
+%vervang percentage verwijderde slices naar aantal slices verwijderd. 
 
 \subsection{Cropping of the image slices}
 
 Cropping is a commonly used image-manipulation process. The obtained MRI images contained lots of background noise which interferes with the performance of the model. 
-To counter this problem the images were cropped ensuring that our region of interest was intact and unnecessary areas were removed (see appendix \ref{Appendix: Figures Preprocessing}: Figure~\ref{fig:comparision-cropped}).  
+To counter this problem the images were cropped ensuring that our region of interest was intact (see appendix \ref{Appendix: Figures Preprocessing}: Figure~\ref{fig:comparision-cropped}).  
 
 
 
 \subsection{Zarr arrays}
 
-The acquired data were first converted into Zarr arrays because of the large volume of data. Zarr arrays use compression to reduce storage while still maintaining image quality. 
-Unlike other formats this enables faster access by allowing selective loading rather than loading the entire dataset. 
+The acquired data were first converted into Zarr arrays to compress the large volume of data while maintaining image quality. 
+Unlike other formats this enables faster access since specific slices can be loaded instead of the entire dataset.
 The low-resolution image were upsampled using nearest-neighbor interpolation (order=0) with a zoom factor of 2 to match the high-resolution image dimensions. 
 
 \subsection{Normalization}
 
 Mean normalization was performed, each low-resolution image was divided by its mean intensity, and the same mean value was applied as a normalization factor for the corresponding high-resolution image.  
-Also, the dimension of the single-channel 2D images were expanded by adding a second channel. Both low-resolution and high-resolution images were converted to torch.FloatTensor for compatibility with PyTorch models.
+Both low-resolution and high-resolution images were converted for compatibility with PyTorch models.
 
+
+%the subsection below is data augmentation and not pre processing
 \subsection{Padding and random flipping}
 The images were randomly flipped horizontally and vertically with a 50\% probability, to introduce variations. 
 This improves the model generalization. Since input may have varying dimensions, the images were padded to match the largest width and height within each batch, ensuring uniform sizes for batch processing.
@@ -241,15 +241,17 @@ This improves the model generalization. Since input may have varying dimensions,
 
 \section{Deep learning network}
 \subsection{Model architecture}
-For the denoising and super-resolution DL model, a convolutional neural network based on the U-Net architecture is used. 
+For the denoising and super-resolution DL model, a convolutional neural network based on the U-Net architecture was used. 
 Such a network is a form of autoencoder, consisting of an encoder and decoder (see Figure~\ref{fig:U-Net}) \cite{ronneberger2015unet}.
 The input of the network is the low resolution images (dimensions 150x150), upsampled by interpolation to bring it up to the same dimensions of the output (300x300). 
-The network then denoises this input, which gives an image of a higher SNR. During training, the high-resolution images serve as ground truth to compute the loss, which in this case is the MSE loss. 
+The network then denoises this input, which gives an image of a higher SNR. During training, the high-resolution images serve as ground truth.
 The U-Net structure is supplied with residual connections between subsequent layers of the encoder and decoder. 
-The advantage of these residuals is faster convergence, instead of predicting and generating these high resolution images from the ground up, the network only has to predict the noise. 
-The rationale behind this U-Net, is that the encoder first tries to extract certain features from the input. 
+The advantage of these residuals is faster convergence, since the network then only needs to predict the noise instead of predicting and generating these high resolution images from the ground up.
+The rationale behind this U-Net, is that the encoder first extract certain features from the input. 
 Then, the decoder builds an image of higher SNR based on the positional pixel data of its corresponding layer in the encoder, and the condensed information generated by the encoder. 
 
+
+%ander formaat
 \begin{figure}
     \centering
     \includegraphics[width=0.5\linewidth]{U-Net.jpg}
@@ -262,10 +264,12 @@ Then, the decoder builds an image of higher SNR based on the positional pixel da
 
 
 \subsection{Anchored Path Diffusion Denoising Model (APDDM)}
-To complement the direct image-to-image denoising approach, discussed in the previous section, a second model was implemented, the Anchored Path Diffusion Denoising Model (APDDM). This model is a diffusion based framework designed specifically for paired high and low SNR images. In this case the high-resolution (12-minute) scans and the low-resolution (1-minute) scan. Unlike conventional denoising diffusion models that corrupt clean images with artificial Gaussian noise, APDDM uses the actual low SNR image as the endpoint, allowing the model to incorporate real noise from the dataset into the forward process. 
+To complement the direct image-to-image denoising approach, discussed in the previous section, a second model was implemented, 
+the Anchored Path Diffusion Denoising Model (APDDM). 
+This model is a diffusion based framework designed specifically for paired high and low SNR images, in this case the high-resolution (12-minute) scans and the low-resolution (1-minute) scan. Unlike conventional denoising diffusion models that corrupt clean images with artificial Gaussian noise, APDDM uses the actual low SNR image as the endpoint, allowing the model to incorporate real noise from the dataset into the forward process. 
 
 \subsubsection{Forward Diffusion Process}
-The forward process defines a stochastic path that gradually transforms the clean image $x_0$ into a noisy version $x_T$, with the endpoint distribution anchored around the real noisy scan $x_t^*$. 
+The forward process defines a stochastic path that gradually transforms the clean image $x_0$ into a noisy version $x_t$, with the endpoint distribution anchored around the real noisy scan $x_T^*$. 
 This is achieved using a Markov chain defined by:
 
 \begin{equation}\label{eq:Markov chain}
@@ -279,8 +283,8 @@ x_t=q(x_{t-1})=x_{t-1}+\frac{1}{T}\cdot R+f(t)\cdot \hat{\epsilon}, t=1,2,...,T
 \end{itemize}
 
 
-The approach guarantees that the endpoint of the forward diffusion $x_t$ is close to the true low-SNR image $x_t^*$. 
-By anchoring the path to $x_t^*$, the model maintains connected to the real noise present in the dataset. 
+The approach guarantees that the endpoint of the forward diffusion $x_T$ is close to the true low-SNR image $x_T^*$. 
+By anchoring the path to $x_T^*$, the model maintains connected to the real noise present in the dataset. 
 Additionally the variance in the diffusion path is fully controllable via the envelope function $f(t)$ and the scaling of the noise term $\hat{\epsilon} $, allowing adjustments of how much randomness is introduced. 
 This concept is illustrated in Figure \ref{fig:forward APDDM}. The forward diffusion path (indicated in orange) gradually moves from the high-SNR image $x_0$ toward a distribution centered around the noise image $x_T^*$, with each step adding increasing amount of noise. 
 The shape of the blue curve represents the variance of the distribution of noise.
@@ -294,8 +298,8 @@ The shape of the blue curve represents the variance of the distribution of noise
 
 
 \subsubsection{Reverse Process and Training}
-To reconstruct $x0$ from any intermediate $x_t$, a U-Net model $r_{theta}$ is trained to predict the added noise. 
-The predicted noise is then subtracted to obtain an estimate of $\hat{x_0}$, adn training is performed using mean squared error loss: 
+To reconstruct $x_0$ from any intermediate $x_t$, a U-Net model $r_{\theta}$ is trained to predict the added noise. 
+The predicted noise is then subtracted to obtain an estimate of $\hat{x_0}$, and training is performed using mean squared error loss: 
 \begin{equation}\label{eq:Markov chain}
     \hat{x_0}=x_t-f(t) \cdot r_{\theta}(x_t,\frac{t}{T})
 \end{equation}
@@ -320,16 +324,14 @@ This ensures that the denoising task is meaningful and well-aligned with the exp
 Furthermore, the ability to modulate noise strength and variance offers great control over training difficulty. 
 As an example, increasing noise allows for more challenging samples, improving the model's robustness to varying noise levels in unseen data. 
 Overall, APDDM offers a highly customizable framework for modeling noise in paired data and provides a strong foundation for future extensions. 
-A more mathematical approach can be found in \ref{appendix:Mathematics APDDM}
+The mathematical derivations that support this model can be found in \ref{appendix:Mathematics APDDM}
 
 \subsection{Trained hyperparameters}
 
 To get the best results for the deep learning model for micro MRI image denoising and super-resolution, the hyperparameters need to be fine-tuned. 
-In this case Optuna was used to perform automated hyperparameter tuning. 
-Giving the number of components and interactions within the model, manual tuning would be inefficient and inconsistent. 
+Given the number of components and interactions within the model, manual tuning would be inefficient and inconsistent. 
 Therefore, an open-source optimization software, such as Optuna, was used. 
 
-At the core of Optuna is the concept of a study, this manages a collection of trials. 
 Each trial corresponds to the training of the model with a specific set of hyperparameters. 
 The performance metrics are recorded after each trial, for example a validation loss. These metrics are used as a guide for the search. 
 A built-in sampler selects new parameter values to explore, while a pruners stops trials early if the model is clearly not improving. 
@@ -347,35 +349,36 @@ The following parameters were included in our optimization process:
 
 \subsubsection{Early stopping}
 To avoid excessive training of the model, the Early Stopping is used. 
-This parameter is defined as 'no update since' value, which the user must set. 
+This parameter is defined as `no update since`' value, which the user must set. 
 If this number is set too low, the model may avoid overfitting but could also stop training prematurely. 
 On the other hand, setting the value too high may result in an ineffective use of the Early Stopping. 
-In this project, at least 10 epochs will be ran. If there is no improvement during 6 epochs, the program will be stopped.
+In this project, at least 10 epochs will be run. If there is no improvement during 6 epochs, the program will be stopped.
 
 \subsubsection{Optimizer}
 The optimizer plays a crucial role in fine-tuning the model's weights during training to minimize the loss function. 
-Different methods can be used, each with its own advantages and disadvantages. 
-In this project four different optimizers will be tested: torch.optim.Adam, torch.optim.AdamW, torch.optim.SGD and torch.optim.RMSprop. 
+Different methods are available, each with its own advantages and disadvantages. 
+In this project, four different optimizers will be tested: Adam (short for adaptive moment estimation), AdamW, SGD and RMSprop. 
+%briefly explain how this works ie. a moving average of past gradients is used to update parameters. This means it doesn't rely solely on the current gradient but also "remembers" previous ones. The moving average helps smooth out noisy updates and provides a more stable direction — similar to momentum — which helps the optimizer converge faster and more reliably, especially in noisy or sparse data settings.
 Adam combines the benefits of momentum and adaptive learning rates.  
 One of its limitations is the way it incorporates L2 regularization directly into the gradient update, which can sometimes negatively affect the performance. 
 In contrast, AdamW decouples weight decay from the gradient update, applying it separately after the parameter update, which provides a more effective approach \cite{pykes-2021}.
-Stochast gradient descent (SGD) updates the model's parameteres based on the gradient loss function. 
-Unlike Adam, it uses a fixed learning rate and does not estimate moments of the gradients \cite{massed-compute-2025}.
+Adam uses a fixed learning rate, while stochastic gradient descent (SGD) updates the model's parameteres based on the gradient loss function  \cite{massed-compute-2025}. 
 RMSprop is another gradient-based optimization algorithm. 
 It uses an adaptive learning rate instead of treating the learning rate as a hyperparameter, which results in a change of learning rate over time. 
 This can result in faster convergence \cite{sanghvirajit-2025}.
 
 \subsubsection{Scheduler} \label{subsec:Scheduler}
-The scheduler adjust the learning rate during training according to the strategy that is predefined. 
-The following schedulers will be tested: \texttt{ExponentialLR}, \texttt{StepLR}, and \texttt{ReduceLROnPlateau} from the PyTorch \texttt{torch.optim.lr\_scheduler} module.
+The scheduler adjust the learning rate during training according to the predefined strategy. 
+%look up real names
+The following schedulers were be tested: exponential learning rate [\texttt{ExponentialLR}], step learning rate [\texttt{StepLR}], and reduce learning rate on plateau [\texttt{ReduceLROnPlateau}].
 
 The ExponentialLR divides the learning rate every epoch by the same factor $\Gamma$. 
-As a result, the learning rate decreases abruptly during the first epochs and then gradually stabilizes, approaching zero over time. 
+As a result, the learning rate decreases quickly during the first epochs and then gradually stabilizes, approaching zero over time. 
 StepLR is similar to ExponentialLR. It also decays the learning rate by gamma. However, the key difference is that this decay occurs only every N epochs. 
 This leads to more gradual and less frequent reductions in the learning rate compared to ExponentialLR. 
-This difference can be seen in \ref{eq:1} and \ref{eq:2}.
+Their respective formulas [4] and [5] are given below.
 Another scheduler is ReduceLROnPlateau. Unlike the others, it adapts the learning rate based on the performance of a specified metric. 
-This algorithm decreases the learning rate when the specified metrics stops improving for longer than the patience number allows. 
+This algorithm decreases the learning rate when the specified metrics stops improving for longer than allowed. 
 So, the learning rate is kept constant as long as the metric improves quantity. 
 When the learning rate is reduced, the results stagnate \cite{unknown-author-no-date3} \cite{isbhargav-2020}. 
 
@@ -393,15 +396,20 @@ lr_{\text{epoch}-1}, & \text{otherwise}
 $}
 \end{equation}
 
+
+%combine with scheduler
 \subsubsection{Learning rate decay}
-The learning rate decay will decrease the learning rate when the training progresses and becomes more stable. 
+The learning rate decay decreases the learning rate when the training progresses and becomes more stable. 
 It is used in the Scheduler algorithms as the step size (see \ref{subsec:Scheduler}). 
 Here, the learning rate decay of 0.1, 0.,3 and 0.5 is tested.
 
+
+%NOT HYPERPARAMETER
 \subsubsection{Features main and features skip}
-To decide which main features are used, different powers of $2$ were used. 
+To decide which number of main features are used, different powers of $2$ were used. 
 For every component of features\_main matrix, a different power can be chosen. 
 The next elements of the matrix will contain the next powers of $2$. It can be chosen how many elements will be used in the matrix. 
+%rewrite next part in simpler terms
 For the features\_skip, the same matrix as features main was chosen with the last element deleted. 
 We conducted experiments using a setup where one value was selected from each of the defined categories. 
 Specifically, features\_main\_1 was chosen from [32, 64, 128], features\_main\_2 from [64, 128, 256], and features\_main\_3 from [128, 256, 512]. 
@@ -409,10 +417,12 @@ This approach allowed us to systematically explore different combinations of fea
 
 \subsubsection{Upsampling method}
 The upsampling method is the process by which the resolution of an image is increased while minimizing the loss in image quality. 
-The goal is to increase the number of rows and/or columns of the image. Several methods are available, including nearest, linear, bilinear, trilinear, and bicubic interpolation, as implemented in torch.nn.Upsample.
+The goal is to increase the number of rows and/or columns of the image. 
+%look up real names
+Several methods are available, including nearest, linear, bilinear, trilinear, and bicubic interpolation, as implemented in torch.nn.Upsample.
 The nearest neighbor interpolation is the simplest approach. 
 Each pixel of the upscaled image is assigned the value of its nearest neighbor in the original image. 
-This method is fast and simple, but can produce pixelated images.
+This method is fast and simple, but might lead to produce pixelated images.
 The linear interpolation calculates the new pixel value by taking a weighted average of the two nearest pixels along a single axis. 
 The bilinear interpolation calculates a weighted average of the four nearest neighbors' pixel values in the original image. 
 It uses linear functions and a 2x2 pixel grid. 
@@ -425,16 +435,16 @@ After that the pixel intensity is estimated at the target position.
 It is an effective method for high-quality upscaling because it preserves details and reduces artifacts \cite{amanrao-2023} \cite{unknown-author-2025}.
 
 \subsubsection{Downsampling method}
-The downsampling method is important in the encoder and tells how the images will be reduced. Different methods were considered. 
+The downsampling method is an important aspect of the decoder and determines how the images will be reduced. Different methods were considered. 
 Maxpooling selects the maximum value from each patch in the feature map, preserving the most prominent features while reducing spatial dimensions. 
 This concept can be observed in Figure ~\ref{fig:maxpool} \cite{dhanushkumar-2023}.
 Another approach is Meanpooling. Instead of taking the prominent feature, this method averages the values within a patch, offering a smoother downsampling method. 
 In Figure ~\ref{fig:meanpool} the concept of meanpool can be seen.
-The last method, that is observed in this project, is convStrided. The principle can be seen in Figure ~\ref{fig:convStrided}. 
+The last method, is strided convolution. The principle can be seen in Figure ~\ref{fig:convStrided}. 
 First, the image is upsampled to increase its resolution (if necessary). 
 Next, the convolution is applied with a larger stride. 
 The strides controls how much the filter moves across the feature map during the convolution process. 
-When the the stride is greater than 1, the convolution operation skip some of the pixel, which results in an effective method to reduce the size of the feature map \cite{unknown-author-no-date2}.
+When the stride is greater than 1, the convolution operation skips some of the pixel, which results in an effective method to reduce the size of the feature map \cite{unknown-author-no-date2}.
 Each of these methods reduce the size of the feature map but with different strategies.
 
 
@@ -459,9 +469,10 @@ Each of these methods reduce the size of the feature map but with different stra
     \label{fig:convStrided}
 \end{figure}
 
+%with scheduler
 \subsubsection{Learning rate}
 The pace in which the weights are updates during training depends on the learning rate. 
-A learning rate value which is too high can lead to instability and poor convergence, while a value too low might slow down the training of the model  as can be seen on Figure \ref{fig:Learnrate} or it can even get stuck in a local minima \cite{jordan_2018_setting}. 
+A learning rate value which is too high can lead to instability and poor convergence, while too low value might slow down the training of the model  as can be seen on Figure \ref{fig:Learnrate} or it can even get stuck in a local minima \cite{jordan_2018_setting}. 
 Optuna was used to search across a continuous range of values [1E-2, 1E-6] to find the optimal balance between convergence and stability.
 
 \begin{figure}
@@ -474,13 +485,14 @@ Optuna was used to search across a continuous range of values [1E-2, 1E-6] to fi
 \subsubsection{Loss function}
 The loss function defines how well our model is performing by evaluating the prediction against the target images. 
 It guides the process by providing a measure of error which then can be minimized during training. 
-3 loss function were tested: Mean Squared Error (MSE) , Mean Absolute Error (MAE) and a hybrid loss. 
+3 loss functions were tested: Mean Squared Error (MSE) , Mean Absolute Error (MAE) and a hybrid loss. 
 MSE penalizes the squared difference between the predicted and true pixel values. 
 This loss function penalizes large errors more severely because the errors are squared. 
 This method is effective for achieving high numerical accuracy but can lead to overly smooth outputs with less fine structural detail.
 MAE computes the average of the absolute differences between predicted and true pixel values. 
 This method preserves edges and sharper transitions better than MSE but it is less sensitive to small errors and can converge more slowly \cite{anderson_2023_loss}.
 The last option, the hybrid loss, is a custom-defined loss which combines mean squared error (MSE) and structural similarity index (SSIM).
+%SSIM explanation and formula
 \begin{equation}\label{eq:3}
 \mathcal{L}_{\text{hybrid}} = \alpha \cdot \mathcal{L}_{\text{MSE}} + (1 - \alpha) \cdot (1 - \text{SSIM})
 \end{equation}
@@ -495,13 +507,13 @@ This allowed the model to adaptively prioritize pixel accuracy versus perceptual
 
 \subsubsection{Activation function}
 Activation functions introduce a non-linearity into the network. This allows complex mapping between inputs and outputs. 
-Without an activation function the network would behave like a linear system and would not be able to model intricate relationships suchs as edges and contrast. 
-Different options were tested such as ReLU,  LeakyReLU and ELU. Each of these options come with their own set of advantages and difficulties. 
+Without an activation function the network would behave like a linear system and would not be able to model intricate relationships such as edges and contrast. 
+Different options were tested such as ReLU,  LeakyReLU, ELU and PReLu. Each of these options come with their own set of advantages and difficulties. 
 ReLU (Rectified Linear Unit) is most commonly used as an activation function because of its simplicity and computational efficiency. 
-This function \ref{eq:4} returns the positive inputs directly and zero if negative. One of the limitations is a phenomena called 'dying neurons',  if a neuron only receives negative inputs, it will always output zero and stop learning.
+This function \ref{eq:4} returns the positive inputs directly and zero if negative. One of the limitations is a phenomenon called `dying neurons`',  if a neuron only receives negative inputs, it will always output zero and stop learning.
 LeakyReLU adresses this problem by allowing small negative outputs. This function \ref{eq:5} helps keeps neurons active and keeping them active. 
 This technique keeps the simplicity or ReLU while improving stability. 
-ELU is similar to LeakyReLU in the idea of keeping negative ouputs, but in this case with a smooth exponential curve \ref{eq:6}  instead of a constant curve. 
+ELU is similar to LeakyReLU in sense that negative outputs are generated, but in this case with a smooth exponential curve \ref{eq:6}  instead of a constant curve. 
 Finally PReLU (Parametric ReLU) also starts from LeakyReLU but in this case the negative slope is a learnable parameter and not a fixed value. 
 This lets the model adapt the activation function in training leading to potentially better performance. 
 However it does introduce an extra parameter increasing computational cost \cite{bharatiya_2019_comprehensive}.
@@ -537,22 +549,23 @@ a x & \text{if } x < 0
 
 \subsubsection{Batch size}
 Batch size defines how many training samples are used to calculate the gradient before the model updated the weights. 
-A larger batch size gives a more gradient estimate which can speed up training, but it requires large memory and can lead to worse generalization. 
-While a small batch size is more noisy in gradient updates which can escape local minima but also may lead to slow convergence. 
+A larger batch size gives a more gradient estimate which can speed up training, but it requires large memory and can lead to worse generalization,
+while a small batch size is more noisy in gradient updates which can escape local minima but also may lead to slow convergence. 
 
 \subsubsection{Residual learning}
 With residual learning instead of predicting the final high-resolution images the model learns the difference between the low- and high-resolution, this is called the residual. 
 After training the residual is added back onto the input image to produce the final image. This method has its advantages. 
 Learning the missing information is often faster and easier than predicting the entire image. This can lead to faster and better convergence. 
+%how implemented
 In this project residual learning is an optional feature. Optuna was used to explore if enabling led to better performance.
 
 \subsubsection{Number of epochs}
-The number of epochs defines how many times the model goes through the entire training dataset. 
+The number of epochs defines how many times the model goes through the entire training dataset for training. 
 While this is not a traditional hyperparameter it still has a role in the performance of the model. 
 Too few epochs can lead to underfitting, the model has not learned enough (especially with smaller datasets). 
 Too many can lead to overfitting, a phenomenon where the model memorizes the training data and performs poorly on unseen samples. 
 
-\section{Validation methods}
+\section{Model performance evaluation}
 In this section, the used validation methods are described. All the methods check the performance of the model. 
 
 \subsection{Mean squared error}
@@ -566,10 +579,10 @@ If there is no error, the MSE will become zero. Formula \ref{eq:MSE} can be used
 Here, S(i, j) is the observed value, and $\hat{S}(i, j)$  is the corresponding predicted value. 
 X represents the number of pixels in a row and y denotes the number of pixels in a column. \cite{mseJim}
 
-The MSE was calculated for the high resolution and the result of the deep learning model. After these calculations the ratio is taken.
+The MSE was calculated for the high resolution and the result of the deep learning model. After these calculations the ratio is taken of these two.
 
 \subsection{Structural similarity index measure}
-Since MSE can't account for structural composition, structural similarity index measure (SSIM) is used. 
+Since MSE does not account for structural composition, structural similarity index measure (SSIM) is used. 
 SSIM assesses the structural similarity between two images by considering luminance, contrast, and structure. 
 It can be used to evaluate the quality of the deep learning model compared to the pre-scanned high resolution images. 
 This evaluation metric is especially useful in medical image applications.
@@ -603,16 +616,16 @@ Ideally the residual of high-resolution and deep-learning images should be close
 
 \section{Results}
 \subsection{First results}
-First the model was runned on the hpc to check if everything went correctly. 
+First the model was run on the hpc to check whether all components were implemented correctly. 
 With this first run, the pre-processing steps could be verified and the first results could be observed. 
 The training was done on the accelgor cluster. 
-The 11th epoch was the best one, as can be observed in Figure \ref{fig:first_loss}.
+The 11th epoch was the best, as can be observed in Figure \ref{fig:first_loss}.
 In the best epoch the loss of the training is equal to 0.481, while the one of the validation equals 0.426.
 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{First_results_loss.png}
-    \caption{Visual representation of the loss function over different epochs during hyperparameter training. ER STAAN GEEN ASSEN OP DEZE FIGUUR!!!!!!}
+    \caption{Visual representation of the loss function over different epochs during hyperparameter training. geen assen!!!}
     \label{fig:first_loss}
 \end{figure}
 
@@ -631,14 +644,14 @@ Each image depicts another plane of the mouse. Also, images of the test mice can
 \begin{figure*}
     \centering
     \includegraphics[width=1\linewidth]{Mouse01_Sagittal_16_epoch_10.png}
-    \caption{First results of mouse 1 (training) sagittal plane slice 16 after 11th epoch.}
+    \caption{First results of abdomen}
     \label{fig:first_sagittal}
 \end{figure*}
 
 \begin{figure*}
     \centering
     \includegraphics[width=1\linewidth]{Mouse23_Transax_27_epoch_10.png}
-    \caption{First results of mouse 23 (training) transaxial plane slice 27 after 11th epoch.}
+    \caption{First results of  transaxial plane after 11th epoch.}
     \label{fig:first_transax}
 \end{figure*}
 
@@ -651,31 +664,13 @@ Each image depicts another plane of the mouse. Also, images of the test mice can
 
 
 \subsection{Trained hyperparameters}
-\subsubsection{First optimization}
-The first hyperparameter optimization process conducted with Optuna evaluated multiple architertural and training configurations for a U-Net based model. 
-Trail 54 emerges as the best-performing configuration, achieving a validation MSE of 0.0984. 
-This model uses a structure with convolutional feature depths of 128, 256, 256 for the main layers. 
-Downsampling was performed using strided convolutions and upsampling with transposed convolutions. 
-The ReLU activation function was used and residual output connections were disabled. 
-Optimization was done using the RMSprop algorithm with initial learning rate of 0.004112 in combination with the ReduceLROnPlateau learning rate scheduler. 
-The model was trained using a hybrid loss function that combines MSE and SSIM with the weighting controlled by a parameter $\alpha=0.3$.
-This combination of hyperparameters resulted in the lowest validation MSE across all evaluated trials, indicating strong performance in reconstructing high-resolution images. 
 
-\subsubsection{Disclaimer}
-It was later discovered that the optimization function was not working as intended and this was due to 2 reasons.
-First the custom loss function did not function correctly. Second of all Optuna was run only on transaxial slices and only on 2 mice. 
-As a result, the hyperparameters and validation metrics do not generalize to the full dataset. 
-
-To address this problem, a second Optuna optimization was run with corrected loss function and a full dataset. 
-The revised optimization yielded different best performing parameters. 
-
-\subsubsection{Second optimization}
 
 
 \subsection{Results after hyperparameter training}
 \begin{figure}
     \centering
-    \includegraphics[width=1\linewidth]{loss_graph_tuning.png}
+    \includegraphics[width=1\linewidth]{loss_graph.png}
     \caption{Visual representation of the loss function over different epochs during training.}
     \label{fig:train_loss}
 \end{figure}
@@ -707,7 +702,9 @@ The revised optimization yielded different best performing parameters.
 \subsection{First results}
 After obtaining the first results, a visual validation was made. At first sight, the results were very promising. 
 Looking at the Figure \ref{fig:first_sagittal}, Figure \ref{fig:first_transax} and Figure \ref{fig:first_coronal} shows that the deep learning (DL), the second image, has clearly higher quality and sharper details compared to the low resolution (LR) image at the left side. 
-The DL image approaches the high resolution (HR), but still has noise and structures that are not totally visible. Also, some parts are depicted more black than in the HR.
+The DL image approaches the high resolution (HR), but still has noise and structures that are not totally visible. 
+%add picture with arrow indication of this 
+Also, some parts are depicted more black than in the HR.
 The maximum intensity of the DL image is always lower than the one of the HR and the one of the LR. 
 This indicates small intensity bias or scaling difference. This is also due to the background that is cropped in the original images but depicted at the edges and not depicted in the DL output. 
 Looking at the edges of the mice in the DL images it shows that these are generally more smeared out and less sharp than in the HR images. 
@@ -728,11 +725,11 @@ While ReLu is prone to "dying neurons", its simplicity, speed and effectiveness 
 The absence of a relatively complex activation function suggests the network did not suffer from gradient issues that would call for alternatives. 
 Strided convolution (convStrided) was preferred over pooling for downsampling. 
 This aligns with expectations from common CNN practive. 
-Strided convolution allows the model to learn how to compress feature maps instead of relying on fixed operations such as meanpooling. 
+Strided convolution allows the model to practive how to compress feature maps instead of relying on fixed operations such as meanpooling. 
 This learnability likely helped preserve critical structural details. 
 
 Upsampling was performed using transposed convolutions (upconv), as a standard approach that allows the network to recover spatial resolution in a data-driven way. 
-Unlike other methods, upconv layers can learn to reintroduce high-frequency detail, making them well suited in this case.
+Unlike other methods, upconv layers can learn to reintroduce high-frequency detail, making them well suited in this case to enhance the resolution. 
 
 Residual connections were disabled which is an unexpected result which contrasts with many image restoration models that benefit from residual learning. 
 However, it can be explained due to the skip connections inherent to U-Net which likely compensated for this. 
@@ -746,16 +743,18 @@ In parallel, the ReduceLROnPlateau scheduler monitors the validation loss and au
 Together these tools contribute to faster and more stable convergence, reducing the risk of overshooting or stagnation.
 
 The model was trained using a hybrid loss function that combines both MSE and SSIM, with  $\alpha=0.3$. 
-Because of \ref{eq:6} it can be concluded that structural similarity is favored, encouraging the model to preserve structural features over strict pixel accuracy. 
+Because of formula \ref{eq:6} it can be concluded that structural similarity is favored, encouraging the model to preserve structural features over strict pixel accuracy. 
 Such a loss is better suited in medical imaging tasks than pure MSE which can lead to overly smooth, less diagnostic outputs \cite{Dastmalchi}. 
 
-The optimization process solely relied on MSE for validation. This decision may introduce some form of metric bias. 
+The optimization process solely relied on MSE for validation. 
+%add reason why validation relied on MSE
+This decision may introduce some form of metric bias. 
 MSE disproportionately penalizes large pixel errors, which often lead to overly smooth outputs. 
 In denoising tasks, this can result in models that reduce noise effectively in terms of pixel accuracy but at the cost of signal preservation, leading to a lower signal-to-noise (SNR) in practice. 
 MSE is also sensitive to outliers and intensity shifts, while being oblivious to perceptual structure and contrast consistency \cite{1284395}. 
 Future work could benefit from using alternative validation metrics, such as SNR or perceptual similarity measures, to better guide model selection and ensure outputs are both quantitatively accurate and visually informative \cite{chavhan2009t2star}. 
 Metrics such as LPIPS offer a promising alternative by leveraging deep features that align more closely with human perception and quality \cite{zhang2018unreasonableeffectivenessdeepfeatures}.
-
+%what is LPIPS
 \subsection{Results after hyperparameter training}
 
 \subsection{APDDM}
