@@ -608,10 +608,11 @@ With this first run, the pre-processing steps could be verified and the first re
 The training was done on the accelgor cluster. 
 The 11th epoch was the best one, as can be observed in Figure \ref{fig:first_loss}.
 In the best epoch the loss of the training is equal to 0.481, while the one of the validation equals 0.426.
+
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{First_results_loss.png}
-    \caption{Visual representation of the loss function over different epochs. ER STAAN GEEN ASSEN OP DEZE FIGUUR!!!!!!}
+    \caption{Visual representation of the loss function over different epochs during hyperparameter training. ER STAAN GEEN ASSEN OP DEZE FIGUUR!!!!!!}
     \label{fig:first_loss}
 \end{figure}
 
@@ -674,8 +675,8 @@ The revised optimization yielded different best performing parameters.
 \subsection{Results after hyperparameter training}
 \begin{figure}
     \centering
-    \includegraphics[width=1\linewidth]{loss_graph.png}
-    \caption{Visual representation of the loss function over different epochs.}
+    \includegraphics[width=1\linewidth]{loss_graph_tuning.png}
+    \caption{Visual representation of the loss function over different epochs during training.}
     \label{fig:train_loss}
 \end{figure}
 
@@ -694,7 +695,7 @@ The revised optimization yielded different best performing parameters.
     \end{tabular}
     }
     \caption{\label{tab:mouse_distribution} Mouse distribution across training, validation, and testing sets.}
-    \end{table}
+\end{table}
 
     
 
@@ -705,18 +706,14 @@ The revised optimization yielded different best performing parameters.
 \section{Discussion}
 \subsection{First results}
 After obtaining the first results, a visual validation was made. At first sight, the results were very promising. 
-Looking at the Figure \ref{fig:transax1_first} and Figure \ref{fig:transax2_first} shows that the deep learning (DL), in the middle, has clearly higher quality and sharper details compared to the low resolution (LR) image at the left side. 
-The DL image approaches the high resolution (HR), but still has noise and structures that are not totally visible. 
-In Figure \ref{fig:transax1_first}, the maximum intensity of the DL image is the same as that of the LR, which both have an intensity of 5, while the maximum intensity of the HR is higher with an intensity of 6. 
-This indicates small intensity bias or scaling difference. 
-This is in contrast with Figure \ref{fig:transax2_first} where the maximum intensity (equal to 4) is lower than in the LR and HR images, where the mean value is 5. 
-This can be due to the liver that is smeared out and more depicted gray as in both LR and HR scans.
-Looking at the edges of the DL images it shows that these are generally more smeared out and less sharp than in the HR images. 
+Looking at the Figure \ref{fig:first_sagittal}, Figure \ref{fig:first_transax} and Figure \ref{fig:first_coronal} shows that the deep learning (DL), the second image, has clearly higher quality and sharper details compared to the low resolution (LR) image at the left side. 
+The DL image approaches the high resolution (HR), but still has noise and structures that are not totally visible. Also, some parts are depicted more black than in the HR.
+The maximum intensity of the DL image is always lower than the one of the HR and the one of the LR. 
+This indicates small intensity bias or scaling difference. This is also due to the background that is cropped in the original images but depicted at the edges and not depicted in the DL output. 
+Looking at the edges of the mice in the DL images it shows that these are generally more smeared out and less sharp than in the HR images. 
 The noise of the LR is reduced with minimal loss of important structural information. 
+The same observations can be made when looking at the validation mice (see Appendix \ref{Appendix: Figures Results}).
 As said, the results are very promising but there is also room for improvement. The first step in this process is training the hyperparameters. 
-An important note to make is that the validation and test set for the first results were not well chosen. 
-All the images that were scanned during this project are set as validation, which could lead to bias. 
-This will be taken into account when training the model a second time.
 
 \subsection{Trained hyperparameters (work in progress)}
 Trial 54 achieved a strong validation MSE of 0.0984. 
