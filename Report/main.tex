@@ -52,17 +52,14 @@
 \newpage
 \onecolumn
 \begin{abstract}
-Magnetic resonance imaging (MRI) is a non‐invasive imaging technique that uses magnetic fields and radiofrequency pulses to generate detailed anatomical images. 
-Micro-MRI, a preclinical imaging modality, offers excellent soft tissue contrast for anatomical visualization in rodent models. 
-However, achieving an optimal balance between spatial resolution, acquisition time, and signal to noise ratio (SNR) remains challenging. 
-In this study a deep learning denoising and super-resolution framework for micro-MRI to reduce scan time while enhancing spatial resolution is developed. 
-A total of 24 mice were scanned using a $7$T Bruker Pharmascan micro-MRI scanner. For each T2-weighted image, 2 scans were acquired: a 1-minute low-resolution scan and a 12-minute high-resolution scan. 
-Following data acquisition, the data was pre-processed. The pre-processing included (1) removing bad slices, (2) cropping the images, (3) put them into Zarr arrays, (4) normalize them and (5) padding and random flipping. 
-After the data was pre-processed, a U-Net architecture was optimized by exploring different hyperparameters. 
-The optimizer, scheduler, features main, features skip, upsampling method, downsampling method, learning rate, loss function, activation function, batch size and residual learning were trained via Optuna. 
-After getting the best hyperparameters the model was trained with and without super-resolution. To evaluate the model performance different strategies were used. 
-The following methodologies were chosen: mean squared error (MSE), structural similarity index measure (SSIM), contrast-to-noise ratio (CNR) and visual comparison. 
-In addition, a second model, namely anchored path diffusion denoising model, was designed and trained.
+Micro-MRI enables high-contrast anatomical imaging in small animal models but often requires a trade-off between spatial resolution, signal-to-noise ratio (SNR), and scan time.
+ This study presents a deep learning framework designed to enhance image quality and reduce acquisition time by combining denoising and super-resolution techniques. 
+ Paired T2-weighted scans were acquired for 24 mice using a 7T Bruker Pharmascan system, consisting of low-resolution (1-minute) and high-resolution (12-minute) images. 
+ After data pre-processing and augmentation, a U-Net convolutional network was trained using automated hyperparameter optimization.
+  This process systematically tested combinations of learning rates, optimizers, convolutional filter sizes, upsampling and downsampling strategies, loss and activation functions, batch size, and the inclusion of residual learning to identify the most effective configuration. 
+  Model performance was evaluated using global and local image quality metrics. Mean squared error (MSE) and structural similarity index (SSIM) quantified overall image accuracy and structural integrity, while contrast-to-noise ratio (CNR) assessed localized contrast improvements, particularly relevant for denoising effectiveness. 
+  In addition to the U-Net model, a second denoising framework called the Anchored Path Diffusion Denoising Model (APDDM) was developed. This model introduces realistic noise during training to improve robustness. 
+  The proposed methods demonstrated improved image quality while enabling significantly shorter acquisition times, supporting more efficient imaging workflows in preclinical research.
 \end{abstract}\hspace{15pt}
 \newpage
 
@@ -239,7 +236,7 @@ The images were randomly flipped horizontally and vertically with a 50\% probabi
 This improves the model generalization. Since input may have varying dimensions, the images were padded to match the largest width and height within each batch, ensuring uniform sizes for batch processing.
 
 
-\section{Deep learning network}
+\section{Neural Network and Training Process}
 \subsection{Model architecture}
 For the denoising and super-resolution DL model, a convolutional neural network based on the U-Net architecture was used. 
 Such a network is a form of autoencoder, consisting of an encoder and decoder (see Figure~\ref{fig:U-Net}) \cite{ronneberger2015unet}.
@@ -260,6 +257,258 @@ Then, the decoder builds an image of higher SNR based on the positional pixel da
 \end{figure}
 
 
+\subsection{Hyperparameter Optimization for Training of the U-Net}
+To get the best results for the deep learning model for micro MRI image denoising and super-resolution, the hyperparameters need to be fine-tuned. 
+Given the number of components and interactions within the model, manual tuning would be inefficient and inconsistent. 
+Therefore, an open-source optimization software, such as Optuna, was used. 
+
+Each trial corresponds to the training of the model with a specific set of hyperparameters. 
+The performance metrics are recorded after each trial, for example a validation loss. These metrics are used as a guide for the search. 
+A built-in sampler selects new parameter values to explore, while a pruners stops trials early if the model is clearly not improving. 
+This combination is especially helpful to reduce the number of trainings that need to be run, this saves computational resources. 
+
+One of the advantages of Optuna is its define-by-run approach \cite{10.1145/3292500.3330701}. 
+This means that instead of predefining the entire parameter space before the optimization, the search space is defined dynamically while being executed. 
+This gives more flexibility especially in cases where certain parameters are only relevant under specific conditions. 
+Instead of testing all combinations blindly, Optuna can selectively explore subsets of the parameter space based on earlier decisions within the same trial. 
+The avoidance of meaningless testing makes the optimizations process  more efficient. 
+
+Overall Optuna played a key role in helping reach a well-performing model more efficiently, and ensured that our final configuration was based on data-driven search rather than trial and error.
+
+\subsubsection{Hyperparameters fo the Network Structure }
+\paragraph{Features main and features skip}
+To decide which number of main features are used, different powers of $2$ were used.  
+For every component of the \texttt{features\_main} matrix, a different power can be chosen.  
+The next elements of the matrix will contain the next powers of $2$. It can be chosen how many elements will be used in the matrix.  
+Although this is not a traditional hyperparameter, it was still included in the tuning process to evaluate its impact on model performance.
+
+For the \texttt{features\_skip}, the same values as in \texttt{features\_main} were used, but with the last element removed.  
+These values define how many filters are used in each layer of the encoder and decoder.  
+The skip connections pass feature maps from the encoder to the decoder at corresponding levels, helping the model retain spatial information during reconstruction.
+
+To test different configurations, one value was selected from each of three predefined categories.  
+Specifically, \texttt{features\_main\_1} was chosen from [32, 64, 128], \texttt{features\_main\_2} from [64, 128, 256], and \texttt{features\_main\_3} from [128, 256, 512].  
+This setup allowed us to systematically explore various combinations of feature sizes and evaluate their influence on model performance.
+
+\paragraph{Downsampling method}
+The downsampling method is an important aspect of the decoder and determines how the images will be reduced. Different methods were considered. 
+Maxpooling selects the maximum value from each patch in the feature map, preserving the most prominent features while reducing spatial dimensions. 
+This concept can be observed in Figure ~\ref{fig:maxpool} \cite{dhanushkumar-2023}.
+Another approach is Meanpooling. Instead of taking the prominent feature, this method averages the values within a patch, offering a smoother downsampling method. 
+In Figure ~\ref{fig:meanpool} the concept of meanpool can be seen.
+The last method, is strided convolution. The principle can be seen in Figure ~\ref{fig:convStrided}. 
+First, the image is upsampled to increase its resolution (if necessary). 
+Next, the convolution is applied with a larger stride. 
+The strides controls how much the filter moves across the feature map during the convolution process. 
+When the stride is greater than 1, the convolution operation skips some of the pixel, which results in an effective method to reduce the size of the feature map \cite{unknown-author-no-date2}.
+Each of these methods reduce the size of the feature map but with different strategies.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Maxpool.jpg}
+    \caption{Downsampling - Maxpool}
+    \label{fig:maxpool}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Meanpool.jpg}
+    \caption{Downsampling - Meanpool}
+    \label{fig:meanpool}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{ConvStrided_new.png}
+    \caption{Downsampling - convStrided}
+    \label{fig:convStrided}
+\end{figure}
+
+
+\paragraph{Upsampling}
+The upsampling method is the process by which the resolution of an image is increased while minimizing the loss in image quality. 
+The goal is to increase the number of rows and/or columns of the image. 
+Several methods are available, including nearest neighbor, linear, bilinear, trilinear, and bicubic interpolation, as implemented in PyTorch's interpolation modes.
+
+The nearest neighbor interpolation is the simplest approach. 
+Each pixel of the upscaled image is assigned the value of its nearest neighbor in the original image. 
+This method is fast and simple, but might produce pixelated images.
+
+The linear interpolation calculates the new pixel value by taking a weighted average of the two nearest pixels along a single axis. 
+The bilinear interpolation calculates a weighted average of the four nearest neighbors' pixel values in the original image. 
+It uses linear functions and a $2 \times 2$ pixel grid. 
+
+The trilinear interpolation is used in 3D images. 
+The interpolation is first performed linearly along one axis, followed by linear interpolation along the second and third axes. 
+The linear, bilinear, and trilinear methods result in smoother images than the nearest neighbor method.
+
+Bicubic interpolation is more advanced. This method first identifies the nearest $4 \times 4$ grid of pixels surrounding the point that needs to be interpolated. 
+Then, it calculates the cubic polynomials that best fit the pixel values in the grid. 
+After that, the pixel intensity is estimated at the target position. 
+It is an effective method for high-quality upscaling because it preserves details and reduces artifacts \cite{amanrao-2023} \cite{unknown-author-2025}.
+
+\paragraph{Activation function}
+Activation functions introduce a non-linearity into the network. This allows complex mapping between inputs and outputs. 
+Without an activation function the network would behave like a linear system and would not be able to model intricate relationships such as edges and contrast. 
+Different options were tested such as ReLU,  LeakyReLU, ELU and PReLu. Each of these options come with their own set of advantages and difficulties. 
+ReLU (Rectified Linear Unit) is most commonly used as an activation function because of its simplicity and computational efficiency. 
+This function \ref{eq:4} returns the positive inputs directly and zero if negative. One of the limitations is a phenomenon called `dying neurons`',  if a neuron only receives negative inputs, it will always output zero and stop learning.
+LeakyReLU adresses this problem by allowing small negative outputs. This function \ref{eq:5} helps keeps neurons active and keeping them active. 
+This technique keeps the simplicity or ReLU while improving stability. 
+ELU is similar to LeakyReLU in sense that negative outputs are generated, but in this case with a smooth exponential curve \ref{eq:6}  instead of a constant curve. 
+Finally PReLU (Parametric ReLU) also starts from LeakyReLU but in this case the negative slope is a learnable parameter and not a fixed value. 
+This lets the model adapt the activation function in training leading to potentially better performance. 
+However it does introduce an extra parameter increasing computational cost \cite{bharatiya_2019_comprehensive}.
+
+\begin{equation}\label{eq:4}
+    f(x)_{ReLU} = \max(0, x)
+\end{equation}
+
+\begin{equation}\label{eq:5}
+f(x)_{LeakyReLU} = 
+\begin{cases}
+x & \text{if } x \geq 0 \\
+\beta x & \text{if } x < 0
+\end{cases}
+\end{equation}
+
+\begin{equation}\label{eq:6}
+f(x)_{ELU} = 
+\begin{cases}
+x & \text{if } x \geq 0 \\
+\alpha (e^x - 1) & \text{if } x < 0
+\end{cases}
+\end{equation}
+
+
+\begin{equation}\label{eq:7}
+f(x)_{PReLU} = 
+\begin{cases}
+x & \text{if } x \geq 0 \\
+a x & \text{if } x < 0
+\end{cases}
+\end{equation}
+
+\paragraph{Residual learning}
+With residual learning instead of predicting the final high-resolution images the model learns the difference between the low- and high-resolution, this is called the residual. 
+After training the residual is added back onto the input image to produce the final image. This method has its advantages. 
+Learning the missing information is often faster and easier than predicting the entire image. This can lead to faster and better convergence. 
+%how implemented
+In this project residual learning is an optional feature. Optuna was used to explore if enabling led to better performance.
+
+\subsubsection{Hyperparameters of the Training Process}
+
+\paragraph{Learning Rate Strategies} \label{subsec:LearningRateStrategies}
+The scheduler adjusts the learning rate during training according to a predefined strategy.  
+The following schedulers were tested: exponential learning rate (\texttt{ExponentialLR}), step learning rate (\texttt{StepLR}), and reduce learning rate on plateau (\texttt{ReduceLROnPlateau}).
+
+The \texttt{ExponentialLR} divides the learning rate every epoch by the same factor $\Gamma$.  
+As a result, the learning rate decreases quickly during the first epochs and then gradually stabilizes, approaching zero over time.  
+\texttt{StepLR} is similar to \texttt{ExponentialLR}. It also decays the learning rate by gamma. However, the key difference is that this decay occurs only every $N$ epochs.  
+This leads to more gradual and less frequent reductions in the learning rate compared to \texttt{ExponentialLR}.  
+Their respective formulas \ref{eq:1} and \ref{eq:2} are given below.
+
+Another scheduler is \texttt{ReduceLROnPlateau}. Unlike the others, it adapts the learning rate based on the performance of a specified metric.  
+This algorithm decreases the learning rate when the specified metric stops improving for longer than allowed.  
+So, the learning rate is kept constant as long as the metric improves.  
+When the learning rate is reduced, the results stagnate \cite{unknown-author-no-date3} \cite{isbhargav-2020}.
+
+These schedulers make use of a learning rate decay value, which determines how much the learning rate is reduced at each step.  
+The learning rate decay decreases the learning rate as training progresses and becomes more stable.  
+It is used in the scheduler algorithms as the step size.  
+Here, the learning rate decay values of 0.1, 0.3, and 0.5 were tested.
+
+In addition to scheduling and decay, selecting an appropriate initial learning rate is also crucial.  
+The pace in which the weights are updated during training depends on the learning rate.  
+A learning rate value which is too high can lead to instability and poor convergence, while a value that is too low might slow down the training of the model, as shown in Figure \ref{fig:Learnrate}, or even cause the model to get stuck in a local minimum \cite{jordan_2018_setting}.  
+Optuna was used to search across a continuous range of values \([10^{-2}, 10^{-6}]\) to find the optimal balance between convergence and stability.
+
+\begin{equation}\label{eq:1}
+lr_{\text{epoch ExponentialLR}} = \Gamma \times lr_{\text{epoch}-1}
+\end{equation}
+
+\begin{equation}\label{eq:2}
+\resizebox{1.\hsize}{!}{$
+lr_{\text{epoch}} =
+\begin{cases}
+\Gamma \times lr_{\text{epoch}-1}, & \text{if } \text{epoch} \bmod \text{step\_size} = 0 \\
+lr_{\text{epoch}-1}, & \text{otherwise}
+\end{cases}
+$}
+\end{equation}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Learn rate.jpg}
+    \caption{Comparison of different learning rates}
+    \label{fig:Learnrate}
+\end{figure}
+
+\paragraph{Optimizer}
+The optimizer plays a crucial role in fine-tuning the model's weights during training to minimize the loss function. 
+Different methods are available, each with its own advantages and disadvantages. 
+In this project, four different optimizers will be tested: Adam, AdamW, SGD and RMSprop. 
+One of its limitations is the way it incorporates L2 regularization directly into the gradient update, which can sometimes negatively affect the performance. 
+Stochast gradient descent(SGD) updates the model’s parameteres basedon the gradient loss function. Unlike Adam, ituses a fixed learning rate and does not estimatemoments of the gradients
+In contrast, AdamW decouples weight decay from the gradient update, applying it separately after the parameter update, which provides a more effective approach \cite{pykes-2021}.
+RMSprop, also known as root mean square propagation, is another gradient-based optimization algorithm. It uses a moving average of the squared gradients to adapt the learning rate for each parameter. 
+This means it does not rely solely on the current gradient, but also incorporates information from previous updates. By "remembering" the magnitude of recent gradients, RMSprop smooths out noisy updates and helps stabilize the training process. 
+This leads to faster and more reliable convergence, particularly in settings with sparse gradients or noisy data, functioning similarly to momentum-based methods.
+It uses an adaptive learning rate instead of treating the learning rate as a hyperparameter, which results in a change of learning rate over time. 
+This can result in faster convergence \cite{sanghvirajit-2025}.
+
+
+
+\paragraph{Loss function}\label{loss_function}
+The loss function defines how well our model is performing by evaluating the prediction against the target images. 
+It guides the process by providing a measure of error which then can be minimized during training. 
+3 loss functions were tested: Mean Squared Error (MSE) , Mean Absolute Error (MAE) and a hybrid loss. 
+MSE penalizes the squared difference between the predicted and true pixel values. 
+This loss function penalizes large errors more severely because the errors are squared. 
+This method is effective for achieving high numerical accuracy but can lead to overly smooth outputs with less fine structural detail.
+MAE computes the average of the absolute differences between predicted and true pixel values. 
+This method preserves edges and sharper transitions better than MSE but it is less sensitive to small errors and can converge more slowly \cite{anderson_2023_loss}.
+The last option, the hybrid loss, is a custom-defined loss which combines mean squared error (MSE) and structural similarity index (SSIM).
+\begin{equation}\label{eq:3}
+\mathcal{L}_{\text{hybrid}} = \alpha \cdot \mathcal{L}_{\text{MSE}} + (1 - \alpha) \cdot (1 - \text{SSIM})
+\end{equation}
+\begin{itemize}
+    \item $\alpha \in [0, 1]$ controls the balance between the two components,
+    \item $\mathcal{L}_{\text{MSE}}$ measures the average pixel-wise error between the predicted and ground truth images,
+    \item $\text{SSIM}$ evaluates perceptual similarity.
+\end{itemize}
+
+The Structural Similarity Index Measure (SSIM) is used to evaluate the perceptual similarity between two images.  
+Unlike MSE or MAE, which focus on absolute pixel-wise differences, SSIM compares structural information by considering changes in luminance, contrast, and structure.  
+This makes it particularly suitable for applications like medical imaging, where preserving anatomical detail is important.
+\begin{equation}\label{eq:SSIM}
+\text{SSIM}(A, B) = \frac{(2 \cdot \mu_A \cdot \mu_B + c_1)(2 \cdot \sigma_{AB} + c_2)}{(\mu_A^2 + \mu_B^2 + c_1)(\sigma_A^2 + \sigma_B^2 + c_2)}
+\end{equation}
+
+\begin{itemize}
+    \item $\mu_a,\mu_b$ : mean intensities of images A and B
+    \item $\sigma_A^2, \sigma_B^2$ :variances
+    \item $\sigma_{AB}$ : covariances
+    \item $c_1,c_2$ : 2 variables which stabilize the division (both are typically small values)
+\end{itemize}
+
+MSE helps preserve pixel-wise fidelity while SSIM ensures structural integrity of the image, which is crucial in medical contexts. 
+Optuna was used to choose the type of loss function to apply and, in the case of the hybrid loss, to optimize the value of alpha. 
+This allowed the model to adaptively prioritize pixel accuracy versus perceptual quality. 
+
+\paragraph{Others}
+Several training-related settings were applied to control the model optimization process, including early stopping, batch size, and the number of training epochs.
+ While these are not traditional hyperparameters in the architectural sense, they significantly influence model performance and training efficiency.
+
+Early stopping was used to prevent excessive training and potential overfitting. The criterion is based on a `no improvement`' threshold, where training stops if validation performance does not improve for a set number of epochs. 
+In this project, training was stopped if no improvement was observed after 6 consecutive epochs, with a minimum of 10 epochs always run to ensure sufficient learning.
+
+Batch size determines how many training samples are processed before updating the model weights. Larger batch sizes provide more stable gradient estimates, which can speed up training but require more memory and may generalize worse. 
+Smaller batches introduce more noise into gradient updates, which can help escape local minima but may lead to slower convergence.
+
+Number of epochs refers to how many times the model sees the entire training dataset. Although not a direct hyperparameter, it plays a key role in controlling learning. 
+Too few epochs can result in underfitting, while too many may lead to overfitting, especially when early stopping is not properly configured.
 
 
 
@@ -326,244 +575,6 @@ As an example, increasing noise allows for more challenging samples, improving t
 Overall, APDDM offers a highly customizable framework for modeling noise in paired data and provides a strong foundation for future extensions. 
 The mathematical derivations that support this model can be found in \ref{appendix:Mathematics APDDM}
 
-\subsection{Trained hyperparameters}
-
-To get the best results for the deep learning model for micro MRI image denoising and super-resolution, the hyperparameters need to be fine-tuned. 
-Given the number of components and interactions within the model, manual tuning would be inefficient and inconsistent. 
-Therefore, an open-source optimization software, such as Optuna, was used. 
-
-Each trial corresponds to the training of the model with a specific set of hyperparameters. 
-The performance metrics are recorded after each trial, for example a validation loss. These metrics are used as a guide for the search. 
-A built-in sampler selects new parameter values to explore, while a pruners stops trials early if the model is clearly not improving. 
-This combination is especially helpful to reduce the number of trainings that need to be run, this saves computational resources. 
-
-One of the advantages of Optuna is its define-by-run approach \cite{10.1145/3292500.3330701}. 
-This means that instead of predefining the entire parameter space before the optimization, the search space is defined dynamically while being executed. 
-This gives more flexibility especially in cases where certain parameters are only relevant under specific conditions. 
-Instead of testing all combinations blindly, Optuna can selectively explore subsets of the parameter space based on earlier decisions within the same trial. 
-The avoidance of meaningless testing makes the optimizations process  more efficient. 
-
-Overall Optuna played a key role in helping reach a well-performing model more efficiently, and ensured that our final configuration was based on data-driven search rather than trial and error.
-
-The following parameters were included in our optimization process:
-
-\subsubsection{Early stopping}
-To avoid excessive training of the model, the Early Stopping is used. 
-This parameter is defined as `no update since`' value, which the user must set. 
-If this number is set too low, the model may avoid overfitting but could also stop training prematurely. 
-On the other hand, setting the value too high may result in an ineffective use of the Early Stopping. 
-In this project, at least 10 epochs will be run. If there is no improvement during 6 epochs, the program will be stopped.
-
-\subsubsection{Optimizer}
-The optimizer plays a crucial role in fine-tuning the model's weights during training to minimize the loss function. 
-Different methods are available, each with its own advantages and disadvantages. 
-In this project, four different optimizers will be tested: Adam (short for adaptive moment estimation), AdamW, SGD and RMSprop. 
-%briefly explain how this works ie. a moving average of past gradients is used to update parameters. This means it doesn't rely solely on the current gradient but also "remembers" previous ones. The moving average helps smooth out noisy updates and provides a more stable direction — similar to momentum — which helps the optimizer converge faster and more reliably, especially in noisy or sparse data settings.
-Adam combines the benefits of momentum and adaptive learning rates.  
-One of its limitations is the way it incorporates L2 regularization directly into the gradient update, which can sometimes negatively affect the performance. 
-In contrast, AdamW decouples weight decay from the gradient update, applying it separately after the parameter update, which provides a more effective approach \cite{pykes-2021}.
-Adam uses a fixed learning rate, while stochastic gradient descent (SGD) updates the model's parameteres based on the gradient loss function  \cite{massed-compute-2025}. 
-RMSprop is another gradient-based optimization algorithm. 
-It uses an adaptive learning rate instead of treating the learning rate as a hyperparameter, which results in a change of learning rate over time. 
-This can result in faster convergence \cite{sanghvirajit-2025}.
-
-\subsubsection{Scheduler} \label{subsec:Scheduler}
-The scheduler adjust the learning rate during training according to the predefined strategy. 
-%look up real names
-The following schedulers were be tested: exponential learning rate [\texttt{ExponentialLR}], step learning rate [\texttt{StepLR}], and reduce learning rate on plateau [\texttt{ReduceLROnPlateau}].
-
-The ExponentialLR divides the learning rate every epoch by the same factor $\Gamma$. 
-As a result, the learning rate decreases quickly during the first epochs and then gradually stabilizes, approaching zero over time. 
-StepLR is similar to ExponentialLR. It also decays the learning rate by gamma. However, the key difference is that this decay occurs only every N epochs. 
-This leads to more gradual and less frequent reductions in the learning rate compared to ExponentialLR. 
-Their respective formulas [4] and [5] are given below.
-Another scheduler is ReduceLROnPlateau. Unlike the others, it adapts the learning rate based on the performance of a specified metric. 
-This algorithm decreases the learning rate when the specified metrics stops improving for longer than allowed. 
-So, the learning rate is kept constant as long as the metric improves quantity. 
-When the learning rate is reduced, the results stagnate \cite{unknown-author-no-date3} \cite{isbhargav-2020}. 
-
-\begin{equation}\label{eq:1}
-lr_{\text{epoch ExponentialLR}} = \Gamma \times lr_{\text{epoch}-1}
-\end{equation}
-
-\begin{equation}\label{eq:2}
-\resizebox{1.\hsize}{!}{$
-lr_{\text{epoch}} =
-\begin{cases}
-\Gamma \times lr_{\text{epoch}-1}, & \text{if } \text{epoch} \bmod \text{step\_size} = 0 \\
-lr_{\text{epoch}-1}, & \text{otherwise}
-\end{cases}
-$}
-\end{equation}
-
-
-%combine with scheduler
-\subsubsection{Learning rate decay}
-The learning rate decay decreases the learning rate when the training progresses and becomes more stable. 
-It is used in the Scheduler algorithms as the step size (see \ref{subsec:Scheduler}). 
-Here, the learning rate decay of 0.1, 0.,3 and 0.5 is tested.
-
-
-%NOT HYPERPARAMETER
-\subsubsection{Features main and features skip}
-To decide which number of main features are used, different powers of $2$ were used. 
-For every component of features\_main matrix, a different power can be chosen. 
-The next elements of the matrix will contain the next powers of $2$. It can be chosen how many elements will be used in the matrix. 
-%rewrite next part in simpler terms
-For the features\_skip, the same matrix as features main was chosen with the last element deleted. 
-We conducted experiments using a setup where one value was selected from each of the defined categories. 
-Specifically, features\_main\_1 was chosen from [32, 64, 128], features\_main\_2 from [64, 128, 256], and features\_main\_3 from [128, 256, 512]. 
-This approach allowed us to systematically explore different combinations of feature sizes and assess their impact on the model's performance.
-
-\subsubsection{Upsampling method}
-The upsampling method is the process by which the resolution of an image is increased while minimizing the loss in image quality. 
-The goal is to increase the number of rows and/or columns of the image. 
-%look up real names
-Several methods are available, including nearest, linear, bilinear, trilinear, and bicubic interpolation, as implemented in torch.nn.Upsample.
-The nearest neighbor interpolation is the simplest approach. 
-Each pixel of the upscaled image is assigned the value of its nearest neighbor in the original image. 
-This method is fast and simple, but might lead to produce pixelated images.
-The linear interpolation calculates the new pixel value by taking a weighted average of the two nearest pixels along a single axis. 
-The bilinear interpolation calculates a weighted average of the four nearest neighbors' pixel values in the original image. 
-It uses linear functions and a 2x2 pixel grid. 
-The trilinear interpolation is used in 3D images. 
-The interpolation is first performed linearly along one axis, followed by linear interpolation along the second and third axes. 
-The linear, bilinear and trilinear methods result in smoother images than the nearest method.
-Bicubic interpolation is more advanced. This interpolation method first identifies the nearest 4x4 grid of pixels surrounding that point that needs to be interpolated. 
-Then, it calculates the cubic polynomials that best fit the pixel values in the grid. 
-After that the pixel intensity is estimated at the target position. 
-It is an effective method for high-quality upscaling because it preserves details and reduces artifacts \cite{amanrao-2023} \cite{unknown-author-2025}.
-
-\subsubsection{Downsampling method}
-The downsampling method is an important aspect of the decoder and determines how the images will be reduced. Different methods were considered. 
-Maxpooling selects the maximum value from each patch in the feature map, preserving the most prominent features while reducing spatial dimensions. 
-This concept can be observed in Figure ~\ref{fig:maxpool} \cite{dhanushkumar-2023}.
-Another approach is Meanpooling. Instead of taking the prominent feature, this method averages the values within a patch, offering a smoother downsampling method. 
-In Figure ~\ref{fig:meanpool} the concept of meanpool can be seen.
-The last method, is strided convolution. The principle can be seen in Figure ~\ref{fig:convStrided}. 
-First, the image is upsampled to increase its resolution (if necessary). 
-Next, the convolution is applied with a larger stride. 
-The strides controls how much the filter moves across the feature map during the convolution process. 
-When the stride is greater than 1, the convolution operation skips some of the pixel, which results in an effective method to reduce the size of the feature map \cite{unknown-author-no-date2}.
-Each of these methods reduce the size of the feature map but with different strategies.
-
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{Maxpool.jpg}
-    \caption{Downsampling - Maxpool}
-    \label{fig:maxpool}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{Meanpool.jpg}
-    \caption{Downsampling - Meanpool}
-    \label{fig:meanpool}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{ConvStrided_new.png}
-    \caption{Downsampling - convStrided}
-    \label{fig:convStrided}
-\end{figure}
-
-%with scheduler
-\subsubsection{Learning rate}
-The pace in which the weights are updates during training depends on the learning rate. 
-A learning rate value which is too high can lead to instability and poor convergence, while too low value might slow down the training of the model  as can be seen on Figure \ref{fig:Learnrate} or it can even get stuck in a local minima \cite{jordan_2018_setting}. 
-Optuna was used to search across a continuous range of values [1E-2, 1E-6] to find the optimal balance between convergence and stability.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{Learn rate.jpg}
-    \caption{Comparison of different learning rates}
-    \label{fig:Learnrate}
-\end{figure}
-
-\subsubsection{Loss function}
-The loss function defines how well our model is performing by evaluating the prediction against the target images. 
-It guides the process by providing a measure of error which then can be minimized during training. 
-3 loss functions were tested: Mean Squared Error (MSE) , Mean Absolute Error (MAE) and a hybrid loss. 
-MSE penalizes the squared difference between the predicted and true pixel values. 
-This loss function penalizes large errors more severely because the errors are squared. 
-This method is effective for achieving high numerical accuracy but can lead to overly smooth outputs with less fine structural detail.
-MAE computes the average of the absolute differences between predicted and true pixel values. 
-This method preserves edges and sharper transitions better than MSE but it is less sensitive to small errors and can converge more slowly \cite{anderson_2023_loss}.
-The last option, the hybrid loss, is a custom-defined loss which combines mean squared error (MSE) and structural similarity index (SSIM).
-%SSIM explanation and formula
-\begin{equation}\label{eq:3}
-\mathcal{L}_{\text{hybrid}} = \alpha \cdot \mathcal{L}_{\text{MSE}} + (1 - \alpha) \cdot (1 - \text{SSIM})
-\end{equation}
-\begin{itemize}
-    \item $\alpha \in [0, 1]$ controls the balance between the two components,
-    \item $\mathcal{L}_{\text{MSE}}$ measures the average pixel-wise error between the predicted and ground truth images,
-    \item $\text{SSIM}$ evaluates perceptual similarity.
-\end{itemize}
-MSE helps preserve pixel-wise fidelity while SSIM ensures structural integrity of the image, which is crucial in medical contexts. 
-Optuna was used to choose the type of loss function to apply and, in the case of the hybrid loss, to optimize the value of alpha. 
-This allowed the model to adaptively prioritize pixel accuracy versus perceptual quality. 
-
-\subsubsection{Activation function}
-Activation functions introduce a non-linearity into the network. This allows complex mapping between inputs and outputs. 
-Without an activation function the network would behave like a linear system and would not be able to model intricate relationships such as edges and contrast. 
-Different options were tested such as ReLU,  LeakyReLU, ELU and PReLu. Each of these options come with their own set of advantages and difficulties. 
-ReLU (Rectified Linear Unit) is most commonly used as an activation function because of its simplicity and computational efficiency. 
-This function \ref{eq:4} returns the positive inputs directly and zero if negative. One of the limitations is a phenomenon called `dying neurons`',  if a neuron only receives negative inputs, it will always output zero and stop learning.
-LeakyReLU adresses this problem by allowing small negative outputs. This function \ref{eq:5} helps keeps neurons active and keeping them active. 
-This technique keeps the simplicity or ReLU while improving stability. 
-ELU is similar to LeakyReLU in sense that negative outputs are generated, but in this case with a smooth exponential curve \ref{eq:6}  instead of a constant curve. 
-Finally PReLU (Parametric ReLU) also starts from LeakyReLU but in this case the negative slope is a learnable parameter and not a fixed value. 
-This lets the model adapt the activation function in training leading to potentially better performance. 
-However it does introduce an extra parameter increasing computational cost \cite{bharatiya_2019_comprehensive}.
-
-\begin{equation}\label{eq:4}
-    f(x)_{ReLU} = \max(0, x)
-\end{equation}
-
-\begin{equation}\label{eq:5}
-f(x)_{LeakyReLU} = 
-\begin{cases}
-x & \text{if } x \geq 0 \\
-\beta x & \text{if } x < 0
-\end{cases}
-\end{equation}
-
-\begin{equation}\label{eq:6}
-f(x)_{ELU} = 
-\begin{cases}
-x & \text{if } x \geq 0 \\
-\alpha (e^x - 1) & \text{if } x < 0
-\end{cases}
-\end{equation}
-
-
-\begin{equation}\label{eq:7}
-f(x)_{PReLU} = 
-\begin{cases}
-x & \text{if } x \geq 0 \\
-a x & \text{if } x < 0
-\end{cases}
-\end{equation}
-
-\subsubsection{Batch size}
-Batch size defines how many training samples are used to calculate the gradient before the model updated the weights. 
-A larger batch size gives a more gradient estimate which can speed up training, but it requires large memory and can lead to worse generalization,
-while a small batch size is more noisy in gradient updates which can escape local minima but also may lead to slow convergence. 
-
-\subsubsection{Residual learning}
-With residual learning instead of predicting the final high-resolution images the model learns the difference between the low- and high-resolution, this is called the residual. 
-After training the residual is added back onto the input image to produce the final image. This method has its advantages. 
-Learning the missing information is often faster and easier than predicting the entire image. This can lead to faster and better convergence. 
-%how implemented
-In this project residual learning is an optional feature. Optuna was used to explore if enabling led to better performance.
-
-\subsubsection{Number of epochs}
-The number of epochs defines how many times the model goes through the entire training dataset for training. 
-While this is not a traditional hyperparameter it still has a role in the performance of the model. 
-Too few epochs can lead to underfitting, the model has not learned enough (especially with smaller datasets). 
-Too many can lead to overfitting, a phenomenon where the model memorizes the training data and performs poorly on unseen samples. 
 
 \section{Model performance evaluation}
 In this section, the used validation methods are described. All the methods check the performance of the model. 
@@ -582,23 +593,12 @@ X represents the number of pixels in a row and y denotes the number of pixels in
 The MSE was calculated for the high resolution and the result of the deep learning model. After these calculations the ratio is taken of these two.
 
 \subsection{Structural similarity index measure}
-Since MSE does not account for structural composition, structural similarity index measure (SSIM) is used. 
-SSIM assesses the structural similarity between two images by considering luminance, contrast, and structure. 
-It can be used to evaluate the quality of the deep learning model compared to the pre-scanned high resolution images. 
-This evaluation metric is especially useful in medical image applications.
 
-\begin{equation}\label{eq:SSIM}
-\text{SSIM}(A, B) = \frac{(2 \cdot \mu_A \cdot \mu_B + c_1)(2 \cdot \sigma_{AB} + c_2)}{(\mu_A^2 + \mu_B^2 + c_1)(\sigma_A^2 + \sigma_B^2 + c_2)}
-\end{equation}
-
-\begin{itemize}
-    \item $\mu_a,\mu_b$ : mean intensities of images A and B
-    \item $\sigma_A^2, \sigma_B^2$ :variances
-    \item $\sigma_{AB}$ : covariances
-    \item $c_1,c_2$ : 2 variables which stabilize the division (both are typically small values)
-\end{itemize}
-
- The SSIM value is typically in the range of [0,1], where a value closer to 0 represents lower levels of image quality and values nearer to 1 represents higher levels of quality. \cite{dosselmann-2009}
+As previously introduced in section \ref{loss_function}, the Structural Similarity Index Measure (SSIM) is also used independently as an evaluation metric in this study.  
+While it forms part of the hybrid loss function, SSIM is valuable on its own for assessing perceptual image quality, as it accounts for luminance, contrast, and structural consistency.
+In this context, SSIM is used to compare the predicted images to the high-resolution reference scans.  
+This is particularly relevant in medical imaging, where preserving structural details is critical.  
+The SSIM score ranges from 0 to 1, with values closer to 1 indicating higher structural similarity and visual fidelity \cite{dosselmann-2009}.
 
  \subsection{Contrast-to-noise ratio}
  Contrast-to-noise ratio (CNR) is a metric that evaluates the quality of an image by measuring how well a region of interest (for example, liver) can be distinguished from the surrounding background.
@@ -747,14 +747,13 @@ Because of formula \ref{eq:6} it can be concluded that structural similarity is 
 Such a loss is better suited in medical imaging tasks than pure MSE which can lead to overly smooth, less diagnostic outputs \cite{Dastmalchi}. 
 
 The optimization process solely relied on MSE for validation. 
-%add reason why validation relied on MSE
+This choice was made due to MSE’s simplicity, ease of interpretation, and its direct compatibility with the pixel-wise loss functions used during training.  
 This decision may introduce some form of metric bias. 
 MSE disproportionately penalizes large pixel errors, which often lead to overly smooth outputs. 
 In denoising tasks, this can result in models that reduce noise effectively in terms of pixel accuracy but at the cost of signal preservation, leading to a lower signal-to-noise (SNR) in practice. 
 MSE is also sensitive to outliers and intensity shifts, while being oblivious to perceptual structure and contrast consistency \cite{1284395}. 
 Future work could benefit from using alternative validation metrics, such as SNR or perceptual similarity measures, to better guide model selection and ensure outputs are both quantitatively accurate and visually informative \cite{chavhan2009t2star}. 
-Metrics such as LPIPS offer a promising alternative by leveraging deep features that align more closely with human perception and quality \cite{zhang2018unreasonableeffectivenessdeepfeatures}.
-%what is LPIPS
+Metrics such as LPIPS (Learned Perceptual Image Patch Similarity) offer a promising alternative by leveraging deep features that align more closely with human perception and quality \cite{zhang2018unreasonableeffectivenessdeepfeatures}.
 \subsection{Results after hyperparameter training}
 
 \subsection{APDDM}
