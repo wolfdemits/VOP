@@ -12,9 +12,6 @@ import pydicom
 from pydicom.dataset import Dataset, FileDataset
 import datetime
 
-from DatasetClasses_MicroMRI import Mean_Normalisation
-
-
 #################
 ## TENSORBOARD ##
 #################
