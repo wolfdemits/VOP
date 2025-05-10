@@ -15,18 +15,21 @@ import gc
 
 # Import created functions and classes
 from DatasetClasses_MicroMRI import Get_DataLoaders
-from Helper_Functions_MRI import HybridLoss
 from UNet_Model_MRI import UNet  # Assuming your U-Net code is in "unet.py"
 
+## DEBUG
+from Helper_Functions_MRI import Tensorboard_Initialization, Logbook_Initialization
+from Helper_Functions_MRI import Intermediate_Visualization
+
 # Path Definitions
-DATA_PATH_LOCAL = pathlib.Path('./Data/ZARR_PREPROCESSED')
+DATA_PATH_LOCAL = pathlib.Path('../../Data/ZARR_PREPROCESSED')
 RESULT_PATH_LOCAL = pathlib.Path('./Results')
 
 # Path Definitions
 DATA_PATH_HPC = pathlib.Path('/kyukon/data/gent/gvo000/gvo00006/WalkThroughPET/2425_VOP/Project/Data/ZARR_PREPROCESSED')
 RESULT_PATH_HPC = pathlib.Path('/kyukon/data/gent/gvo000/gvo00006/WalkThroughPET/2425_VOP/Project/Hyperparameter_Tuning/Results')
 
-LOCAL = True
+LOCAL = False
 
 if LOCAL:    # If you want to run locally
     DATA_PATH = DATA_PATH_LOCAL
@@ -52,32 +55,29 @@ path2zarr = DATA_PATH
 #####################
 
 # Enter list of trainings subjects
-SubjTrain = ['Mouse01'] #, 'Mouse02', 'Mouse14', 'Mouse09', 'Mouse23']
+SubjTrain = ['Mouse01', 'Mouse02', 'Mouse14', 'Mouse09', 'Mouse23']
 
 # Enter list of validation subjects
-SubjVal = ['Mouse02'] #, 'Mouse06', 'Mouse21', 'Mouse17', 'Mouse05']
+SubjVal = ['Mouse10', 'Mouse06', 'Mouse21', 'Mouse17', 'Mouse05']
 
 # Enter planes
-Planes = ['Coronal'] #, 'Sagittal', 'Transax']
+Planes = ['Coronal', 'Sagittal', 'Transax']
 
 # Enter planes
-Regions = ['HEAD-THORAX'] #, 'THORAX-ABDOMEN']
+Regions = ['HEAD-THORAX', 'THORAX-ABDOMEN']
 
 # Give your run a name
 # NAME_RUN = 'HYPERPARAMETERS_' + str(datetime.datetime.now().strftime("%Y%m%d_%H_%M_%S"))
-NAME_RUN = 'HYPERPARAMETERS_07-05'
+NAME_RUN = 'HYPERPARAMETERS_10-05'
 start_time_run = datetime.datetime.now()
 print(NAME_RUN, flush=True)
 
 ### Tuning Hyperparameters / constant hyperparameters ###
-num_epochs = 1 #5
-batch_size = 8 #32
+num_epochs = 5
+batch_size = 32
 dim = '2d'
 num_in_channels = 1
- 
 conv_kernel_size = 3
-
-
 
 # configure device
 DISABLE_CUDA = False
@@ -97,35 +97,26 @@ def objective(trial):
     """Objective function for Optuna optimization"""
 
     features_main = [
-        trial.suggest_categorical("features_main_1", [32, 64, 128]),
+       # trial.suggest_categorical("features_main_1", [32, 64, 128]),
         trial.suggest_categorical("features_main_2", [64, 128, 256]),
-        trial.suggest_categorical("features_main_3", [128, 256, 512]),
+       # trial.suggest_categorical("features_main_3", [64, 128, 256]),
     ]
 
     features_skip = features_main[:-1]  # Ensure skip connections align
 
-    # down_mode = trial.suggest_categorical("down_mode", ["maxpool", "meanpool", "convStrided"]) 
-    down_mode = 'convStrided'
-    # up_mode = trial.suggest_categorical("up_mode", ["upsample", "upconv", "nearest", "bicubic"])
-    up_mode = 'upconv'
-    # activation = trial.suggest_categorical("activation", ["ReLU", "PReLU", "LeakyReLU"])
+    down_mode = trial.suggest_categorical("down_mode", ["maxpool"]) #, "meanpool", "convStrided"]) 
+  
+    up_mode = trial.suggest_categorical("up_mode", ["upsample"]) #, "upconv", "nearest", "bicubic"])
+
+    #activation = trial.suggest_categorical("activation", ["ReLU", "PReLU", "LeakyReLU"])
     activation = 'ReLU'
-    # residual_connection = trial.suggest_categorical("residual_connection", [True, False])
-    residual_connection = False
-    # LEARN_RATE = trial.suggest_float("lr", 1e-5, 1e-2)
-    LEARN_RATE = 0.004113034307474023
-    # ALPHA = trial.suggest_categorical("alpha", [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
-    ALPHA = 0.3
-    LR_DECAY = trial.suggest_categorical("lr_decay",[0.1, 0.3, 0.5])
 
-    criterion_class = trial.suggest_categorical("criterium", ["MSELoss","L1Loss", "HybridLoss"])
-    if criterion_class == "MSELoss":
-       criterion = nn.MSELoss()
-    elif criterion_class == "L1Loss":
-       criterion = nn.L1Loss()
-    elif criterion_class == "HybridLoss":
-       criterion = HybridLoss(alpha=ALPHA)
+    residual_connection = trial.suggest_categorical("residual_connection", [False]) #, True])
+    # residual_connection = True
 
+    LEARN_RATE = trial.suggest_float("lr", 1e-6, 1e-4)  # 1e-3)
+
+    criterion = torch.nn.MSELoss()
 
     PadValue = 0  # Keep fixed
 
@@ -136,29 +127,34 @@ def objective(trial):
     model = UNet(dim, num_in_channels, features_main, features_skip, conv_kernel_size,
                  down_mode, up_mode, activation, residual_connection, PadValue)
     
-    #optimizer_class = trial.suggest_categorical("optimizer", ["ADAM", "ADAMW", "SGD", "RMSprop"])
-    optimizer_class = "RMSprop"
+    optimizer_class = trial.suggest_categorical("optimizer", ["ADAM"]) #, "RMSprop"])
 
     if optimizer_class == "ADAM":
         optimizer = optim.Adam(model.parameters(), lr=LEARN_RATE)
-    elif optimizer_class == "ADAMW":
-        optimizer = optim.AdamW(model.parameters(), lr=LEARN_RATE)
-    elif optimizer_class == "SGD":
-        optimizer = optim.SGD(model.parameters(), lr=LEARN_RATE)
+    # elif optimizer_class == "ADAMW":
+    #     optimizer = optim.AdamW(model.parameters(), lr=LEARN_RATE)
+    # elif optimizer_class == "SGD":
+    #     optimizer = optim.SGD(model.parameters(), lr=LEARN_RATE)
     elif optimizer_class == "RMSprop":
         optimizer = optim.RMSprop(model.parameters(), lr=LEARN_RATE)
 
-    scheduler_class = trial.suggest_categorical("scheduler",["ExponentialLR", "ReduceLROnPlateau", "StepLR"])
+    scheduler_class = trial.suggest_categorical("scheduler",["ExponentialLR"]) #, "ReduceLROnPlateau", "StepLR"])
 
     if scheduler_class == "ExponentialLR":
-        scheduler = optim.lr_scheduler.ExponentialLR(optimizer, LR_DECAY)
+        scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.1)
     elif scheduler_class == "ReduceLROnPlateau":
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer)
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.1)
     elif scheduler_class == "StepLR":
-        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=LR_DECAY)
+        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=0.1)
         
 
     model = model.to(device)   
+
+    ## DEBUG
+    # Initialize LogBook
+    LogBook_Params = [NAME_RUN, Planes, Regions, num_in_channels, batch_size, LEARN_RATE]
+    ModelUNet_Params = [dim, num_in_channels, features_main, features_skip, conv_kernel_size, down_mode, up_mode, activation, residual_connection] 
+    Logbook_Initialization(dim, path2logbook, LogBook_Params, ModelUNet_Params) 
 
     # Training Loop
 
@@ -172,6 +168,8 @@ def objective(trial):
             loss = criterion(output, HR_Img)
             loss.backward()
             optimizer.step()
+
+            print(f'Epoch: {epoch}, loss: {loss.item()}', flush=True)
 
         if scheduler_class == "ReduceLROnPlateau":   
             # Validation Loss
@@ -194,15 +192,45 @@ def objective(trial):
     # Validation Loss
     model.eval()
     val_loss = 0.0
-    objective = nn.MSELoss()
+    batch_number = 0
     with torch.no_grad():
         for batch in val_loader:
+            batch_number += 1
             LR_Img, HR_Img = batch["LR_Img"].to(device), batch["HR_Img"].to(device)
             output = model(LR_Img)
-            loss = objective(output, HR_Img)
+            loss = criterion(output, HR_Img)
             val_loss += loss.item()
 
-    avg_val_loss = val_loss / len(val_loader)
+
+            ## DEBUG
+            SLICES_TO_SHOW = range(0, 25, 300)
+            SUBJECTS_TO_SHOW = [SubjTrain[0], SubjTrain[-1], SubjVal[0], SubjVal[-1]]
+            writers = Tensorboard_Initialization(path2tb/NAME_RUN)
+
+            Intermediate_Visualization(
+                batch = batch, 
+                LR_Img = LR_Img, 
+                DL_Img = output, 
+                HR_Img = HR_Img, 
+                EpochNumber = 0, 
+                num_in_channels = num_in_channels, 
+                ShowSlices = SLICES_TO_SHOW,  
+                TensorboardWriter = writers['val'],
+                ShowSubject = SUBJECTS_TO_SHOW, 
+                Path_FigSave = Path_FigSave)
+
+    avg_val_loss = val_loss / batch_number
+
+
+    ## DEBUG
+    # save  
+    checkpoint = {
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'scheduler_state_dict': scheduler.state_dict()}
+    
+    path2ckpt.mkdir(exist_ok=True)
+    torch.save(checkpoint, path2ckpt / '{}.pt'.format(NAME_RUN))
 
     # Clean up to free GPU memory
     del model
@@ -215,7 +243,7 @@ def objective(trial):
 # Run Optuna Optimization
 if __name__ == '__main__':
     study = optuna.create_study(storage='sqlite:///db.sqlite3', study_name=NAME_RUN, load_if_exists=True, direction="minimize")
-    study.optimize(objective, n_trials=1000)
+    study.optimize(objective, n_trials=1)
 
     print("Best hyperparameters:", study.best_params)
-    print("Best Trial: " + study.best_trial + ", with loss: " + study.best_value)
+    print("Best Trial: " + str(study.best_trial) + ", with loss: " + str(study.best_value))

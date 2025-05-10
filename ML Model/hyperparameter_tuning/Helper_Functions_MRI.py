@@ -131,11 +131,11 @@ def PlotComparison(LR_Img, DL_Img, HR_Img, Norm_Factor, FigTitle):
 
 def Intermediate_Visualization(batch, LR_Img, DL_Img, HR_Img, EpochNumber, num_in_channels, ShowSlices, TensorboardWriter, ShowSubject, Path_FigSave):
 
-    for idx, (Subject, SliceIndex, Plane, Norm_Factor) in enumerate(zip(batch['Subject'], batch['SliceIndex'], batch['Plane'], batch['LR_NormFactor'])):
+    for idx, (Subject, SliceIndex, Plane, Region, Norm_Factor) in enumerate(zip(batch['Subject'], batch['SliceIndex'], batch['Plane'], batch['Region'], batch['LR_NormFactor'])):
 
         if (idx in ShowSlices) and (Subject in ShowSubject):
                 
-            name = '{}_{}_{}_epoch_{}'.format(Subject, Plane, SliceIndex, EpochNumber)
+            name = '{}_{}_{}_{}_epoch_{}'.format(Subject, Plane, Region, SliceIndex, EpochNumber)
                 
             fig, dl_img_np = PlotComparison(LR_Img=LR_Img[idx][num_in_channels//2],DL_Img=DL_Img[idx][0],HR_Img=HR_Img[idx][0],Norm_Factor=Norm_Factor,FigTitle=name)
                         
@@ -187,9 +187,9 @@ def Intermediate_Visualization(batch, LR_Img, DL_Img, HR_Img, EpochNumber, num_i
 
             residual_diff = residual_hr_lr - residual_hr_dl
             # Save residuals
-            save_residual_as_dicom(residual_hr_lr, Subject, Plane, SliceIndex, EpochNumber, 'hr_lr', dicom_save_dir)
-            save_residual_as_dicom(residual_hr_dl, Subject, Plane, SliceIndex, EpochNumber, 'hr_dl', dicom_save_dir)
-            save_residual_as_dicom(residual_diff, Subject, Plane, SliceIndex, EpochNumber, 'diff', dicom_save_dir)
+            save_residual_as_dicom(residual_hr_lr, Subject, Plane, Region, SliceIndex, EpochNumber, 'hr_lr', dicom_save_dir)
+            save_residual_as_dicom(residual_hr_dl, Subject, Plane, Region, SliceIndex, EpochNumber, 'hr_dl', dicom_save_dir)
+            save_residual_as_dicom(residual_diff, Subject, Plane, Region, SliceIndex, EpochNumber, 'diff', dicom_save_dir)
 
                 
             TensorboardWriter.add_figure(name, fig, EpochNumber)
@@ -204,7 +204,7 @@ def Intermediate_Visualization(batch, LR_Img, DL_Img, HR_Img, EpochNumber, num_i
 
     return
     
-def save_residual_as_dicom(image_array, subject, plane, slice_index, epoch_number, residual_type, save_root):
+def save_residual_as_dicom(image_array, subject, plane, region, slice_index, epoch_number, residual_type, save_root):
     image_array = np.clip(image_array, 0, 1)
     image_uint8 = (image_array * 255).astype(np.uint8)
 
@@ -215,7 +215,7 @@ def save_residual_as_dicom(image_array, subject, plane, slice_index, epoch_numbe
     file_meta.ImplementationClassUID = pydicom.uid.PYDICOM_IMPLEMENTATION_UID
 
     dt = datetime.datetime.now()
-    dicom_filename = f"{subject}_{plane}_{slice_index}_{residual_type}.dcm"
+    dicom_filename = f"{subject}_{plane}_{region}_{slice_index}_{residual_type}.dcm"
     save_dir = Path(save_root) / f"residual_{residual_type}" / f"epoch_{epoch_number}"
     save_dir.mkdir(parents=True, exist_ok=True)
     filepath = save_dir / dicom_filename
@@ -284,41 +284,70 @@ def compute_SNR(LR, HR):
     return snr_batch.mean().item()
 
 # Define SSIM function
-def _gaussian_window(channels, kernel_size=11, sigma=1.5, device='cpu'):
-    coords = torch.arange(kernel_size, device=device) - kernel_size//2
-    g = torch.exp(-(coords**2) / (2 * sigma**2))
-    g = (g / g.sum()).unsqueeze(1) @ (g / g.sum()).unsqueeze(0)
-    return g.expand(channels, 1, kernel_size, kernel_size)
-
-def ssim_index(x, y, data_range=1.0, window_size=11, sigma=1.5, K=(0.01, 0.03)):
+def _gaussian_window(channels: int,
+                     kernel_size: int = 11,
+                     sigma: float = 1.5,
+                     device: str = 'cpu') -> torch.Tensor:
     """
-    x, y: [B, C, H, W], float tensors, in [0, data_range]
-    returns: scalar SSIM index averaged over batch and channels
+    Create a 2D Gaussian kernel of shape [channels, 1, kernel_size, kernel_size].
+    Built in float32 so we can cast it to x.dtype later.
     """
-    C = x.shape[1]
-    win = _gaussian_window(C, window_size, sigma, device=x.device)
+    # 1D coordinates centered at zero
+    coords = torch.arange(kernel_size, device=device, dtype=torch.float32) - (kernel_size // 2)
+    # 1D Gaussian
+    g1d = torch.exp(-(coords**2) / (2 * sigma**2))
+    # outer product => 2D Gaussian
+    g2d = (g1d / g1d.sum()).unsqueeze(1) @ (g1d / g1d.sum()).unsqueeze(0)
+    # expand to [channels, 1, k, k]
+    return g2d.expand(channels, 1, kernel_size, kernel_size)
 
-    # means
-    mu_x = F.conv2d(x, win, padding=window_size//2, groups=C)
-    mu_y = F.conv2d(y, win, padding=window_size//2, groups=C)
+def ssim_index(x: torch.Tensor,
+               y: torch.Tensor,
+               data_range: float = 1.0,
+               window_size: int = 11,
+               sigma: float = 1.5,
+               K: tuple = (0.01, 0.03),
+               eps: float = 1e-6) -> torch.Tensor:
+    """
+    Compute the mean SSIM index between x and y.
+    x, y: [B, C, H, W], float tensors in [0, data_range].
+    Returns a scalar tensor SSIM.
+    """
+    # If images are constant, SSIM=1
+    if data_range == 0:
+        return torch.tensor(1.0, device=x.device, dtype=x.dtype)
+
+    B, C, H, W = x.shape
+    C1 = (K[0] * data_range) ** 2
+    C2 = (K[1] * data_range) ** 2
+
+    # Build Gaussian window in float32, then cast to x.dtype
+    win = _gaussian_window(C, window_size, sigma, device=x.device).to(x.dtype)
+    pad = window_size // 2
+
+    # Local means
+    mu_x = F.conv2d(x, win, padding=pad, groups=C)
+    mu_y = F.conv2d(y, win, padding=pad, groups=C)
 
     mu_x2 = mu_x * mu_x
     mu_y2 = mu_y * mu_y
     mu_xy = mu_x * mu_y
 
-    # variances / covariances
-    sigma_x2 = F.conv2d(x * x, win, padding=window_size//2, groups=C) - mu_x2
-    sigma_y2 = F.conv2d(y * y, win, padding=window_size//2, groups=C) - mu_y2
-    sigma_xy = F.conv2d(x * y, win, padding=window_size//2, groups=C) - mu_xy
+    # Local variances and covariance
+    sigma_x2 = F.conv2d(x * x, win, padding=pad, groups=C) - mu_x2
+    sigma_y2 = F.conv2d(y * y, win, padding=pad, groups=C) - mu_y2
+    sigma_xy = F.conv2d(x * y, win, padding=pad, groups=C) - mu_xy
 
-    C1 = (K[0] * data_range) ** 2
-    C2 = (K[1] * data_range) ** 2
+    # Clamp tiny negatives from numerical error
+    sigma_x2 = torch.clamp(sigma_x2, min=0.0)
+    sigma_y2 = torch.clamp(sigma_y2, min=0.0)
 
+    # SSIM formula
     num = (2 * mu_xy + C1) * (2 * sigma_xy + C2)
     den = (mu_x2 + mu_y2 + C1) * (sigma_x2 + sigma_y2 + C2)
-    ssim_map = num / den
 
-    return ssim_map.mean()
+    # Mean over all pixels, channels, batch
+    return (num / (den + eps)).mean()
 
 def ssim_loss(img1, img2):
     return 1- ssim_index(img1,img2)
