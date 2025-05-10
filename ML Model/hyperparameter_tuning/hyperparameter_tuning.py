@@ -17,10 +17,6 @@ import gc
 from DatasetClasses_MicroMRI import Get_DataLoaders
 from UNet_Model_MRI import UNet  # Assuming your U-Net code is in "unet.py"
 
-## DEBUG
-from Helper_Functions_MRI import Tensorboard_Initialization, Logbook_Initialization
-from Helper_Functions_MRI import Intermediate_Visualization
-
 # Path Definitions
 DATA_PATH_LOCAL = pathlib.Path('../../Data/ZARR_PREPROCESSED')
 RESULT_PATH_LOCAL = pathlib.Path('./Results')
@@ -150,12 +146,6 @@ def objective(trial):
 
     model = model.to(device)   
 
-    ## DEBUG
-    # Initialize LogBook
-    LogBook_Params = [NAME_RUN, Planes, Regions, num_in_channels, batch_size, LEARN_RATE]
-    ModelUNet_Params = [dim, num_in_channels, features_main, features_skip, conv_kernel_size, down_mode, up_mode, activation, residual_connection] 
-    Logbook_Initialization(dim, path2logbook, LogBook_Params, ModelUNet_Params) 
-
     # Training Loop
 
     model.train()
@@ -168,8 +158,6 @@ def objective(trial):
             loss = criterion(output, HR_Img)
             loss.backward()
             optimizer.step()
-
-            print(f'Epoch: {epoch}, loss: {loss.item()}', flush=True)
 
         if scheduler_class == "ReduceLROnPlateau":   
             # Validation Loss
@@ -201,36 +189,7 @@ def objective(trial):
             loss = criterion(output, HR_Img)
             val_loss += loss.item()
 
-
-            ## DEBUG
-            SLICES_TO_SHOW = range(0, 25, 300)
-            SUBJECTS_TO_SHOW = [SubjTrain[0], SubjTrain[-1], SubjVal[0], SubjVal[-1]]
-            writers = Tensorboard_Initialization(path2tb/NAME_RUN)
-
-            Intermediate_Visualization(
-                batch = batch, 
-                LR_Img = LR_Img, 
-                DL_Img = output, 
-                HR_Img = HR_Img, 
-                EpochNumber = 0, 
-                num_in_channels = num_in_channels, 
-                ShowSlices = SLICES_TO_SHOW,  
-                TensorboardWriter = writers['val'],
-                ShowSubject = SUBJECTS_TO_SHOW, 
-                Path_FigSave = Path_FigSave)
-
     avg_val_loss = val_loss / batch_number
-
-
-    ## DEBUG
-    # save  
-    checkpoint = {
-        'model_state_dict': model.state_dict(),
-        'optimizer_state_dict': optimizer.state_dict(),
-        'scheduler_state_dict': scheduler.state_dict()}
-    
-    path2ckpt.mkdir(exist_ok=True)
-    torch.save(checkpoint, path2ckpt / '{}.pt'.format(NAME_RUN))
 
     # Clean up to free GPU memory
     del model
