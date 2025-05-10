@@ -11,21 +11,15 @@ from Helper_Functions_MRI import Tensorboard_Initialization, Logbook_Initializat
 from Helper_Functions_MRI import Intermediate_Visualization
 from DatasetClasses_MicroMRI import Get_DataLoaders
 from UNet_Model_MRI import UNet, count_model_parameters
-from Helper_Functions_MRI import HybridLoss
 
 
 # Path Definitions
 DATA_PATH_LOCAL = pathlib.Path('./Data/ZARR_PREPROCESSED')
 RESULT_PATH_LOCAL = pathlib.Path('./ML Model/Without_SR_Module')
 
-# TODO: change
-#CODE_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
-#DATA_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
-#RESULT_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/...')
-
-CODE_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Without_SR_Module')
+CODE_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/UNet')
 DATA_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Data/ZARR_PREPROCESSED')
-RESULT_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Without_SR_Module/New_Results')
+RESULT_PATH_UGENT = pathlib.Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/UNet/Results')
 
 
 LOCAL = False
@@ -67,7 +61,7 @@ PlanesData = ['Coronal', 'Sagittal', 'Transax']
 RegionsData = ['HEAD-THORAX', 'THORAX-ABDOMEN']
 
 # Give your run a name
-NAME_RUN = 'NAME_' + str(datetime.datetime.now().strftime("%Y%m%d_%H_%M_%S")) 
+NAME_RUN = 'Optimized_' + str(datetime.datetime.now().strftime("%Y%m%d_%H_%M_%S")) 
 start_time_run = datetime.datetime.now()
 print(NAME_RUN, flush=True)
 
@@ -76,11 +70,11 @@ print(NAME_RUN, flush=True)
 
 dim = '2d'
 num_in_channels = 1                     # Can be adjusted if wanted
-features_main = [128, 256, 256]     # Can be adjusted if wanted
+features_main = [128, 128, 64]     # Can be adjusted if wanted
 features_skip = features_main[:-1]          # Can be adjusted if wanted
 conv_kernel_size = 3                   
 down_mode = 'convStrided'                 ## Options: maxpool, meanpool, convStrided
-up_mode = 'upconv'                  ## Options: upsample, upconv
+up_mode = 'upsample'                  ## Options: upsample, upconv
 activation = 'ReLU'                   ## Options: ReLU, LeakyReLU, PReLU
 residual_connection = False
 
@@ -89,9 +83,9 @@ residual_connection = False
 # Training Hyperparameters
 
 batch_size = 32
-LEARN_RATE = 0.004113034307474023
+LEARN_RATE = 0.0003
 
-EPOCHS = 200
+EPOCHS = 100
 
 RESUME_CKPT = False  # IF TRUE, we resume training from last checkpoint 
 
@@ -145,14 +139,13 @@ DL_Model = DL_Model.to(device)
 
 
 # Set-up 
-
-optimizer = torch.optim.RMSprop(DL_Model.parameters(), lr=LEARN_RATE)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer)
+optimizer = torch.optim.Adam(DL_Model.parameters(), lr=LEARN_RATE)
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=0.1)
 #grad_scaler = torch.amp.GradScaler('cuda')
 grad_scaler = GradScaler()
 
 
-loss_criterion = torch.nn.MSELoss()    # or HybridLoss(alpha=0.3), but this returns nan
+loss_criterion = torch.nn.MSELoss() #HybridLoss(alpha=0.3) #torch.nn.MSELoss()    # or HybridLoss(alpha=0.3), but this returns nan
 
 
 
@@ -161,7 +154,7 @@ loss_criterion = torch.nn.MSELoss()    # or HybridLoss(alpha=0.3), but this retu
 
 # Initialize LogBook
 
-LogBook_Params = [NAME_RUN, PlanesData, RegionsData, num_in_channels, batch_size, LEARN_RATE] #, LR_DECAY]
+LogBook_Params = [NAME_RUN, PlanesData, RegionsData, num_in_channels, batch_size, LEARN_RATE]
 ModelUNet_Params = [dim, num_in_channels, features_main, features_skip, conv_kernel_size, down_mode, up_mode, activation, residual_connection] 
 Logbook_Initialization(dim, path2logbook, LogBook_Params, ModelUNet_Params) 
 
@@ -282,7 +275,6 @@ for current_epoch in range(start_epoch, EPOCHS):
                     
 
         # Perform validation
-
         with torch.no_grad(): 
             if MIXED_PRECISION:
                 with torch.amp.autocast('cuda'):

@@ -16,6 +16,8 @@ def Mean_Normalisation(ImgArray, Norm_Factor=None, inverse=False):
         
         if Norm_Factor is None:     ## for LR
             Norm_Factor = np.mean(ImgArray)
+            #DEBUG
+            if Norm_Factor == 0: print('Divide by zero for normalisation')
             Norm_ImgArray = ImgArray / np.mean(ImgArray)
         
         else:   ## for HR
@@ -63,18 +65,15 @@ class Dataset2D_MicroMRI(torch.utils.data.Dataset):
                     
                     # Paths to HR images
                     
-                    # region = (Subj.split('_')[1] + '-' + Subj.split('_')[2]).upper()
-                    # id = Subj.split('_')[0]
-                    
                     self.path2slices_HR = PathZarr / 'HIGH RES' / Region / Subj / Plane
                     self.path2slices_HR = Path(self.path2slices_HR).absolute()
-                    slicesFolder_HR = [path for path in self.path2slices_HR.iterdir() if not path.name.startswith('.')] 
+                    slicesFolder_HR = [path for path in self.path2slices_HR.iterdir() if not path.name.startswith('.')]
 
                     # Paths to LR images
                     self.path2slices_LR = PathZarr / 'LOW RES' / Region / Subj / Plane
                     self.path2slices_LR = Path(self.path2slices_LR)
 
-                    for SliceIndex, _ in enumerate(slicesFolder_HR): 
+                    for SliceIndex in range(len(slicesFolder_HR) - 1): 
                         self.search.append((Subj, Plane, SliceIndex, Region))
 
         
@@ -87,9 +86,7 @@ class Dataset2D_MicroMRI(torch.utils.data.Dataset):
 
     def __getitem__(self, index): 
         
-        Subj, Plane, SliceIndex, Region  = self.search[index] 
-        if SliceIndex != 0:
-            SliceIndex -=1 #cheap fix
+        Subj, Plane, SliceIndex, Region  = self.search[index]
 
         path2slices_HR = self.PathZarr / 'HIGH RES' / Region / Subj / Plane
         path2slices_LR = self.PathZarr / 'LOW RES' / Region / Subj / Plane
@@ -132,6 +129,7 @@ class Dataset2D_MicroMRI(torch.utils.data.Dataset):
                 'HR_Img': HR_Img,
                 'Subject': Subj,
                 'Plane': Plane, 
+                'Region': Region,
                 'SliceIndex': SliceIndex, 
                 'LR_NormFactor': LR_NormFactor}
 
@@ -218,3 +216,16 @@ def Get_DataLoaders(SubjTrain, SubjVal, PathZarr, Planes, Regions, batch_size, n
 
     return TrainLoader, ValLoader
 
+def Get_Test_DataLoader(SubjTest, PathZarr, Planes, Regions, batch_size, num_in_channels):
+
+    TestSet = Dataset2D_MicroMRI(
+                PathZarr = PathZarr,
+                SubjList = SubjTest,
+                Planes = Planes,
+                Regions = Regions,
+                num_input_slices = num_in_channels,
+                RandomFlip = False)
+    
+    TestLoader = torch.utils.data.DataLoader(TestSet, batch_size=batch_size, collate_fn=CollateFn2D_MicroMRI(), shuffle=True)
+
+    return TestLoader
