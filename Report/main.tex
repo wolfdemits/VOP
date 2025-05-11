@@ -53,13 +53,13 @@
 \onecolumn
 \begin{abstract}
 Micro-MRI enables high-contrast anatomical imaging in small animal models but often requires a trade-off between spatial resolution, signal-to-noise ratio (SNR), and scan time.
- This study presents a deep learning framework designed to enhance image quality and reduce acquisition time by combining denoising and super-resolution techniques. 
- Paired T2-weighted scans were acquired for 24 mice using a 7T Bruker Pharmascan system, consisting of low-resolution (1-minute) and high-resolution (12-minute) images. 
- After data pre-processing and augmentation, a U-Net convolutional network was trained using automated hyperparameter optimization.
-  This process systematically tested combinations of learning rates, optimizers, convolutional filter sizes, upsampling and downsampling strategies, loss and activation functions, batch size, and the inclusion of residual learning to identify the most effective configuration. 
-  Model performance was evaluated using global and local image quality metrics. Mean squared error (MSE) and structural similarity index (SSIM) quantified overall image accuracy and structural integrity, while contrast-to-noise ratio (CNR) assessed localized contrast improvements, particularly relevant for denoising effectiveness. 
-  In addition to the U-Net model, a second denoising framework called the Anchored Path Diffusion Denoising Model (APDDM) was developed. This model introduces realistic noise during training to improve robustness. 
-  The proposed methods demonstrated improved image quality while enabling significantly shorter acquisition times, supporting more efficient imaging workflows in preclinical research.
+This study presents a deep learning framework designed to enhance image quality and reduce acquisition time by combining denoising and super-resolution techniques. 
+Paired T2-weighted scans were acquired for 24 mice using a 7T Bruker Pharmascan system, consisting of low-resolution (1-minute) and high-resolution (12-minute) images. 
+After data pre-processing and augmentation, a U-Net convolutional network was trained using automated hyperparameter optimization.
+This process systematically tested combinations of learning rates, optimizers, convolutional filter sizes, upsampling and downsampling strategies, loss and activation functions, batch size, and the inclusion of residual learning to identify the most effective configuration. 
+Model performance was evaluated using global and local image quality metrics. Mean squared error (MSE) and structural similarity index (SSIM) quantified overall image accuracy and structural integrity, while contrast-to-noise ratio (CNR) assessed localized contrast improvements, particularly relevant for denoising effectiveness. 
+In addition to the U-Net model, a second denoising framework called the Anchored Path Diffusion Denoising Model (APDDM) was developed. This model introduces realistic noise during training to improve robustness. 
+The proposed methods demonstrated improved image quality while enabling significantly shorter acquisition times, supporting more efficient imaging workflows in preclinical research.
 \end{abstract}\hspace{15pt}
 \newpage
 
@@ -178,7 +178,7 @@ In the project, the data of 5 mice were acquired.
 
 \begin{table}[h]
 \centering
-\resizebox{0.97\linewidth}{!}{  % Schaal de tabel tot 80% van de kolombreedte
+\resizebox{0.8\linewidth}{!}{
 \begin{tabular}{l|c|c}
 \toprule
  & \textbf{1 min (low-res)} & \textbf{12 min (high-res)} \\
@@ -199,7 +199,7 @@ Averages per slice & 1 & 5 \\
 \end{table}
 
 
-\section{Pre-processing}
+\section{Pre-processing and data augmentation}
 
 Pre-processing of the slices is a crucial step in preparing the data for the deep learning model. 
 This stage ensures the data is uniform and optimized for training. 
@@ -216,8 +216,6 @@ Once bad slices were identified, they were removed from the used dataset (see ap
 Cropping is a commonly used image-manipulation process. The obtained MRI images contained lots of background noise which interferes with the performance of the model. 
 To counter this problem the images were cropped ensuring that our region of interest was intact (see appendix \ref{Appendix: Figures Preprocessing}: Figure~\ref{fig:comparision-cropped}).  
 
-
-
 \subsection{Zarr arrays}
 
 The acquired data were first converted into Zarr arrays to compress the large volume of data while maintaining image quality. 
@@ -229,8 +227,6 @@ The low-resolution image were upsampled using nearest-neighbor interpolation (or
 Mean normalization was performed, each low-resolution image was divided by its mean intensity, and the same mean value was applied as a normalization factor for the corresponding high-resolution image.  
 Both low-resolution and high-resolution images were converted for compatibility with PyTorch models.
 
-
-%the subsection below is data augmentation and not pre processing
 \subsection{Padding and random flipping}
 The images were randomly flipped horizontally and vertically with a 50\% probability, to introduce variations. 
 This improves the model generalization. Since input may have varying dimensions, the images were padded to match the largest width and height within each batch, ensuring uniform sizes for batch processing.
@@ -248,13 +244,13 @@ The rationale behind this U-Net, is that the encoder first extract certain featu
 Then, the decoder builds an image of higher SNR based on the positional pixel data of its corresponding layer in the encoder, and the condensed information generated by the encoder. 
 
 
-%ander formaat
-\begin{figure}
+%ander formaat, zo goed?
+\begin{figure*}
     \centering
     \includegraphics[width=0.5\linewidth]{U-Net.jpg}
     \caption{U-Net architecture.}
     \label{fig:U-Net}
-\end{figure}
+\end{figure*}
 
 
 \subsection{Hyperparameter Optimization for Training of the U-Net}
@@ -707,7 +703,7 @@ This consistency supports the robustness of the design.
 
 \begin{table}[h]
     \centering
-    \resizebox{0.97\linewidth}{!}{  % Schaal de tabel tot 80% van de kolombreedte
+    \resizebox{0.8\linewidth}{!}{
     \begin{tabular}{l|c|c|c}
     \toprule
      & \textbf{Training} & \textbf{Validation}& \textbf{Testing} \\
