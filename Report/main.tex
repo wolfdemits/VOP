@@ -625,7 +625,7 @@ In the best epoch the loss of the training is equal to 0.481, while the one of t
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{First_results_loss.png}
-    \caption{Visual representation of the loss function over different epochs during hyperparameter training. geen assen!!!}
+    \caption{Visual representation of the loss function over different epochs. geen assen!!!}
     \label{fig:first_loss}
 \end{figure}
 
@@ -664,6 +664,36 @@ Each image depicts another plane of the mouse. Also, images of the test mice can
 
 
 \subsection{Trained hyperparameters}
+To improve the performance of the model, hyperparameter tuning was done using Optuna's framework. 
+The MSE was used as the validation metric. The search space included the number of filters in each layer, the downsampling, upsampling, presence of residual connections, learning rate, optimizer and the learning rate scheduler. 
+The best-performing configuration achieved a validation MSE of 0.03034 and this optimal network used: 
+\begin{itemize}
+    \item 128 filters in the first layer
+    \item 128 filters in the second layer
+    \item 64 filters in the third layer
+    \item strided convolution for downsampling
+    \item bilinear upsampling
+    \item no residual connections
+    \item learning rate of 0.0003139
+    \item Adam optimizer 
+    \item step-wise learning rate scheduler
+\end{itemize}
+In addition to these hyperparameters, the activation function and loss function were fixed as ReLU and MSE, respectively. 
+These choices were guided by prior literature and informed by earlier tuning, during which alternative activations such as LeakyReLU and PReLU, and loss functions including SSIM-based objectives, were preliminarily evaluated but did not yield consistent improvements. 
+ReLU demonstrated stable convergence behavior and compatibility with the U-Net architecture, while MSE remained the most reliable objective for optimizing pixel-wise accuracy during supervised training.
+As such, both were retained as fixed components throughout the main hyperparameter optimization process. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{loss_hyperparameters.png}
+    \caption{Visual representation of the loss function over trials in hyperparameter tuning}
+    \label{fig:loss_hyperparameter}
+\end{figure}
+
+Figure \ref{fig:loss_hyperparameter} illustrates the evolution of the validation MSE over all tuning trials.
+Several other trials achieved losses close to the best-achieving one (e.g. trial 18).
+These well-performing trials shared nearly identical architectures, differing in learning rate. 
+This consistency supports the robustness of the design. 
 
 
 
@@ -712,39 +742,42 @@ The noise of the LR is reduced with minimal loss of important structural informa
 The same observations can be made when looking at the validation mice (see Appendix \ref{Appendix: Figures Results}).
 As said, the results are very promising but there is also room for improvement. The first step in this process is training the hyperparameters. 
 
-\subsection{Trained hyperparameters (work in progress)}
-Trial 54 achieved a strong validation MSE of 0.0984. 
-Several key hyperparameter choices reflect current best practices in deep learning for medical image restoration, while others diverge in notable ways. 
+\subsection{Trained hyperparameters}
+The results of the hyperparameter optimization provide insights into the performance of the model. 
+Several key hyperparameter choices reflect current best practices in deep learning formedical image restoration, while others diverge in notable ways
 
-The feature dimensions were set to 128,256 and 256 across the 3 main layers. 
-This progressive increase allows the network to capture abstract and complex image features as spatial resolution decreases. 
-The depth of the layers contributed to the model's ability to reconstruct finer details.
+The feature dimensions were set to 128, 128, 64, showing that the moderately deep but not excessively wide netwroks achieved optimal performance. 
+This allows the network to capture a sufficientrange of spatial features while avoiding overfitting, which is a risk in smaller-scale datasets such as micro-MRI.
 
-ReLU was selected as activation function over other alternatives such as LeakyReLU or ELU. 
-While ReLu is prone to "dying neurons", its simplicity, speed and effectiveness in networks make it a robust default choice \cite{relu}. 
-The absence of a relatively complex activation function suggests the network did not suffer from gradient issues that would call for alternatives. 
 Strided convolution (convStrided) was preferred over pooling for downsampling. 
 This aligns with expectations from common CNN practive. 
 Strided convolution allows the model to practive how to compress feature maps instead of relying on fixed operations such as meanpooling. 
-This learnability likely helped preserve critical structural details. 
-
-Upsampling was performed using transposed convolutions (upconv), as a standard approach that allows the network to recover spatial resolution in a data-driven way. 
-Unlike other methods, upconv layers can learn to reintroduce high-frequency detail, making them well suited in this case to enhance the resolution. 
-
+This learnability likely helped preserve critical structural details \cite{springenberg2014}.
+For upsampling, bilinear interpolation was favored over learned transposed convolutions. 
+Unlike transposed conolutions, which introduce additional parameters and are prone to artifacts, bilinear upsampling provides a smooth and stable to restore spatial dimensions. 
+This upsampling method does not learn to add high-frequency details \cite{kolarik2019}.
+The consistent selection of bilinear upsampling in high-performing trials suggests that its simplicity and robustness were well-suited for this task.
+ 
 Residual connections were disabled which is an unexpected result which contrasts with many image restoration models that benefit from residual learning. 
-However, it can be explained due to the skip connections inherent to U-Net which likely compensated for this. 
-This allows effective feature reuse and reduces the need for a global residual link.
+In this case the low-resolution and high-resolution images were relatively similar in structure and intensity, making transformations less complex.
+This reduces the benefit of residual modeling. 
+The U-Net's skip connections inherently serve a similar role to residuals, which likely compensated for this. 
+This allows effective feature reuse and reduces the need for a global residual link \cite{xu2024}.
 
-The learning rate was set to 0.004113 which is relatively high initial value. This enables faster early convergence. 
-The optimization setup combined RMSprop and ReduceLROnPlateau. 
-RMSprop adjusts the learning rate for each parameter individually based on the recent history of the gradients \cite{9036442}. 
-This helps stabilize updates, especially when gradients vary in scale. 
-In parallel, the ReduceLROnPlateau scheduler monitors the validation loss and automatically lowers the global learning rate when improvements slow down. 
-Together these tools contribute to faster and more stable convergence, reducing the risk of overshooting or stagnation.
+The learning rate was consistently selected in the lower range, supporting gradual and stable learning. 
+The chosen scheduler, step learning rate, reduces the learning rate at fixed intervals. 
+This allows the network to learn quickly during early eoichs and refine weights more delicately later in training. 
+This balance is preferred for restoring subtle textures in high-resolution data. 
 
-The model was trained using a hybrid loss function that combines both MSE and SSIM, with  $\alpha=0.3$. 
-Because of formula \ref{eq:6} it can be concluded that structural similarity is favored, encouraging the model to preserve structural features over strict pixel accuracy. 
-Such a loss is better suited in medical imaging tasks than pure MSE which can lead to overly smooth, less diagnostic outputs \cite{Dastmalchi}. 
+Certain parameters were fixed prior to tuning, based on theoretical justification and preliminary experiments. 
+The activation function was set to ReLU, chosen over alternatives such as LeakyReLU, PReLU, or ELU. 
+Although ReLU is susceptible to the "dying neuron" problem, it remains a robust default in convolutional architectures due to its simplicity, computational efficiency, and effective gradient propagation. 
+Initial exploratory tests showed no instability or gradient vanishing that would necessitate more complex activations. 
+The network’s stable convergence confirmed that ReLU was a suitable choice for this task.
+
+The loss function was fixed as mean squared error (MSE), a standard objective for pixel-wise regression tasks. 
+MSE offers a simple, differentiable, and interpretable loss landscape that aligns well with the goal of minimizing reconstruction error. 
+While alternative loss functions, such as SSIM or perceptual loss, were considered, MSE was retained due to its stability and its compatibility with the validation metric used during tuning. 
 
 The optimization process solely relied on MSE for validation. 
 This choice was made due to MSE’s simplicity, ease of interpretation, and its direct compatibility with the pixel-wise loss functions used during training.  
@@ -824,7 +857,13 @@ Metrics such as LPIPS (Learned Perceptual Image Patch Similarity) offer a promis
     \bibitem{1284395} Wang, Z., Bovik, A. C., Sheikh, H. R., \& Simoncelli, E. P. (2004). Image quality assessment: from error visibility to structural similarity. \textit{IEEE Transactions on Image Processing}, 13(4), 600–612. \url{https://doi.org/10.1109/TIP.2003.819861}.
     
     \bibitem{zhang2018unreasonableeffectivenessdeepfeatures} Zhang, R., Isola, P., Efros, A. A., Shechtman, E., \& Wang, O. (2018). The Unreasonable Effectiveness of Deep Features as a Perceptual Metric. \textit{arXiv:1801.03924}. Retrieved from \url{https://arxiv.org/abs/1801.03924}.
+
+    \bibitem{springenberg2014} Springenberg, J. T., Dosovitskiy, A., Brox, T., \& Riedmiller, M. (2014). Striving for simplicity: The all convolutional net. \textit{arXiv preprint arXiv:1412.6806}. \url{https://arxiv.org/abs/1412.6806}.
   
+    \bibitem{xu2024} Xu, G., Wang, X., Wu, X., Leng, X., \& Xu, Y. (2024). Development of Skip Connection in Deep Neural Networks for Computer Vision and Medical Image Analysis: A Survey. \textit{arXiv preprint arXiv:2405.01725}. \url{https://arxiv.org/abs/2405.01725}
+
+    \bibitem{kolarik2019} Kolařík, M., Burget, R., \& Říha, K. (2019). Upsampling Algorithms for Autoencoder Segmentation Neural Networks: A Comparison Study. \textit{2019 11th International Congress on Ultra Modern Telecommunications and Control Systems and Workshops (ICUMT)}, 1–7. \url{https://ieeexplore.ieee.org/document/8970918}
+
   \end{thebibliography}
 
 \newpage
