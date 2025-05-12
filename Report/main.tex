@@ -592,14 +592,15 @@ In this context, SSIM is used to compare the predicted images to the high-resolu
 This is particularly relevant in medical imaging, where preserving structural details is critical.  
 The SSIM score ranges from 0 to 1, with values closer to 1 indicating higher structural similarity and visual fidelity \cite{dosselmann-2009}.
 
- \subsection{Contrast-to-noise ratio}
- Contrast-to-noise ratio (CNR) is a metric that evaluates the quality of an image by measuring how well a region of interest (for example, liver) can be distinguished from the surrounding background.
+\subsection{Contrast-to-noise ratio}
+Contrast-to-noise ratio (CNR) is a metric that evaluates the quality of an image by measuring how well a region of interest (for example, liver) can be distinguished from the surrounding background.
 \begin{equation}\label{CNR}
 \text{CNR}=\frac{\mu_{ROI}-\mu_b}{\sigma_b}
 \end{equation}
 
 $\mu_{ROI}$ is the mean of the region of interest, $\mu_b$ is the mean of the background and $\sigma_b$ is the noise in the background.
 A higher CNR value indicates better differentiation of the region of interest from its background.
+To obtain the CNR the program Amide is used.
 
 \subsection{Visual comparison}
 In addition to quantitative measurements, a visual inspection can also be done to evaluate the quality of the reconstructed images. 
@@ -745,6 +746,9 @@ The same division of mice was used, as in indicated in Table \ref{tab:mouse_dist
 \subsection{APDDM}
 
 \subsection{Validation}
+
+\subsubsection{Contrast-to-noise ratio}
+
 
 \section{Discussion}
 \subsection{First results}
