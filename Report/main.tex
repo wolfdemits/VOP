@@ -622,12 +622,20 @@ In the best epoch the loss of the training is equal to 0.481, while the one of t
 \end{figure}
 
 In this script the training, validation and test mice were defined. A detailed overview can be found in Table \ref{tab:mouse_distribution}.
-The features\_main were set to [64, 128, 256], with corresponding features\_skip values of [64, 128]. 
-Meanpooling was used for downsampling, and upconv was applied for the upsampling steps. 
-The activation function was ReLU, and residual connections were enabled True.
-The model was trained with a batch size of 32 and a learning rate of 0.0001. Training was conducted over 200 epochs. 
-The RMSprop optimizer was used along with an ReduceLROnPlateau scheduler. MSE was employed as the loss function.
-These hyperparameters were chosen based on knowledge and guessing what the best one would be.
+The hyperparameters were chosen based on knowledge and guessing what the best one would be.
+\begin{itemize}
+    \item 64 filters in the first layer
+    \item 128 filters in the second layer
+    \item 256 filters in the third layer
+    \item meanpooling for downsampling
+    \item upconv upsampling
+    \item residual connections
+    \item learning rate of 0.0001
+    \item RMSprop optimizer
+    \item ReduceLROnPlateau scheduler
+\end{itemize}
+The model was trained with a batch size of 32 and training was conducted over 200 epochs. MSE was employed as the loss function and ReLU was the activation function.
+
 
 In Figure \ref{fig:first_sagittal}, Figure \ref{fig:first_transax} and Figure \ref{fig:first_coronal} the results can be observed, where each is an example of the training mice. 
 Since the output gave not all images back, Figure \ref{fig:first_coronal} is a result of the 13th epoch.
