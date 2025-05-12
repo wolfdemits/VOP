@@ -781,6 +781,25 @@ I (Fea) am still busy working with amide to get the CNR. This table is an indica
     \caption{\label{tab:CNR} Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images.}
 \end{table*}
 
+\subsubsection{Visual comparison}
+Figure \ref{fig:first_sagittal} shows a sagittal view of the mouse spine and surrounding anatomy. 
+The LR input of the spine and organ boundaries is quite noisy. The DL output is somewhat sharper for example the white spine column and rib edges are brighter and better defined than in LR. 
+However, the DL image still lacks the crisp detail of the HR reference. 
+Subtle textures are smoothed out. 
+
+On Figure \ref{mouse06_c_12} the coronal view shows the spine vertically at the center and bilateral organs on each side. The LR slice is very grainy. 
+The DL output reduces noise and enhances structures for example the kidney outlines and the vertebral column appear a bit clearer than in LR. 
+Contrast along bone boundaries and organ edges is higher in DL but not as sharp as HR.
+The HR-LR residual highlight the kidneys and spine quite strongly, whereas DL-HR show weaker residuals that trace those same shapes. 
+In conclusion, DL recovers some large-scale anatomy from LR but `smears over` finer details. 
+
+Figure \ref{mouse10_s_19} shows the spinal column (bright vertebrae) and pelvic region below with softer tissues above. 
+DL gain some edge clarity over LR but this is limited. The vertebral outline are only faintly improved. 
+In HR-LR, the vertebral bone edges and joint edges appear very strongly. The DL-HR residual shows reduced but still traces at those same locations, signifying partial detail recovery. 
+This is especially noticeable in the residual maps, the HR-LR difference shows strong edge signal around the spin and organs, while the DL-HR has only half the amplitude. 
+The network removes large-scale blur but leaves persistent contours at edges. 
+Overall, DL improves global sharpness over LR but retains an over-smoothed appearances with blurred finer details.  
+
 
 \section{Discussion}
 \subsection{First results}
@@ -858,6 +877,12 @@ The loss of structural information is still present, but less than previously.
 
 \subsection{Validation}
 
+\subsubsection{Visual comparison}
+In all cases the DL output appears to be smoother than the HR reference. This over-smoothing is a known effect of using MSE loss. 
+This is due to the network learning to average high-frequency patterns which results on blurred textures. 
+The residuals of DL-HR consistently have lower amplitudes than the HR-LR, this means the network shrinks the differences but is unable to restore all fine details \cite{MSE}. 
+MSE encourages finding pixel-wise averages of solutions, producing overly-smooth results. Our visual inspection confirms this. 
+
 \section{Conclusion}
 
 \newpage
@@ -928,6 +953,8 @@ The loss of structural information is still present, but less than previously.
     \bibitem{xu2024} Xu, G., Wang, X., Wu, X., Leng, X., \& Xu, Y. (2024). Development of Skip Connection in Deep Neural Networks for Computer Vision and Medical Image Analysis: A Survey. \textit{arXiv preprint arXiv:2405.01725}. \url{https://arxiv.org/abs/2405.01725}
 
     \bibitem{kolarik2019} Kolařík, M., Burget, R., \& Říha, K. (2019). Upsampling Algorithms for Autoencoder Segmentation Neural Networks: A Comparison Study. \textit{2019 11th International Congress on Ultra Modern Telecommunications and Control Systems and Workshops (ICUMT)}, 1–7. \url{https://ieeexplore.ieee.org/document/8970918}
+
+    \bibitem{MSE} C.~Ledig, L.~Theis, F.~Huszar, J.~Caballero, A.~Cunningham, A.~Acosta, A.~Aitken, A.~Tejani, J.~Totz, Z.~Wang, and W.~Shi, ``Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network,'' in \emph{Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}
 
   \end{thebibliography}
 
@@ -1196,18 +1223,21 @@ This result can be demonstrated by a simulation where beta is varied and the mea
     \centering
     \includegraphics[width=1\linewidth]{Mouse10_Sagittal_THORAX-ABDOMEN_19_epoch_0.png}
     \caption{Results after hyperparameter tuning of abdomen of test mouse.}
+    \label{mouse10_s_19}
 \end{figure*}
 
 \begin{figure*}[h]
     \centering
     \includegraphics[width=1\linewidth]{Mouse10_Transax_THORAX-ABDOMEN_16_epoch_0.png}
     \caption{Results after hyperparameter tuning of abdomen of test mouse.}
+    \label{mouse10_t_16}
 \end{figure*}
 
 \begin{figure*}[h]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_Coronal_THORAX-ABDOMEN_12_epoch_0.png}
     \caption{Results after hyperparameter tuning of abdomen of test mouse.}
+    \label{mouse06_c_12}
 \end{figure*}
 
 
