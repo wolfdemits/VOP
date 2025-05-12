@@ -639,7 +639,7 @@ The model was trained with a batch size of 32 and training was conducted over 20
 
 In Figure \ref{fig:first_sagittal}, Figure \ref{fig:first_transax} and Figure \ref{fig:first_coronal} the results can be observed, where each is an example of the training mice. 
 Since the output gave not all images back, Figure \ref{fig:first_coronal} is a result of the 13th epoch.
-Each image depicts another plane of the mouse. Also, images of the test mice can be found in Appendix \ref{Appendix: Figures Results}
+Each image depicts another plane of the mouse. Also, images of the test mice can be found in Appendix \ref{Appendix: first results}
 
 \begin{figure*}
     \centering
@@ -698,6 +698,10 @@ This consistency supports the robustness of the design.
 
 
 \subsection{Results after hyperparameter training}
+After hyperparameter tuning the model was runned again. Hereby, the parameters of section 7.2 were used.
+As in the part of the first results, the images of the training mice can be found in this section.
+Figure \ref{fig:second_sagittal}, Figure \ref{fig:second_transax} and Figure \ref{fig:second_coronal} represent the different planes.
+Images of the test mice can be found in Appendix \ref{Appendix: results after tuning}
 \begin{figure*}
     \centering
     \includegraphics[width=1\linewidth]{Mouse01_Sagittal_THORAX-ABDOMEN_26_epoch_0.png}
@@ -801,7 +805,9 @@ In denoising tasks, this can result in models that reduce noise effectively in t
 MSE is also sensitive to outliers and intensity shifts, while being oblivious to perceptual structure and contrast consistency \cite{1284395}. 
 Future work could benefit from using alternative validation metrics, such as SNR or perceptual similarity measures, to better guide model selection and ensure outputs are both quantitatively accurate and visually informative \cite{chavhan2009t2star}. 
 Metrics such as LPIPS (Learned Perceptual Image Patch Similarity) offer a promising alternative by leveraging deep features that align more closely with human perception and quality \cite{zhang2018unreasonableeffectivenessdeepfeatures}.
+
 \subsection{Results after hyperparameter training}
+
 
 \subsection{APDDM}
 
@@ -1118,8 +1124,8 @@ This result can be demonstrated by a simulation where beta is varied and the mea
 \clearpage
 \newpage
 \section{Appendix: Figures Results}
-\label{Appendix: Figures Results}
 \subsection{Appendix: first results}
+\label{Appendix: first results}
 \begin{figure*}[h]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_Sagittal_10_epoch_10.png}
@@ -1140,6 +1146,7 @@ This result can be demonstrated by a simulation where beta is varied and the mea
 
 \newpage
 \subsection{Appendix: results after hyperparameter tuning}
+\label{Appendix: results after tuning}
 \begin{figure*}[h]
     \centering
     \includegraphics[width=1\linewidth]{Mouse10_Sagittal_THORAX-ABDOMEN_19_epoch_0.png}
