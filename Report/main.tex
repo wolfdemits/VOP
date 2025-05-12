@@ -662,6 +662,22 @@ Each image depicts another plane of the mouse. Also, images of the test mice can
     \label{fig:first_coronal}
 \end{figure*}
 
+\begin{table}[h]
+    \centering
+    \resizebox{0.8\linewidth}{!}{
+    \begin{tabular}{l|c|c|c}
+    \toprule
+     & \textbf{Training} & \textbf{Validation}& \textbf{Testing} \\
+    \hline
+    \midrule
+    Mouse & \makecell{1, 2, 3, 4, 5, 8 \\ 9, 11, 12, 13, 14, 15 \\ 17, 18, 19, 20, 21, 23} 
+              & \makecell{6, 10}
+              & \makecell{7, 16, 22} \\
+    \bottomrule
+    \end{tabular}
+    }
+    \caption{\label{tab:mouse_distribution} Mouse distribution across training, validation, and testing sets.}
+\end{table}
 
 \subsection{Trained hyperparameters}
 To improve the performance of the model, hyperparameter tuning was done using Optuna's framework. 
@@ -701,7 +717,9 @@ This consistency supports the robustness of the design.
 After hyperparameter tuning the model was runned again. Hereby, the parameters of section 7.2 were used.
 As in the part of the first results, the images of the training mice can be found in this section.
 Figure \ref{fig:second_sagittal}, Figure \ref{fig:second_transax} and Figure \ref{fig:second_coronal} represent the different planes.
-Images of the test mice can be found in Appendix \ref{Appendix: results after tuning}
+Images of the test mice can be found in Appendix \ref{Appendix: results after tuning}.
+The same division of mice was used, as in indicated in Table \ref{tab:mouse_distribution}.
+
 \begin{figure*}
     \centering
     \includegraphics[width=1\linewidth]{Mouse01_Sagittal_THORAX-ABDOMEN_26_epoch_0.png}
@@ -722,25 +740,7 @@ Images of the test mice can be found in Appendix \ref{Appendix: results after tu
     \caption{Results after hyperparameter tuning of abdomen of training mouse.}
     \label{fig:second_coronal}
 \end{figure*}
-
-\begin{table}[h]
-    \centering
-    \resizebox{0.8\linewidth}{!}{
-    \begin{tabular}{l|c|c|c}
-    \toprule
-     & \textbf{Training} & \textbf{Validation}& \textbf{Testing} \\
-    \hline
-    \midrule
-    Mouse & \makecell{1, 2, 3, 4, 5, 8 \\ 9, 11, 12, 13, 14, 15 \\ 17, 18, 19, 20, 21, 23} 
-              & \makecell{6, 10}
-              & \makecell{7, 16, 22} \\
-    \bottomrule
-    \end{tabular}
-    }
-    \caption{\label{tab:mouse_distribution} Mouse distribution across training, validation, and testing sets.}
-\end{table}
-
-    
+   
 
 \subsection{APDDM}
 
