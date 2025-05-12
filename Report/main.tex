@@ -699,7 +699,7 @@ These choices were guided by prior literature and informed by earlier tuning, du
 ReLU demonstrated stable convergence behavior and compatibility with the U-Net architecture, while MSE remained the most reliable objective for optimizing pixel-wise accuracy during supervised training.
 As such, both were retained as fixed components throughout the main hyperparameter optimization process. 
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
     \includegraphics[width=1\linewidth]{loss_hyperparameters.png}
     \caption{Visual representation of the loss function over trials in hyperparameter tuning}
@@ -807,7 +807,16 @@ Future work could benefit from using alternative validation metrics, such as SNR
 Metrics such as LPIPS (Learned Perceptual Image Patch Similarity) offer a promising alternative by leveraging deep features that align more closely with human perception and quality \cite{zhang2018unreasonableeffectivenessdeepfeatures}.
 
 \subsection{Results after hyperparameter training}
-
+When looking at the results after hyperparameter, it can be seen that the model is still working quite good. 
+The DL image in Figure \ref{fig:second_sagittal}, Figure \ref{fig:second_transax} and Figure \ref{fig:second_coronal} shows again sharper details and higher quality compared to the LR image.
+The DL image is still more black than the HR image.
+The maximum intensity of the DL image is again lower than the ones of the LR and HR image, but the difference is only $1$. 
+In the first results this difference was much higher.
+This means the intensity bias and scaling difference are better than previously.
+The background also needs to be taken into account, which can also leads to other maximum intensities.
+Compared to Figure \ref{fig:first_sagittal}, Figure \ref{fig:first_transax} and Figure \ref{fig:first_coronal} the images after hyperparameter tuning has sharper edges.
+The edges are less smeared out and a bit sharper.
+The loss of structural information is still present, but less than previously. 
 
 \subsection{APDDM}
 
