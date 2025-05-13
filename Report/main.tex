@@ -917,7 +917,31 @@ The loss of structural information is still present, but less than previously.
 In all cases the DL output appears to be smoother than the HR reference. This over-smoothing is a known effect of using MSE loss. 
 This is due to the network learning to average high-frequency patterns which results on blurred textures. 
 The residuals of DL-HR consistently have lower amplitudes than the HR-LR, this means the network shrinks the differences but is unable to restore all fine details \cite{MSE}. 
-MSE encourages finding pixel-wise averages of solutions, producing overly-smooth results. Our visual inspection confirms this. 
+MSE encourages finding pixel-wise averages of solutions, producing overly-smooth results. Our visual inspection confirms this.
+
+\subsubsection{LEGO brick phantom}
+As an extra validation step, an MRI scan of a LEGO brick with a 1-minute scan time was given as input to the trained model and compared with its 12-minute scan time counterpart. This can show whether the model is overtrained and whether it could potentially be used to denoise and improve shorter scan time images of objects other than mice. The images discussed here can be seen in Figure \ref{fig:lego_phantom_test}.
+
+Visually, the model produces an output that strongly resembles both the LR and HR images. The model removes noise in the grey regions from the LR image, as well as echo artifacts that can be seen, for example, between the black LEGO pins at the top. The rectangular shapes are preserved, although the training data of mice did not contain many such shapes.
+
+However, comparing the residuals shows that the LR image is closer to the HR image in terms of the rectangles than the DL image. This could be due to the fact that the model was trained on mouse scans, which, as mentioned, do not contain the sharp edges characteristic of a LEGO brick, and that the model used MSE as the loss function during training. MSE penalizes large pixel errors, so the model tends to smooth out sharp changes.
+
+The MSE between the DL and HR images is 0.1269, and between the LR and HR images is 0.0737 (an increase of 72\% from the LR to the DL image). This means that if we only consider the pixel-wise error, the LR image remains a better approximation of the HR image than the DL image.
+
+Another indicator of image quality is the Structural Similarity Index Measure (SSIM), as discussed in section \ref{Structural similarity index measure}. The DL and HR images have an SSIM of 0.4548, while the LR and HR images have one of 0.4624. So the SSIMs differ by only 1.6\%, indicating that according to SSIM, neither the LR nor the DL image is clearly a better approximation of the HR image. Very similar conclusions regarding MSE and SSIM can be drawn from examining other slices of the LEGO phantom.
+
+It is important to note that MSE and SSIM are purely quantitative metrics and should be considered as supplementary to qualitative visual assessment. Despite the DL image having a slightly higher MSE and lower SSIM than the LR image, it remains a strong approximation of the HR image due to its effective denoising and artifact suppression capabilities, also for objects different from mice.
+
+
+
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{LEGO_phantom_test.png}
+    \caption{Results after hyperparameter tuning of LEGO phantom.}
+    \label{fig:lego_phantom_test}
+\end{figure*}
+
 
 \section{Conclusion}
 
