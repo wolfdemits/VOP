@@ -5,7 +5,7 @@ import torch.nn.functional as F
 import pathlib
 import pydicom
 from pydicom.uid import ImplicitVRLittleEndian
-from Slicemanager import Slice_manager
+from Without_SR_Module.Slicemanager import Slice_manager
 import re
 import random
 from pathlib import Path
@@ -102,7 +102,7 @@ def ssim_index(x: torch.Tensor,
 # ── Validation driver ──────────────────────────────────────────────────────────
 
 def validate(dl_root: Path, dicom_data_path: Path, seed: int = 42):
-    # 1) pick latest epoch folder (by highest number in name)
+    # 1) Pick latest epoch folder (by highest number in name)
     epochs = [d for d in dl_root.iterdir() if d.is_dir()]
     def epoch_num(d):
         m = re.search(r'(\d+)', d.name)
@@ -110,80 +110,80 @@ def validate(dl_root: Path, dicom_data_path: Path, seed: int = 42):
     latest = max(epochs, key=epoch_num)
     print(f"Evaluating epoch: {latest.name}")
 
-    # 2) collect DL files
-    dl_files = list(latest.glob('*_DL.dcm'))
+    # 2) Collect DL files recursively
+    dl_files = list(latest.glob('**/*_diff.dcm'))
+
+    # 3) Process files
     records = []
     for f in dl_files:
-        m = re.match(r'Mouse(\d+)_([A-Za-z]+)_(\d+)_DL\.dcm', f.name)
-        if not m: continue
+        m = re.match(r'Mouse(\d+)_([A-Za-z]+)_(\w+)-(\w+)_(\d+)_diff\.dcm', f.name)
+        if not m: 
+            continue
+        mouse_id = int(m.group(1))
+        if mouse_id not in [1, 6, 10, 23]:  # 👈 filter here
+            continue
         records.append({
             'path': f,
-            'mouse_id': int(m.group(1)),
-            'loc': 'HEAD-THORAX',
+            'mouse_id': mouse_id,
+            'loc': f'{m.group(3)}-{m.group(4)}',
             'plane': m.group(2),
-            'slice': int(m.group(3))
+            'slice': int(m.group(5)),
         })
 
-    # 3) split by mouse_id
-    splits = {
-        'train': [r for r in records if  1 <= r['mouse_id'] <= 5 or 8 <= r['mouse_id'] <= 9 or 11 <= r['mouse_id'] <= 21 or r['mouse_id']==23],
-        'val':   [r for r in records if r['mouse_id'] == 6 or  r['mouse_id']==10],
-        'test':  [r for r in records if r['mouse_id']==16 or  r['mouse_id']==7 or  r['mouse_id']==22],
-    }
-
+    # Shuffle for randomness
     random.seed(seed)
-    samples = {}
-    for split, lst in splits.items():
-        if lst:
-            samples[split] = random.choice(lst)
-        else:
-            print(f"⚠ no DL files for split {split}")
+    random.shuffle(records)
 
-    # 4) init slicemanager
+    # 4) Init slicemanager
     slicer = Slice_manager(dicom_data_path)
 
-    # 5) compute metrics
-    results = {}
-    for split, rec in samples.items():
-        # Do this:
+    # 5) Evaluate all matching records
+    results = []
+    for rec in records:
+        print(f"Evaluating Mouse {rec['mouse_id']} {rec['plane']} slice {rec['slice']}")
         ds = pydicom.dcmread(str(rec['path']), force=True)
-        # ensure there’s a file_meta and TSUID
         if not hasattr(ds, 'file_meta') or 'TransferSyntaxUID' not in ds.file_meta:
             ds.file_meta = getattr(ds, 'file_meta', pydicom.dataset.FileMetaDataset())
             ds.file_meta.TransferSyntaxUID = ImplicitVRLittleEndian
             ds.is_implicit_VR = True
             ds.is_little_endian = True
         dl = ds.pixel_array.astype(np.float32)
+
+
         slicer.set_mouse_id(rec['mouse_id'])
         slicer.set_loc(rec['loc'])
         slicer.set_plane(rec['plane'])
         slicer.set_slice(rec['slice'])
         lr, hr = slicer.get_slice()
 
+        # Torch and normalize
         dl = torch.from_numpy(dl).unsqueeze(0).unsqueeze(0).float()
         hr = torch.from_numpy(hr).unsqueeze(0).unsqueeze(0).float()
 
+        # Normalize both
+        dl = (dl - dl.min()) / (dl.max() - dl.min() + 1e-8)
+        hr = (hr - hr.min()) / (hr.max() - hr.min() + 1e-8)
+
+
+
         if dl.shape != hr.shape:
-            dl = F.interpolate(dl,
-                                 size=hr.shape[-2:],
-                                 mode='bilinear',
-                                 align_corners=False)
+            dl = F.interpolate(dl, size=hr.shape[-2:], mode='bilinear', align_corners=False)
 
         ssim = ssim_index(dl, hr, data_range=1.0).item()
         mse  = F.mse_loss(dl, hr, reduction='mean').item()
 
-        results[split] = {
+        results.append({
             'mouse': rec['mouse_id'],
             'plane': rec['plane'],
             'slice': rec['slice'],
             'ssim': ssim,
             'mse': mse
-        }
+        })
 
-    # 6) print
-    print("\nResults:")
-    for split, r in results.items():
-        print(f"{split.upper():5s} → Mouse {r['mouse']} {r['plane']} slice {r['slice']}: "
+    # 6) Print results
+    print("\nValidation Results:")
+    for r in results:
+        print(f"Mouse {r['mouse']} {r['plane']} slice {r['slice']}: "
               f"SSIM={r['ssim']:.4f}, MSE={r['mse']:.6f}")
 
     return results
@@ -192,7 +192,9 @@ def validate(dl_root: Path, dicom_data_path: Path, seed: int = 42):
 # ── Entrypoint ─────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-                    
-    DL_ROOT    = Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Without_SR_Module_Results/IntermediateFigures/DICOM_DL')
-    DICOM_DATA = Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Data')
+
+    #DL_ROOT    = Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Without_SR_Module_Results/IntermediateFigures/DICOM_DL')
+    DL_ROOT    = Path('C:\\Users\\daanv\\Ugent\\vop\\DICOM_DL_epoch_0') #change this to own paths
+    #DICOM_DATA = Path('/kyukon/data/gent/vo/000/gvo00006/WalkThroughPET/2425_VOP/Project/Data')
+    DICOM_DATA = Path('C:\\Users\daanv\\Ugent\\vop\\VOP\Data')
     validate(DL_ROOT, DICOM_DATA)
