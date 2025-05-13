@@ -1,0 +1,66 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{Acknowledgements}{5}{section*.4}%
+\contentsline {section}{\numberline {1}Introduction}{6}{section.1}%
+\contentsline {section}{\numberline {2}Data collection}{6}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Infinity lab}{6}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Preparation and calibration }{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Performing the MRI scan}{6}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Image Datasets}{7}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Pre-processing and data augmentation}{7}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Removal of bad image slices}{7}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Cropping of the image slices}{7}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Zarr arrays}{7}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Normalization}{8}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Padding and random flipping}{8}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Neural Network and Training Process}{8}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Model architecture}{8}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Hyperparameter Optimization for Training of the U-Net}{8}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Hyperparameters fo the Network Structure }{8}{subsubsection.4.2.1}%
+\contentsline {paragraph}{Features main and features skip}{8}{section*.8}%
+\contentsline {paragraph}{Downsampling method}{9}{section*.9}%
+\contentsline {paragraph}{Upsampling}{9}{section*.13}%
+\contentsline {paragraph}{Activation function}{10}{section*.14}%
+\contentsline {paragraph}{Residual learning}{10}{section*.15}%
+\contentsline {subsubsection}{\numberline {4.2.2}Hyperparameters of the Training Process}{10}{subsubsection.4.2.2}%
+\contentsline {paragraph}{Learning Rate Strategies}{10}{section*.16}%
+\contentsline {paragraph}{Optimizer}{11}{section*.18}%
+\contentsline {paragraph}{Loss function}{11}{section*.19}%
+\contentsline {paragraph}{Others}{12}{section*.20}%
+\contentsline {subsection}{\numberline {4.3}Anchored Path Diffusion Denoising Model (APDDM)}{12}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Forward Diffusion Process}{12}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Reverse Process and Training}{12}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Integration}{13}{subsubsection.4.3.3}%
+\contentsline {section}{\numberline {5}Model performance evaluation}{13}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Mean squared error}{13}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Structural similarity index measure}{13}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Contrast-to-noise ratio}{13}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Visual comparison}{13}{subsection.5.4}%
+\contentsline {section}{\numberline {6}Results}{14}{section.6}%
+\contentsline {subsection}{\numberline {6.1}First results}{14}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Trained hyperparameters}{14}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Results after hyperparameter training}{16}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}APDDM}{16}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5}Validation}{16}{subsection.6.5}%
+\contentsline {subsubsection}{\numberline {6.5.1}Contrast-to-noise ratio}{16}{subsubsection.6.5.1}%
+\contentsline {subsubsection}{\numberline {6.5.2}Visual comparison}{16}{subsubsection.6.5.2}%
+\contentsline {section}{\numberline {7}Discussion}{16}{section.7}%
+\contentsline {subsection}{\numberline {7.1}First results}{16}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Trained hyperparameters}{16}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Results after hyperparameter training}{19}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}APDDM}{19}{subsection.7.4}%
+\contentsline {subsection}{\numberline {7.5}Validation}{19}{subsection.7.5}%
+\contentsline {subsubsection}{\numberline {7.5.1}Visual comparison}{19}{subsubsection.7.5.1}%
+\contentsline {section}{\numberline {8}Conclusion}{19}{section.8}%
+\contentsline {section}{Appendices}{22}{section*.34}%
+\contentsline {section}{\numberline {A}Appendix: Gantt chart}{22}{appendix.1.A}%
+\contentsline {section}{\numberline {B}Appendix: Figures Preprocessing}{23}{appendix.1.B}%
+\contentsline {section}{\numberline {C}Appendix: Mathematics APDDM}{24}{appendix.1.C}%
+\contentsline {subsection}{\numberline {C.1}Ansatz: linear interpolation between image pair}{24}{subsection.1.C.1}%
+\contentsline {subsection}{\numberline {C.2}Proposition of the Markovian process}{24}{subsection.1.C.2}%
+\contentsline {subsection}{\numberline {C.3}Expected value of the endpoint}{25}{subsection.1.C.3}%
+\contentsline {subsection}{\numberline {C.4}Variance of the endpoint}{25}{subsection.1.C.4}%
+\contentsline {subsection}{\numberline {C.5}Controlling the variance}{26}{subsection.1.C.5}%
+\contentsline {subsection}{\numberline {C.6}MSE stability}{26}{subsection.1.C.6}%
+\contentsline {section}{\numberline {D}Appendix: Figures Results}{28}{appendix.1.D}%
+\contentsline {subsection}{\numberline {D.1}Appendix: first results}{28}{subsection.1.D.1}%
+\contentsline {subsection}{\numberline {D.2}Appendix: results after hyperparameter tuning}{29}{subsection.1.D.2}%

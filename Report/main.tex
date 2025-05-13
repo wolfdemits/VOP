@@ -507,7 +507,7 @@ Too few epochs can result in underfitting, while too many may lead to overfittin
 \subsection{Anchored Path Diffusion Denoising Model (APDDM)}
 To complement the direct image-to-image denoising approach, discussed in the previous section, a second model was implemented, 
 the Anchored Path Diffusion Denoising Model (APDDM). 
-This model is a diffusion based framework designed specifically for paired high and low SNR images, in this case the high-resolution (12-minute) scans and the low-resolution (1-minute) scan. Unlike conventional denoising diffusion models that corrupt clean images with artificial Gaussian noise, APDDM uses the actual low SNR image as the endpoint, allowing the model to incorporate real noise from the dataset into the forward process. 
+This model is a diffusion based framework designed specifically for paired high and low SNR images, in this case the high-resolution (12-minute) scans and the low-resolution (1-minute) scan. Unlike conventional denoising diffusion models that add noise to the HNR images until the endpoint is complete Gaussian noise, APDDM uses the actual low SNR image as the endpoint, allowing the model to incorporate real noise from the dataset into the forward process. 
 
 \subsubsection{Forward Diffusion Process}
 The forward process defines a stochastic path that gradually transforms the clean image $x_0$ into a noisy version $x_t$, with the endpoint distribution anchored around the real noisy scan $x_T^*$. 
@@ -519,16 +519,16 @@ x_t=q(x_{t-1})=x_{t-1}+\frac{1}{T}\cdot R+f(t)\cdot \hat{\epsilon}, t=1,2,...,T
 \begin{itemize}
     \item $R=x_T^*-x_0$ : the residual between 2 paired images
     \item $\hat{\epsilon} $: noise sampled from empirical residuals
-    \item $f(t)=4 \cdot \frac{t}{T} \cdot (1-\frac{t}{T})$ : bell-shaped envelope that controls the noise size
+    \item $f(t)=4 \cdot \frac{t}{T} \cdot (1-\frac{t}{T})$ : noise schedule function (this can be defined in multiple ways, but a certain choice is made)
     \item $T$ : the total number of diffusion steps
 \end{itemize}
 
 
 The approach guarantees that the endpoint of the forward diffusion $x_T$ is close to the true low-SNR image $x_T^*$. 
 By anchoring the path to $x_T^*$, the model maintains connected to the real noise present in the dataset. 
-Additionally the variance in the diffusion path is fully controllable via the envelope function $f(t)$ and the scaling of the noise term $\hat{\epsilon} $, allowing adjustments of how much randomness is introduced. 
+Additionally the variance in the diffusion path is fully controllable via the parameter $\beta$, allowing adjustments of how much randomness is introduced. 
 This concept is illustrated in Figure \ref{fig:forward APDDM}. The forward diffusion path (indicated in orange) gradually moves from the high-SNR image $x_0$ toward a distribution centered around the noise image $x_T^*$, with each step adding increasing amount of noise. 
-The shape of the blue curve represents the variance of the distribution of noise.
+The shape of the blue curve represents the approximated real distribution of noise.
 
 \begin{figure}[H]
     \centering
@@ -547,7 +547,7 @@ The predicted noise is then subtracted to obtain an estimate of $\hat{x_0}$, and
 \begin{equation}
     \mathcal{L}=\|x_0-\hat{x_0}\|^2
 \end{equation}
-The network does not need to generate high-quality images from scrath but only needs to estimate the noise added from the forward process. 
+The network does not need to generate high-quality images from scratch but only needs to estimate the noise added from the forward process. 
 Figure \ref{fig:APDDM} shows the training strategy. The clean image $x_0$ is transformed into $x_t$ via forward diffusion and the network is trained to reverse this transformation by removing predicted noise and minimizing the loss. 
 This setup allows the network to focus on denoising realistic degraded images, guided by noise from the data.
 
@@ -1040,8 +1040,11 @@ t = current timestep in the diffusion path \\
 $\alpha_t = \frac{t}{T}$, notation for the fraction of the diffusion path at the current timestep\\
 $\bold{R} = \bold{x}_T^* - \bold{x}_0$, the residual\\
 \\
-Note: $\bold{x}_0$ and $\bold{x}_T^*$ should be normalized images (according to z-score normalization: 
-$\frac{x - \overline{x}}{s_n}$), and $\bold{x}_T^*$ should be interpolated to match the size of $\bold{x}_0$.\\
+Note: $\bold{x}_0$ and $\bold{x}_T^*$ should be normalized images:
+\begin{equation}
+    \bold{x} \leftarrow \frac{\bold{x} - \frac{1}{i,j}\sum_{ij} \bold{x}_{ij}}{ \sqrt{ \frac{1}{ij} \sum_{i,j} \bold{x}_{ij}^2}}
+\end{equation}
+and $\bold{x}_T^*$ should be interpolated to match the size of $\bold{x}_0$.\\
 \\
 We will start by first defining a procedure, where we linearly interpolate between $\bold{x}_0$ and $\bold{x}_T^*$, and add a not yet specified noise term:
 \begin{equation}
@@ -1065,17 +1068,15 @@ $\Leftrightarrow$
 \end{equation}
 By using a Markov process, we create a natural diffusion path from $\bold{x}_0$ to $\bold{x}_t$, where each step builds up on the previous one. 
 We now define our final Markov process as: 
-\begin{equation}\label{eq:12}
+\begin{equation} \label{eq:f(t)}
     \boxed{\bold{x}_t = q(\bold{x}_{t-1}) = \bold{x}_{t-1} + \frac{1}{T} \bold{R} + f(t) \hat{\epsilon} \hspace{.1cm};\hspace{.5cm} t=1,2,...,T}
 \end{equation}
 
-Where we define $f(\alpha_t)$ to be a function that is zero for arguments $0$ and $1$, and reaches a maximum of 1 somewhere in the range $[0,1]$. 
-This is the noise envelope function. Let:
-\begin{equation}\label{eq:13}
+Where we define $f(\alpha_t)$ to be a function that is zero for arguments $0$ and $1$, and reaches a maximum of 1 somewhere in the range $[0,1]$. This is the noise schedule function. Let:
+\begin{equation}
     f(t) = 4\alpha_t(1-\alpha_t) = 4 \frac{t}{T} (1-\frac{t}{T})
 \end{equation}
-This choice of function is arbitrary, but in this way, the noise term is gradually introduced and attenuated again so the course of the diffusion path has a natural way of going from starting point to endpoint. 
-Below, the course of the variance throughout the path will be shown, where it will be clear why such a choice of attenuating envelope function is favorable. \\
+This choice of function is arbitrary, but in this way, the noise term is gradually introduced and attenuated again so the course of the diffusion path has a natural way of going from starting point to endpoint. Below, the course of the variance throughout the path will be shown, where it will be clear why such a choice of attenuating noise schedule function is favorable. \\
 \\
 The noise term $\epsilon$ should be distributed according to the real noise in our data:
 \begin{equation}
@@ -1086,12 +1087,21 @@ We will approximate this empirically by sampling from all the observed residuals
     \epsilon \approx \hat{\epsilon} \stackrel{i.i.d.}{\sim} \mathcal{E}_{dataset}
 \end{equation}
 
-This sampling of the noise residual can be done by i.i.d sampling residual bank $\mathcal{E}_{dataset}$. These are than rotated at random over 0°, 90°, 180° and 270°. 
+This sampling of the noise residual can be done by i.i.d sampling residual bank $\mathcal{E}_{dataset}$. These are then rotated at random over 0°, 90°, 180° and 270° as an augmentation technique so coherent edge artifacts won't accumulate (see Fig. \ref{fig:edge artifacts} for an example of such artifacts). 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{With-Without_Random_Rotation.png}
+    \caption{\textit{Demonstration of coherent edge artifact accumulation when no rotation is applied. }}
+    \label{fig:edge artifacts}
+\end{figure}
+
+\FloatBarrier
 
 \subsection{Expected value of the endpoint}
 Note that generally: $\bold{x}_T \neq \bold{x}_T^*$. It will now be shown that the expected value $\mathbb{E}[\bold{x}_T]$ still is $\bold{x}_T^*$:\\
 \\
-We apply a Markov chain T times to the input $\bold{x}_0$ using \ref{eq:12}:\\
+We apply a Markov chain T times to the input $\bold{x}_0$:\\
 \begin{equation}
     \mathbb{E}[\bold{x}_T] = \mathbb{E}[q(q(...q(\bold{x}_0)..))] = \mathbb{E}[\bold{x}_0 + \frac{T}{T} \bold{R} + \sum_{t=1}^{T} f(t) \cdot \hat{\epsilon}_t] 
 \end{equation}
@@ -1105,22 +1115,21 @@ If we assume $\mathbb{E}[\hat{\epsilon}] = 0$:
 \end{equation}
 
 \subsection{Variance of the endpoint}
-We will now derive the expression for the variance on our endpoint $\bold{x}_T$, again by using \ref{eq:12}:
+We will now derive the expression for the variance on our enpoint $\bold{x}_T$:
 \begin{multline}
-    Var[\bold{x}_T] = Var[q(q(...q(\bold{x}_0)..))] = Var[\bold{x}_0 + \bold{R} + \sum_{t=1}^{T} f(t) \cdot \hat{\epsilon}_t] = \\ \sum_{t=1}^{T} f(t)^2 Var[\hat{\epsilon}_t] + \sum_{i \neq j}^{T} f(i) f(j) Cov[\hat{\epsilon}_i, \hat{\epsilon}_j] = \sum_{t=1}^{T} f(t)^2 Var[\hat{\epsilon}_t]
+    Var[\bold{x}_T] = Var[q(q(...q(\bold{x}_0)..))] = Var[\bold{x}_0 + \bold{R} + \sum_{t=1}^{T} f(t) \cdot \hat{\epsilon}_t] = Var[\sum_{t=1}^{T} f(t) \cdot \hat{\epsilon}_t]\\ = \sum_{t=1}^{T} f(t)^2 Var[\hat{\epsilon}_t] + \sum_{i \neq j}^{T} f(i) f(j) Cov[\hat{\epsilon}_i, \hat{\epsilon}_j] = \sum_{t=1}^{T} f(t)^2 Var[\hat{\epsilon}_t]
 \end{multline}
-Now using the notation: $Var[\hat{\epsilon}_t] = \sigma_{\epsilon}^2$ and \ref{eq:13}, we get:
+Where we used $Cov[\hat{\epsilon}_i, \hat{\epsilon}_j] = 0$ because the noise samples are independent. \\
+Now using the notation: $Var[\hat{\epsilon}_t] = \sigma_{\epsilon}^2$, and substituting (\ref{eq:f(t)}), we get:
 \begin{equation}
     \boxed{Var[\bold{x}_T] = \sigma_{\epsilon}^2 \cdot \sum_{t=1}^{T} f(t)^2 = \frac{8}{15} \frac{T^4 - 1}{T^3} \cdot \sigma_{\epsilon}^2}
 \end{equation}
 Note that for $lim_{T->+\infty} Var[\bold{x}_T] \sim \frac{8}{15} T$.\\
 \\
-We can also derive the general variance throughout the path:
-\begin{multline}
+We can also derive the general variance throughout the whole path (not just at the endpoint):
+\begin{equation}
     Var[\bold{x}_T] = \sigma_{\epsilon}^2 \cdot \sum_{\tau=1}^{T} f(\tau)^2 = \sigma_{\epsilon}^2 \cdot \frac{8}{15} \frac{1}{T^4} t(t+1)[6t^3 - 15t^2T + 9t^2 + 10tT^2 - 15tT + t + 5T^2 - 1]
-\end{multline}
-    
-
+\end{equation}
 % plot -----------------------
 \begin{center}
 \begin{tikzpicture}
@@ -1129,14 +1138,12 @@ We can also derive the general variance throughout the path:
 \end{axis}
 \end{tikzpicture}
 \end{center}
-
 This exact course of the variance has also been confirmed by numerical simulation.\\
 \\
-We can observe that the variance increases slowly in the beginning, and before the endpoint, it slows down and stabilizes again. 
-This is the reason for the particular choice of the envelope function $f(t)$ discussed previously.
+We can observe that the variance increases slowly in the beginning, and before the endpoint, it slows down and stabilizes again. This is the reason for the particular choice of the noise schedule function $f(t)$ discussed previously. \textbf{However, a lot of noise schedule choices can be made and should be investigated.}
 
 \subsection{Controlling the variance}
-I will now propose a method of controlling the variance of this path. 
+I will now propose a method of controlling the variance of this path. This way, we can have the variance of the endpoint as a variable parameter, and even optimize the model in function of this parameter. Thus the ``degree of noise'' can be controlled.   
 First, we will normalize the sampled residual $\hat{\epsilon}$, so we know the variance of the noise is 1:
 \begin{equation}
     \hat{\epsilon'} = \hat{\epsilon} / s_{n,\epsilon}
@@ -1148,24 +1155,21 @@ We will then control the variance by adding a parameter $\sigma$:
     \boxed{\bold{x}_t = q(\bold{x}_{t-1}) = \bold{x}_{t-1} + \frac{1}{T} \bold{R} + \sigma f(t) \hat{\epsilon'} \hspace{.1cm};\hspace{.5cm} t=1,2,...,T}
 \end{equation}
 Where: 
-\begin{equation}
+\begin{equation} \label{eq:beta}
     \sigma = \sqrt{\frac{15}{8} * \frac{T^3}{T^4 - 1}} * \beta
 \end{equation}
 Now, the variance of our endpoint is: 
 \begin{equation}
     Var[\bold{x}_T] = \beta^2
 \end{equation}
-We now have full control over the variance of the diffusion path.
+We now have full control over the variance of the endpoint, with exception to the stability criterion as described in the following section. 
 
 \subsection{MSE stability}
-Important to note is that there are some constraints on this parameter beta (and thus the variance of the noise term), if we want the MSE between $\bold{x}_T$ and $\bold{x}_T^*$ to converge to zero.\\
+Important to note is that there are some constraints on this parameter beta (and thus the variance of the noise term), if we want the diffusion path to converge to $\bold{X}_T^*$. We will measure this in the form of the MSE between $\bold{x}_T$ and $\bold{x}_T^*$, which should not be exceedingly large. \\
 An important condition that must be met, is that $\bold{x}_t$ becomes more similar to $\bold{x}_T^*$ each step.\\
 \\
- This condition will not be met if the noise term overpowers the term $\frac{1}{T}  \bold{R}$. 
- In other words, the residual term magnitude should be larger than the noise term magnitude in each step, so that the diffusion path still mostly converges towards $x_T^*$. 
- We will make an estimation of the size of the subsequent terms based on their Mean Square value $\frac{1}{i,j}\sum_{i,j} X_{i,j}^2$ (MS value). 
- We will also let $f(t) = 1$, to have a conservative estimation.
- The diffusion path will converge if:
+ This condition will not be met if the noise term overpowers the term $\frac{1}{T}  \bold{R}$ at a certain step. In other words, the residual term magnitude should be larger than the noise term magnitude in each step, so that the diffusion path still mostly converges towards $x_T^*$. We will make an estimation of the size of the subsequent terms based on their Mean Square value $\frac{1}{i,j}\sum_{i,j} X_{i,j}^2$ (MS value). We will also let $f(t) = 1$, to have a conservative estimation.  \\
+ The diffusion path will converge if for all steps:
 \begin{equation}
     \mathbb{E}[MS(\hat{\epsilon})] \lesssim MS(\frac{1}{T} \bold{R})
 \end{equation}
@@ -1178,19 +1182,19 @@ $\Leftrightarrow$
     \boxed{\sigma \lesssim \frac{1}{T} RMS(\bold{R}) = \sigma_{crit}}
 \end{equation}
 This last expression is a conservative MSE convergence condition. \\
-In terms of $\beta$:
+Substituting (\ref{eq:beta}), we get the criterion in terms of $\beta$:
 \begin{equation}
     \beta \lesssim \sqrt{\frac{8}{15} \frac{T^4-1}{T^5}} RMS(\bold{R}) = \beta_{crit}
 \end{equation}
 \\
 This result can be demonstrated by a simulation where beta is varied and the mean square error between $x_T$ and $x_T^*$ is computed over N diffusion path samples (Fig. \ref{fig:beta sweep}). We indeed observe that if $\beta$ is within the order of magnitude of $\beta_{crit}$, the diffusion process won't converge towards $x_T^*$ anymore, which manifests itself in an increase in the MSE. 
-
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.8\linewidth]{beta_sweep.png}
-    \caption{Plot of $MSE(x_T, x_T^*)$ against beta. }
+    \caption{\textit{Plot of $MSE(x_T, x_T^*)$ against beta. }}
     \label{fig:beta sweep}
 \end{figure}
+
 \FloatBarrier
 
 \clearpage
