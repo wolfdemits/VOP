@@ -985,8 +985,7 @@ The loss function was fixed as mean squared error (MSE), a standard objective fo
 MSE offers a simple, differentiable, and interpretable loss landscape that aligns well with the goal of minimizing reconstruction error. 
 While alternative loss functions, such as SSIM or perceptual loss, were considered, MSE was retained due to its stability and its compatibility with the validation metric used during tuning. 
 
-The optimization process solely relied on MSE for validation. 
-This choice was made due to MSE’s simplicity, ease of interpretation, and its direct compatibility with the pixel-wise loss functions used during training.  
+The optimization process solely relied on MSE for validation.   
 This decision may introduce some form of metric bias. 
 MSE disproportionately penalizes large pixel errors, which often lead to overly smooth outputs. 
 In denoising tasks, this can result in models that reduce noise effectively in terms of pixel accuracy but at the cost of signal preservation, leading to a lower signal-to-noise (SNR) in practice. 
