@@ -917,6 +917,33 @@ Table \ref{tab:MSE_SSIM}  shows the obtained values for MSE and SSIM. The SSIM v
 
 \subsubsection{Contrast-to-noise ratio}
 I (Fea) am still busy working with amide to get the CNR. This table is an indication of how I will represent the results. I will also add a detailed table with the calculations in the appendices. 
+
+\begin{table*}[h]
+    \centering
+    \resizebox{0.8\linewidth}{!}{
+    \begin{tabular}{l|c|c|c|c|c|c|c}
+    \toprule
+     & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} & \textbf{LR CNR} & \textbf{DL CNR} & \textbf{HR CNR} \\
+    \midrule
+     & 1  & Sagittal   & 6             &TA              &7.365                 & 31.441                & 6.616                  \\
+     &    & Transaxial & 13             &TA              & -155.242                &  -706.785               &   -270.741               \\
+     &    & Coronal    & 10            &TA              &   -14,699              &    -426.689             &        -179.984           \\
+
+    \midrule
+     & 6 & Sagittal    & 10            &TA              &  3.530               &     31.358            &     3.609              \\
+     &    & Transaxial   & 21             &HT              &  8.591               &   32.692              &       7.453            \\
+     &    & Coronal    & 7            &TA              &  -3.783               &     -10.655            &              -4.075     \\
+
+    \midrule
+     & 22 & Sagittal & 12            &HT              &     -8.5587            &      -5.628           &     -10.207              \\
+     &    & Transaxial & 8            &TA              &       -3.057          &     -9.234            &      -2.971             \\
+     &    & Coronal & 13            &TA              &        -4.414         &      -7.264           &          -4.101         \\
+     \bottomrule
+    \end{tabular}
+    }
+    \caption{\label{tab:CNR} Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
+\end{table*}
+
 \begin{table*}[h]
     \centering
     \resizebox{0.8\linewidth}{!}{
