@@ -878,7 +878,7 @@ Overall, DL improves global sharpness and interpretability over LR, especially i
 
 
 \subsubsection{MSE and SSIM}
-Table \ref{tab:MSE_SSIM}  shows the obtained values for MSE and SSIM. The SSIM values range from 0.215 to 0.684, and the MSE values range from 0.001 to 0.035.
+Table \ref{tab:MSE_SSIM}  shows the obtained values for MSE and SSIM. The SSIM values range from 0.138 to 0.666, and the MSE values range from 0.001 to 0.055.
 
 \begin{table*}[h]
     \centering
@@ -1048,7 +1048,7 @@ The residuals of DL-HR consistently have lower amplitudes than the HR-LR, this m
 MSE encourages finding pixel-wise averages of solutions, producing overly-smooth results. Our visual inspection confirms this.
 
 \subsubsection{MSE and SSIM}
-High SSIM values in Mouse 23, Transax slice 19 demonstrate accurate preservation of simpler structures. The lower SSIM in Mouse 6, Coronal slice 12, however, suggests difficulty in accurately reconstructing its more complex anatomical details. The overall low MSE values, imply that the overall pixel intensity is preserved well in the deep learning reconstruction.  
+High SSIM values in Mouse 23, Transax slice 4 demonstrate accurate preservation of simpler structures. The lower SSIM in Mouse 7, Sagittal slice 11, however, suggests difficulty in accurately reconstructing its more complex anatomical details. The overall low MSE values, imply that the overall pixel intensity is preserved well in the deep learning reconstruction.  
 These MSE values together with the varying SSIM values, suggests that while the network correctly preserves the general appearance, the accuracy of fine anatomical details varies. Further investigation into the specific anatomical features present in the slices with lower SSIM could be a guide for how the model can be improved.
 
 \subsubsection{LEGO brick phantom}
