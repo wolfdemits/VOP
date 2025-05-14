@@ -543,7 +543,7 @@ This allowed the model to adaptively prioritize pixel accuracy versus perceptual
 
 \paragraph{Others}
 Several training-related settings were applied to control the model optimization process, including early stopping, batch size, and the number of training epochs.
- While these are not traditional hyperparameters in the architectural sense, they significantly influence model performance and training efficiency.
+While these are not traditional hyperparameters in the architectural sense, they significantly influence model performance and training efficiency.
 
 Early stopping was used to prevent excessive training and potential overfitting. The criterion is based on a `no improvement`' threshold, where training stops if validation performance does not improve for a set number of epochs. 
 In this project, training was stopped if no improvement was observed after 6 consecutive epochs, with a minimum of 10 epochs always run to ensure sufficient learning.
@@ -557,9 +557,30 @@ Too few epochs can result in underfitting, while too many may lead to overfittin
 
 
 \subsection{Anchored Path Diffusion Denoising Model (APDDM)}
-To complement the direct image-to-image denoising approach, discussed in the previous section, a second model was implemented, 
-the Anchored Path Diffusion Denoising Model (APDDM). 
-This model is a diffusion based framework based on the original DDPM by Ho et al. (2020) \cite{DDPM}. It is designed specifically for paired high and low SNR images, in this case the high-resolution (12-minute) scans and the low-resolution (1-minute) scan. Unlike conventional denoising diffusion models that add noise to the HNR images until the endpoint is complete Gaussian noise, APDDM uses the actual low SNR image as the endpoint, allowing the model to incorporate real noise from the dataset into the forward process. 
+To complement the direct image-to-image denoising approach discussed earlier, a second model was implemented: the Anchored Path Diffusion Denoising Model (APDDM). 
+This method is based on the original DDPM framework by Ho et al. (2020) \cite{DDPM}. 
+A schematic representation can be found in Figure \ref{fig:PDDM} and Figure \ref{fig:APDDM} for PDDM and APDDM, respectively.
+Unlike DDPM, which is trained on unpaired data and gradually adds Gaussian noise until the image becomes entirely random, APDDM is adapted for use with paired high- and low-SNR MRI images, in this case, the 12-minute high-resolution scans and the 1-minute low-resolution scans.
+Instead of diffusing toward a generic Gaussian distribution, APDDM anchors the diffusion process around the actual low-SNR image. This allows the model to introduce realistic, data-driven noise during training.
+Moreover, APDDM does not rely on variational inference, but instead follows a more controlled and interpretable forward process tailored to the dataset.
+These changes make it better suited for applications like medical imaging, where noise is often structured and non-Gaussian.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{DDPM_model.png}
+    \caption{Schematic representation of the DDPM model from the Ho et al. paper.}
+    \label{fig:PDDM}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{ADDPM_model.png}
+    \caption{Schematic representation of the ADDPM model.}
+    \label{fig:APDDM}
+\end{figure*}
+
+
+
 
 \subsubsection{Forward Diffusion Process}
 The forward process defines a stochastic path that gradually transforms the clean image $x_0$ into a noisy version $x_t$, with the endpoint distribution anchored around the real noisy scan $x_T^*$. 
