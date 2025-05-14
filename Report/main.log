@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.5.6)  13 MAY 2025 09:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.5.6)  14 MAY 2025 14:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -675,7 +675,13 @@ Package csquotes Info: Trying to load configuration file 'csquotes.cfg'...
 Package csquotes Info: ... configuration file loaded successfully.
  (C:\Users\wolfd\AppData\Local\Programs\MiKTeX\tex/latex/csquotes\csquotes.cfg
 File: csquotes.cfg 
-))
+)) (C:\Users\wolfd\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibraryarrows.meta.code.tex
+File: pgflibraryarrows.meta.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfarrowinset=\dimen316
+\pgfarrowlength=\dimen317
+\pgfarrowwidth=\dimen318
+\pgfarrowlinewidth=\dimen319
+)
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
@@ -687,24 +693,24 @@ LaTeX Warning: Label `eq:Markov chain' multiply defined.
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -748,13 +754,13 @@ Package caption Info: End \AtBeginDocument code.
 (C:\Users\wolfd\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count393
-\scratchdimen=\dimen316
+\scratchdimen=\dimen320
 \scratchbox=\box74
 \nofMPsegments=\count394
 \nofMParguments=\count395
 \everyMPshowfont=\toks50
 \MPscratchCnt=\count396
-\MPscratchDim=\dimen317
+\MPscratchDim=\dimen321
 \MPnumerator=\count397
 \makeMPintoPDFobject=\count398
 \everyMPtoPDFconversion=\toks51
@@ -764,7 +770,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (C:\Users\wolfd\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring ON on input line 24.
+Package hyperref Info: Link coloring ON on input line 29.
  (main.out) (main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
@@ -783,7 +789,7 @@ Package pgfplots notification 'compat/show suggested version=true': you might be
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.64 \newpage
+l.72 \newpage
               [1
 
 
@@ -816,12 +822,12 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 [4
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 75--79
+Underfull \hbox (badness 10000) in paragraph at lines 83--87
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 83--86
+Underfull \hbox (badness 10000) in paragraph at lines 91--94
 
  []
 
@@ -829,248 +835,252 @@ Underfull \hbox (badness 10000) in paragraph at lines 83--86
 
 [5]
 
-<head-thorax.png, id=387, 929.4725pt x 466.74374pt>
-File: head-thorax.png Graphic file (type png)
-<use head-thorax.png>
-Package pdftex.def Info: head-thorax.png  used on input line 124.
-(pdftex.def)             Requested size: 197.97525pt x 99.41496pt.
+<head-region.png, id=413, 402.50375pt x 407.5225pt>
+File: head-region.png Graphic file (type png)
+<use head-region.png>
+Package pdftex.def Info: head-region.png  used on input line 133.
+(pdftex.def)             Requested size: 97.94621pt x 99.16298pt.
+<thorax-abdomen.png, id=415, 412.54124pt x 408.52625pt>
+File: thorax-abdomen.png Graphic file (type png)
+<use thorax-abdomen.png>
+Package pdftex.def Info: thorax-abdomen.png  used on input line 135.
+(pdftex.def)             Requested size: 97.94621pt x 96.98859pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
 
 
 [6
 
- <./head-thorax.png>]
-Underfull \hbox (badness 1946) in paragraph at lines 166--177
-\OT1/cmr/m/n/10 high res-o-lu-tion scans. These val-ues were
- []
+ <./head-region.png> <./thorax-abdomen.png>]
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 166--177
+Underfull \hbox (badness 10000) in paragraph at lines 200--211
 
  []
 
 
-Underfull \hbox (badness 1577) in paragraph at lines 166--177
+Underfull \hbox (badness 1577) in paragraph at lines 200--211
 \OT1/cmr/m/n/10 In the sum-mer of 2024 an in-tern-ship was
  []
 
 
-
-
-Underfull \hbox (badness 1314) in paragraph at lines 202--202
+Underfull \hbox (badness 1314) in paragraph at lines 236--236
 []\OT1/cmr/bx/n/14.4 Pre-processing and data
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 215--217
-\OT1/cmr/m/n/10 Cropping is a com-monly used image-
- []
-
-
-Underfull \hbox (badness 1902) in paragraph at lines 215--217
-\OT1/cmr/m/n/10 manipulation pro-cess. The ob-tained MRI
- []
-
-
-Underfull \hbox (badness 2478) in paragraph at lines 215--217
-\OT1/cmr/m/n/10 im-ages con-tained lots of back-ground noise
  []
 
 
 
 [7]
-Underfull \hbox (badness 10000) in paragraph at lines 234--234
+Underfull \hbox (badness 10000) in paragraph at lines 249--251
+\OT1/cmr/m/n/10 Cropping is a com-monly used image-
+ []
+
+
+Underfull \hbox (badness 1902) in paragraph at lines 249--251
+\OT1/cmr/m/n/10 manipulation pro-cess. The ob-tained MRI
+ []
+
+
+Underfull \hbox (badness 2478) in paragraph at lines 249--251
+\OT1/cmr/m/n/10 im-ages con-tained lots of back-ground noise
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 269--269
 []\OT1/cmr/bx/n/14.4 Neural Net-work and
  []
 
 
-Underfull \hbox (badness 2027) in paragraph at lines 236--244
-\OT1/cmr/m/n/10 For the de-nois-ing and super-resolution DL
- []
 
-<U-Net.jpg, id=416, 633.567pt x 317.38576pt>
+<U-Net.jpg, id=445, 633.567pt x 317.38576pt>
 File: U-Net.jpg Graphic file (type jpg)
 <use U-Net.jpg>
-Package pdftex.def Info: U-Net.jpg  used on input line 247.
+Package pdftex.def Info: U-Net.jpg  used on input line 293.
 (pdftex.def)             Requested size: 341.43437pt x 171.0419pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 253--253
-[]\OT1/cmr/bx/n/12 Hyperparameter Op-ti-miza-
- []
-
-
-Underfull \vbox (badness 1297) has occurred while \output is active []
-
-
-
 
 
 [8]
-<Maxpool.jpg, id=431, 409.53pt x 145.7445pt>
+
+
+
+[9 <./U-Net.jpg>]
+<Maxpool.jpg, id=470, 409.53pt x 145.7445pt>
 File: Maxpool.jpg Graphic file (type jpg)
 <use Maxpool.jpg>
-Package pdftex.def Info: Maxpool.jpg  used on input line 302.
+Package pdftex.def Info: Maxpool.jpg  used on input line 352.
 (pdftex.def)             Requested size: 208.39568pt x 74.16637pt.
-<Meanpool.jpg, id=432, 410.7345pt x 148.75575pt>
+<Meanpool.jpg, id=471, 410.7345pt x 148.75575pt>
 File: Meanpool.jpg Graphic file (type jpg)
 <use Meanpool.jpg>
-Package pdftex.def Info: Meanpool.jpg  used on input line 309.
+Package pdftex.def Info: Meanpool.jpg  used on input line 359.
 (pdftex.def)             Requested size: 208.39568pt x 75.47627pt.
-<ConvStrided_new.png, id=433, 1757.56625pt x 696.6025pt>
+<ConvStrided_new.png, id=472, 1757.56625pt x 696.6025pt>
 File: ConvStrided_new.png Graphic file (type png)
 <use ConvStrided_new.png>
-Package pdftex.def Info: ConvStrided_new.png  used on input line 316.
+Package pdftex.def Info: ConvStrided_new.png  used on input line 366.
 (pdftex.def)             Requested size: 208.39568pt x 82.58954pt.
 
 
 
 
-[9 <./U-Net.jpg> <./Maxpool.jpg> <./Meanpool.jpg> <./ConvStrided_new.png>]
-
-
-Underfull \hbox (badness 1019) in paragraph at lines 395--397
+[10 <./Maxpool.jpg> <./Meanpool.jpg> <./ConvStrided_new.png>]
+Underfull \hbox (badness 1019) in paragraph at lines 445--447
  []\OT1/cmr/bx/n/10 Learning Rate Strate-gies[] \OT1/cmr/m/n/10 The sched-uler
  []
 
 
-Underfull \hbox (badness 1931) in paragraph at lines 404--408
+Underfull \hbox (badness 1931) in paragraph at lines 454--458
 []\OT1/cmr/m/n/10 Another sched-uler is \OT1/cmtt/m/n/10 ReduceLROnPlateau\OT1/cmr/m/n/10 .
  []
 
 
 
-[10]
-<Learn rate.jpg, id=475, 1284.8pt x 722.7pt>
+<Learn rate.jpg, id=501, 1284.8pt x 722.7pt>
 File: Learn rate.jpg Graphic file (type jpg)
 <use Learn rate.jpg>
-Package pdftex.def Info: Learn rate.jpg  used on input line 435.
+Package pdftex.def Info: Learn rate.jpg  used on input line 485.
 (pdftex.def)             Requested size: 208.39568pt x 117.22232pt.
 
 
-
-Underfull \hbox (badness 2538) in paragraph at lines 474--477
+[11 <./Learn rate.jpg>]
+Underfull \hbox (badness 2538) in paragraph at lines 524--527
 []\OT1/cmr/m/n/10 The Struc-tural Sim-i-lar-ity In-dex Mea-sure
  []
 
 
 
-[11 <./Learn rate.jpg>]
-Underfull \hbox (badness 1142) in paragraph at lines 508--511
+
+Underfull \hbox (badness 1142) in paragraph at lines 558--561
 \OT1/cmr/m/n/10 nois-ing ap-proach, dis-cussed in the pre-vi-ous
  []
 
 
-Underfull \hbox (badness 2073) in paragraph at lines 508--511
+Underfull \hbox (badness 2073) in paragraph at lines 558--561
 \OT1/cmr/m/n/10 sec-tion, a sec-ond model was im-ple-mented,
  []
 
 
-Underfull \hbox (badness 3219) in paragraph at lines 508--511
-\OT1/cmr/m/n/10 resolution (12-minute) scans and the low-
- []
 
-
-
-<forward APDDM.png, id=493, 2197.20876pt x 478.78876pt>
+[12]
+<forward APDDM.png, id=534, 2197.20876pt x 478.78876pt>
 File: forward APDDM.png Graphic file (type png)
 <use forward APDDM.png>
-Package pdftex.def Info: forward APDDM.png  used on input line 535.
+Package pdftex.def Info: forward APDDM.png  used on input line 588.
 (pdftex.def)             Requested size: 208.39568pt x 45.40503pt.
-
-
-[12 <./forward APDDM.png>]
-<full APDDM .png, id=504, 1112.155pt x 611.28375pt>
+<full APDDM .png, id=536, 1112.155pt x 611.28375pt>
 File: full APDDM .png Graphic file (type png)
 <use full APDDM .png>
-Package pdftex.def Info: full APDDM .png  used on input line 556.
+Package pdftex.def Info: full APDDM .png  used on input line 609.
 (pdftex.def)             Requested size: 208.39568pt x 114.5408pt.
 
-Underfull \hbox (badness 1132) in paragraph at lines 562--569
+
+
+Underfull \hbox (badness 1132) in paragraph at lines 615--622
 \OT1/cmr/m/n/10 APDDM is par-tic-u-larly well suited for our
  []
 
 
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 587--587
+[13 <./forward APDDM.png> <./full APDDM .png>]
+Underfull \hbox (badness 10000) in paragraph at lines 646--646
 []\OT1/cmr/bx/n/12 Structural sim-i-lar-ity in-dex
  []
 
 
 
-[13 <./full APDDM .png>]
-<First_results_loss.png, id=522, 399.29175pt x 181.8795pt>
+<First_results_loss.png, id=552, 399.29175pt x 181.8795pt>
 File: First_results_loss.png Graphic file (type png)
 <use First_results_loss.png>
-Package pdftex.def Info: First_results_loss.png  used on input line 620.
+Package pdftex.def Info: First_results_loss.png  used on input line 675.
 (pdftex.def)             Requested size: 208.39568pt x 94.92755pt.
-
-
-<Mouse01_Sagittal_16_epoch_10.png, id=529, 1780.7328pt x 490.4724pt>
+<Mouse01_Sagittal_16_epoch_10.png, id=559, 1780.7328pt x 490.4724pt>
 File: Mouse01_Sagittal_16_epoch_10.png Graphic file (type png)
 <use Mouse01_Sagittal_16_epoch_10.png>
-Package pdftex.def Info: Mouse01_Sagittal_16_epoch_10.png  used on input line 647.
+Package pdftex.def Info: Mouse01_Sagittal_16_epoch_10.png  used on input line 702.
 (pdftex.def)             Requested size: 426.79135pt x 117.55113pt.
-<Mouse23_Transax_27_epoch_10.png, id=530, 1780.7328pt x 490.4724pt>
+<Mouse23_Transax_27_epoch_10.png, id=560, 1780.7328pt x 490.4724pt>
 File: Mouse23_Transax_27_epoch_10.png Graphic file (type png)
 <use Mouse23_Transax_27_epoch_10.png>
-Package pdftex.def Info: Mouse23_Transax_27_epoch_10.png  used on input line 654.
+Package pdftex.def Info: Mouse23_Transax_27_epoch_10.png  used on input line 709.
 (pdftex.def)             Requested size: 426.79135pt x 117.55113pt.
-<Mouse23_Coronal_19_epoch_12.png, id=531, 1779.0465pt x 496.254pt>
+<Mouse23_Coronal_19_epoch_12.png, id=561, 1779.0465pt x 496.254pt>
 File: Mouse23_Coronal_19_epoch_12.png Graphic file (type png)
 <use Mouse23_Coronal_19_epoch_12.png>
-Package pdftex.def Info: Mouse23_Coronal_19_epoch_12.png  used on input line 661.
+Package pdftex.def Info: Mouse23_Coronal_19_epoch_12.png  used on input line 716.
 (pdftex.def)             Requested size: 426.79135pt x 119.05038pt.
-<loss_hyperparameters.png, id=532, 722.7pt x 433.62pt>
-File: loss_hyperparameters.png Graphic file (type png)
-<use loss_hyperparameters.png>
-Package pdftex.def Info: loss_hyperparameters.png  used on input line 705.
-(pdftex.def)             Requested size: 208.39568pt x 125.0386pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
 
 
 [14 <./First_results_loss.png>] [15 <./Mouse01_Sagittal_16_epoch_10.png> <./Mouse23_Transax_27_epoch_10.png> <./Mouse23_Coronal_19_epoch_12.png>]
-<Mouse01_Sagittal_THORAX-ABDOMEN_26_epoch_0.png, id=551, 1780.7328pt x 490.4724pt>
+<loss_hyperparameters.png, id=578, 722.7pt x 433.62pt>
+File: loss_hyperparameters.png Graphic file (type png)
+<use loss_hyperparameters.png>
+Package pdftex.def Info: loss_hyperparameters.png  used on input line 761.
+(pdftex.def)             Requested size: 208.39568pt x 125.0386pt.
+
+
+<Mouse01_Sagittal_THORAX-ABDOMEN_26_epoch_0.png, id=585, 1780.7328pt x 490.4724pt>
 File: Mouse01_Sagittal_THORAX-ABDOMEN_26_epoch_0.png Graphic file (type png)
 <use Mouse01_Sagittal_THORAX-ABDOMEN_26_epoch_0.png>
-Package pdftex.def Info: Mouse01_Sagittal_THORAX-ABDOMEN_26_epoch_0.png  used on input line 726.
+Package pdftex.def Info: Mouse01_Sagittal_THORAX-ABDOMEN_26_epoch_0.png  used on input line 782.
 (pdftex.def)             Requested size: 426.79135pt x 117.55113pt.
-<Mouse01_Transax_THORAX-ABDOMEN_27_epoch_0.png, id=552, 1779.5283pt x 494.0859pt>
+<Mouse01_Transax_THORAX-ABDOMEN_27_epoch_0.png, id=586, 1779.5283pt x 494.0859pt>
 File: Mouse01_Transax_THORAX-ABDOMEN_27_epoch_0.png Graphic file (type png)
 <use Mouse01_Transax_THORAX-ABDOMEN_27_epoch_0.png>
-Package pdftex.def Info: Mouse01_Transax_THORAX-ABDOMEN_27_epoch_0.png  used on input line 733.
+Package pdftex.def Info: Mouse01_Transax_THORAX-ABDOMEN_27_epoch_0.png  used on input line 789.
 (pdftex.def)             Requested size: 426.79135pt x 118.5001pt.
-<Mouse01_Coronal_THORAX-ABDOMEN_20_epoch_2.png, id=553, 1779.2874pt x 496.0131pt>
+<Mouse01_Coronal_THORAX-ABDOMEN_20_epoch_2.png, id=587, 1779.2874pt x 496.0131pt>
 File: Mouse01_Coronal_THORAX-ABDOMEN_20_epoch_2.png Graphic file (type png)
 <use Mouse01_Coronal_THORAX-ABDOMEN_20_epoch_2.png>
-Package pdftex.def Info: Mouse01_Coronal_THORAX-ABDOMEN_20_epoch_2.png  used on input line 740.
+Package pdftex.def Info: Mouse01_Coronal_THORAX-ABDOMEN_20_epoch_2.png  used on input line 796.
 (pdftex.def)             Requested size: 426.79135pt x 118.96988pt.
+<Mouse01_Sagittal_val.png, id=589, 1780.7328pt x 490.4724pt>
+File: Mouse01_Sagittal_val.png Graphic file (type png)
+<use Mouse01_Sagittal_val.png>
+Package pdftex.def Info: Mouse01_Sagittal_val.png  used on input line 818.
+(pdftex.def)             Requested size: 426.79135pt x 117.55113pt.
+<Mouse06_Coronal_val.png, id=591, 1780.7328pt x 490.4724pt>
+File: Mouse06_Coronal_val.png Graphic file (type png)
+<use Mouse06_Coronal_val.png>
+Package pdftex.def Info: Mouse06_Coronal_val.png  used on input line 838.
+(pdftex.def)             Requested size: 426.79135pt x 117.55113pt.
+
+
+[16 <./loss_hyperparameters.png>] [17 <./Mouse01_Sagittal_THORAX-ABDOMEN_26_epoch_0.png> <./Mouse01_Transax_THORAX-ABDOMEN_27_epoch_0.png> <./Mouse01_Coronal_THORAX-ABDOMEN_20_epoch_2.png> <./Mouse01_Sagittal_val.png>]
+<Mouse10_Sagittal_val.png, id=606, 1779.2874pt x 497.6994pt>
+File: Mouse10_Sagittal_val.png Graphic file (type png)
+<use Mouse10_Sagittal_val.png>
+Package pdftex.def Info: Mouse10_Sagittal_val.png  used on input line 855.
+(pdftex.def)             Requested size: 426.79135pt x 119.37434pt.
+
+Underfull \hbox (badness 3769) in paragraph at lines 864--865
+\OT1/cmr/m/n/10 and SSIM. The SSIM val-ues are in the
+ []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-
-[16 <./loss_hyperparameters.png>] [17 <./Mouse01_Sagittal_THORAX-ABDOMEN_26_epoch_0.png> <./Mouse01_Transax_THORAX-ABDOMEN_27_epoch_0.png> <./Mouse01_Coronal_THORAX-ABDOMEN_20_epoch_2.png>]
-Underfull \hbox (badness 1406) in paragraph at lines 834--839
-\OT1/cmr/m/n/10 im-age restora-tion mod-els that ben-e-fit from
- []
+LaTeX Warning: Reference `LEGO brick phantom' on page 18 undefined on input line 934.
 
 
-Underfull \vbox (badness 5105) has occurred while \output is active []
-
-
-
-
-Underfull \vbox (badness 5105) has occurred while \output is active []
 
 
 
 [18]
-Underfull \hbox (badness 1152) in paragraph at lines 881--885
+Underfull \hbox (badness 1406) in paragraph at lines 966--971
+\OT1/cmr/m/n/10 im-age restora-tion mod-els that ben-e-fit from
+ []
+
+
+
+
+
+[19 <./Mouse06_Coronal_val.png> <./Mouse10_Sagittal_val.png>]
+Underfull \hbox (badness 1152) in paragraph at lines 1014--1018
 \OT1/cmr/m/n/10 In all cases the DL out-put ap-pears to be
  []
 
@@ -1078,285 +1088,302 @@ Underfull \hbox (badness 1152) in paragraph at lines 881--885
 
 
 
-[19]
-Underfull \hbox (badness 2376) in paragraph at lines 899--900
+[20]
+
+<LEGO_phantom_test.png, id=649, 453.0015pt x 124.173pt>
+File: LEGO_phantom_test.png Graphic file (type png)
+<use LEGO_phantom_test.png>
+Package pdftex.def Info: LEGO_phantom_test.png  used on input line 1037.
+(pdftex.def)             Requested size: 426.79135pt x 116.98788pt.
+
+
+[21] [22 <./LEGO_phantom_test.png>]
+Underfull \hbox (badness 2376) in paragraph at lines 1056--1057
 []\OT1/cmr/m/n/10 Bruker. (2025). Phar-maS-can | Pre-clin-i-cal MRI. Re-trieved March 25, 2025, from
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 899--900
+Underfull \hbox (badness 10000) in paragraph at lines 1056--1057
 [][]$\OT1/cmtt/m/n/10 https : / / www . bruker . com / en / products-[]and-[]solutions / preclinical-[]imaging / mri /
  []
 
 
-Underfull \hbox (badness 4492) in paragraph at lines 913--914
+Underfull \hbox (badness 4492) in paragraph at lines 1070--1071
 []\OT1/cmr/m/n/10 Massed Com-pute. (2025, Febru-ary). FAQ An-swers - Massed com-pute. Re-trieved
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 913--914
+Underfull \hbox (badness 10000) in paragraph at lines 1070--1071
 \OT1/cmr/m/n/10 from [][]$\OT1/cmtt/m/n/10 https : / / massedcompute . com / faq-[]answers / ?question = What % 20are % 20the %
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 913--914
+Underfull \hbox (badness 10000) in paragraph at lines 1070--1071
 \OT1/cmtt/m/n/10 20key % 20differences % 20between % 20Adam % 20and % 20SGD % 20optimizers % 20in % 20large %
  []
 
 
-Underfull \hbox (badness 7504) in paragraph at lines 915--916
+Underfull \hbox (badness 7504) in paragraph at lines 1072--1073
 []\OT1/cmr/m/n/10 Sanghvirajit. (2025, March). Ev-ery-thing you need to know about Adam and
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 915--916
+Underfull \hbox (badness 10000) in paragraph at lines 1072--1073
 \OT1/cmr/m/n/10 RM-Sprop Op-ti-mizer. Re-trieved from [][]$\OT1/cmtt/m/n/10 https : / / medium . com / analytics-[]vidhya /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 929--930
+Underfull \vbox (badness 3260) has occurred while \output is active []
+
+
+
+[23
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 1086--1087
 []\OT1/cmr/m/n/10 Amanrao. (2023, Septem-ber). Im-age Up-scal-ing us-ing Bicu-bic In-ter-po-la-tion
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 929--930
+Underfull \hbox (badness 10000) in paragraph at lines 1086--1087
 \OT1/cmr/m/n/10 - Aman-rao - Medium. Re-trieved from [][]$\OT1/cmtt/m/n/10 https : / / medium . com / @amanrao032 /
  []
 
 
-
-[20
-
-]
-Underfull \hbox (badness 6332) in paragraph at lines 933--934
+Underfull \hbox (badness 6332) in paragraph at lines 1090--1091
 []\OT1/cmr/m/n/10 Anderson, M. (2023, Febru-ary). Loss Func-tions in Ma-chine Learn-ing - Meta-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 933--934
+Underfull \hbox (badness 10000) in paragraph at lines 1090--1091
 \OT1/cmr/m/n/10 physic.ai. Re-trieved April 13, 2025, from [][]$\OT1/cmtt/m/n/10 https : / / blog . metaphysic . ai /
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 935--936
+Underfull \hbox (badness 10000) in paragraph at lines 1094--1095
 \OT1/cmr/m/n/10 intelligence.hashnode.dev/comprehensive-guide-to-the-relu-activation-function-in-neural-
  []
 
 
 
-[21]
-Overfull \hbox (46.05284pt too wide) in paragraph at lines 990--990
+[24]
+
+[25]
+Overfull \hbox (46.05284pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 19/2 
  []
 
 
-Overfull \hbox (46.05284pt too wide) in paragraph at lines 990--990
+Overfull \hbox (46.05284pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 26/2 
  []
 
 
-Overfull \hbox (41.65282pt too wide) in paragraph at lines 990--990
+Overfull \hbox (41.65282pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 5/3 
  []
 
 
-Overfull \hbox (46.05284pt too wide) in paragraph at lines 990--990
+Overfull \hbox (46.05284pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 12/3 
  []
 
 
-Overfull \hbox (46.05284pt too wide) in paragraph at lines 990--990
+Overfull \hbox (46.05284pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 19/3 
  []
 
 
-Overfull \hbox (46.05284pt too wide) in paragraph at lines 990--990
+Overfull \hbox (46.05284pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 26/3 
  []
 
 
-Overfull \hbox (41.65282pt too wide) in paragraph at lines 990--990
+Overfull \hbox (41.65282pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 2/4 
  []
 
 
-Overfull \hbox (41.65282pt too wide) in paragraph at lines 990--990
+Overfull \hbox (41.65282pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 9/4 
  []
 
 
-Overfull \hbox (46.05284pt too wide) in paragraph at lines 990--990
+Overfull \hbox (46.05284pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 16/4 
  []
 
 
-Overfull \hbox (46.05284pt too wide) in paragraph at lines 990--990
+Overfull \hbox (46.05284pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 23/4 
  []
 
 
-Overfull \hbox (46.05284pt too wide) in paragraph at lines 990--990
+Overfull \hbox (46.05284pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 30/4 
  []
 
 
-Overfull \hbox (41.65282pt too wide) in paragraph at lines 990--990
+Overfull \hbox (41.65282pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 7/5 
  []
 
 
-Overfull \hbox (46.05284pt too wide) in paragraph at lines 990--990
+Overfull \hbox (46.05284pt too wide) in paragraph at lines 1152--1152
  []\OT1/cmss/bx/n/8 14/5 
  []
 
 
 
-[22]
-<bad_slice.png, id=673, 265.59225pt x 266.79675pt>
+[26]
+<bad_slice.png, id=737, 265.59225pt x 266.79675pt>
 File: bad_slice.png Graphic file (type png)
 <use bad_slice.png>
-Package pdftex.def Info: bad_slice.png  used on input line 1014.
+Package pdftex.def Info: bad_slice.png  used on input line 1176.
 (pdftex.def)             Requested size: 128.0387pt x 128.62277pt.
-<comparision cropped vs non cropped.png, id=674, 369.38pt x 194.7275pt>
+<comparision cropped vs non cropped.png, id=738, 369.38pt x 194.7275pt>
 File: comparision cropped vs non cropped.png Graphic file (type png)
 <use comparision cropped vs non cropped.png>
-Package pdftex.def Info: comparision cropped vs non cropped.png  used on input line 1021.
+Package pdftex.def Info: comparision cropped vs non cropped.png  used on input line 1183.
 (pdftex.def)             Requested size: 192.0548pt x 101.24698pt.
 
 
-[23 <./bad_slice.png> <./comparision cropped vs non cropped.png>]
+[27 <./bad_slice.png> <./comparision cropped vs non cropped.png>]
 
-Package amsfonts Warning: Obsolete command \bold; \mathbf should be used instead on input line 1036.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1034--1044
-
- []
+Package amsfonts Warning: Obsolete command \bold; \mathbf should be used instead on input line 1198.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1046--1050
+Underfull \hbox (badness 10000) in paragraph at lines 1196--1206
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1055--1058
+Underfull \hbox (badness 10000) in paragraph at lines 1208--1212
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1078--1082
+Underfull \hbox (badness 10000) in paragraph at lines 1217--1220
 
  []
 
-<With-Without_Random_Rotation.png, id=682, 638.88687pt x 323.70938pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 1240--1244
+
+ []
+
+<With-Without_Random_Rotation.png, id=746, 638.88687pt x 323.70938pt>
 File: With-Without_Random_Rotation.png Graphic file (type png)
 <use With-Without_Random_Rotation.png>
-Package pdftex.def Info: With-Without_Random_Rotation.png  used on input line 1094.
+Package pdftex.def Info: With-Without_Random_Rotation.png  used on input line 1256.
 (pdftex.def)             Requested size: 341.43437pt x 172.99757pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 
-[24]
-Underfull \hbox (badness 10000) in paragraph at lines 1102--1105
+[28]
+Underfull \hbox (badness 10000) in paragraph at lines 1264--1267
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1102--1105
+Underfull \hbox (badness 10000) in paragraph at lines 1264--1267
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1126--1130
-
- []
-
-
-
-[25 <./With-Without_Random_Rotation.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 1141--1144
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1168--1173
+Underfull \hbox (badness 10000) in paragraph at lines 1288--1292
 
  []
 
 
 
-[26]
-<beta_sweep.png, id=724, 958.782pt x 380.01974pt>
+[29 <./With-Without_Random_Rotation.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 1303--1306
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1330--1335
+
+ []
+
+
+
+[30]
+<beta_sweep.png, id=788, 958.782pt x 380.01974pt>
 File: beta_sweep.png Graphic file (type png)
 <use beta_sweep.png>
-Package pdftex.def Info: beta_sweep.png  used on input line 1193.
+Package pdftex.def Info: beta_sweep.png  used on input line 1355.
 (pdftex.def)             Requested size: 341.43437pt x 135.32835pt.
 
 
-[27 <./beta_sweep.png>]
-<Mouse06_Sagittal_10_epoch_10.png, id=733, 1779.5283pt x 494.0859pt>
+[31 <./beta_sweep.png>]
+<Mouse06_Sagittal_10_epoch_10.png, id=797, 1779.5283pt x 494.0859pt>
 File: Mouse06_Sagittal_10_epoch_10.png Graphic file (type png)
 <use Mouse06_Sagittal_10_epoch_10.png>
-Package pdftex.def Info: Mouse06_Sagittal_10_epoch_10.png  used on input line 1207.
+Package pdftex.def Info: Mouse06_Sagittal_10_epoch_10.png  used on input line 1369.
 (pdftex.def)             Requested size: 426.79135pt x 118.5001pt.
-<Mouse06_Transax_28_epoch_10.png, id=734, 1779.2874pt x 520.5849pt>
+<Mouse06_Transax_28_epoch_10.png, id=798, 1779.2874pt x 520.5849pt>
 File: Mouse06_Transax_28_epoch_10.png Graphic file (type png)
 <use Mouse06_Transax_28_epoch_10.png>
-Package pdftex.def Info: Mouse06_Transax_28_epoch_10.png  used on input line 1213.
+Package pdftex.def Info: Mouse06_Transax_28_epoch_10.png  used on input line 1375.
 (pdftex.def)             Requested size: 426.79135pt x 124.86348pt.
-<Mouse10_Coronal_0_epoch_10.png, id=735, 1779.5283pt x 494.0859pt>
+<Mouse10_Coronal_0_epoch_10.png, id=799, 1779.5283pt x 494.0859pt>
 File: Mouse10_Coronal_0_epoch_10.png Graphic file (type png)
 <use Mouse10_Coronal_0_epoch_10.png>
-Package pdftex.def Info: Mouse10_Coronal_0_epoch_10.png  used on input line 1219.
+Package pdftex.def Info: Mouse10_Coronal_0_epoch_10.png  used on input line 1381.
 (pdftex.def)             Requested size: 426.79135pt x 118.5001pt.
 
 
-[28
+[32
 
  <./Mouse06_Sagittal_10_epoch_10.png> <./Mouse06_Transax_28_epoch_10.png> <./Mouse10_Coronal_0_epoch_10.png>]
-<Mouse10_Sagittal_THORAX-ABDOMEN_19_epoch_0.png, id=743, 1779.2874pt x 497.6994pt>
+<Mouse10_Sagittal_THORAX-ABDOMEN_19_epoch_0.png, id=807, 1779.2874pt x 497.6994pt>
 File: Mouse10_Sagittal_THORAX-ABDOMEN_19_epoch_0.png Graphic file (type png)
 <use Mouse10_Sagittal_THORAX-ABDOMEN_19_epoch_0.png>
-Package pdftex.def Info: Mouse10_Sagittal_THORAX-ABDOMEN_19_epoch_0.png  used on input line 1228.
+Package pdftex.def Info: Mouse10_Sagittal_THORAX-ABDOMEN_19_epoch_0.png  used on input line 1390.
 (pdftex.def)             Requested size: 426.79135pt x 119.37434pt.
-<Mouse10_Transax_THORAX-ABDOMEN_16_epoch_0.png, id=744, 1779.2874pt x 518.1759pt>
+<Mouse10_Transax_THORAX-ABDOMEN_16_epoch_0.png, id=808, 1779.2874pt x 518.1759pt>
 File: Mouse10_Transax_THORAX-ABDOMEN_16_epoch_0.png Graphic file (type png)
 <use Mouse10_Transax_THORAX-ABDOMEN_16_epoch_0.png>
-Package pdftex.def Info: Mouse10_Transax_THORAX-ABDOMEN_16_epoch_0.png  used on input line 1235.
+Package pdftex.def Info: Mouse10_Transax_THORAX-ABDOMEN_16_epoch_0.png  used on input line 1397.
 (pdftex.def)             Requested size: 426.79135pt x 124.28568pt.
-<Mouse06_Coronal_THORAX-ABDOMEN_12_epoch_0.png, id=745, 1780.7328pt x 490.4724pt>
+<Mouse06_Coronal_THORAX-ABDOMEN_12_epoch_0.png, id=809, 1780.7328pt x 490.4724pt>
 File: Mouse06_Coronal_THORAX-ABDOMEN_12_epoch_0.png Graphic file (type png)
 <use Mouse06_Coronal_THORAX-ABDOMEN_12_epoch_0.png>
-Package pdftex.def Info: Mouse06_Coronal_THORAX-ABDOMEN_12_epoch_0.png  used on input line 1242.
+Package pdftex.def Info: Mouse06_Coronal_THORAX-ABDOMEN_12_epoch_0.png  used on input line 1404.
 (pdftex.def)             Requested size: 426.79135pt x 117.55113pt.
 
 
-[29 <./Mouse10_Sagittal_THORAX-ABDOMEN_19_epoch_0.png> <./Mouse10_Transax_THORAX-ABDOMEN_16_epoch_0.png> <./Mouse06_Coronal_THORAX-ABDOMEN_12_epoch_0.png>] (main.aux)
+[33 <./Mouse10_Sagittal_THORAX-ABDOMEN_19_epoch_0.png> <./Mouse10_Transax_THORAX-ABDOMEN_16_epoch_0.png> <./Mouse06_Coronal_THORAX-ABDOMEN_12_epoch_0.png>] (main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-04-14>
  ***********
 
 
+LaTeX Warning: There were undefined references.
+
+
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: FDC7FC171590E24A711508BE684BBBE1;9991.
+(rerunfilecheck)             Checksum: 15CCC214052E2D88AE4316BC77DCE28A;10424.
  ) 
 Here is how much of TeX's memory you used:
- 40026 strings out of 469941
- 959467 string characters out of 5469431
- 1465315 words of memory out of 5000000
- 66040 multiletter control sequences out of 15000+600000
+ 40469 strings out of 469941
+ 970841 string characters out of 5469431
+ 1473315 words of memory out of 5000000
+ 66464 multiletter control sequences out of 15000+600000
  637969 words of font info for 81 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,17n,101p,777b,2034s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 99i,17n,101p,777b,2036s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\wolfd\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcss1000.pk> <C:\Users\wolfd\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1000.pk><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss10.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmss9.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb><C:/Users/wolfd/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (30 pages, 10673326 bytes).
+Output written on main.pdf (34 pages, 13748285 bytes).
 PDF statistics:
- 881 PDF objects out of 1000 (max. 8388607)
- 198 named destinations out of 1000 (max. 500000)
- 591 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 948 PDF objects out of 1000 (max. 8388607)
+ 213 named destinations out of 1000 (max. 500000)
+ 640 words of extra memory for PDF output out of 10000 (max. 10000000)
 

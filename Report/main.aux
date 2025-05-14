@@ -12,131 +12,150 @@
 \@writefile{toc}{\contentsline {section}{\numberline {2}Data collection}{6}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Infinity lab}{6}{subsection.2.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Preparation and calibration }{6}{subsection.2.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Left figure shows the head-thorax region and the right figure shows the thorax-abdomen region.}}{6}{figure.caption.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces MRI scan regions: head-thorax (left) and thorax-abdomen (right).}}{6}{figure.caption.5}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:head-thorax}{{1}{6}{Left figure shows the head-thorax region and the right figure shows the thorax-abdomen region}{figure.caption.5}{}}
+\newlabel{fig:scan-orientations}{{1}{6}{MRI scan regions: head-thorax (left) and thorax-abdomen (right)}{figure.caption.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Performing the MRI scan}{6}{subsection.2.3}\protected@file@percent }
-\citation{chavhan2009t2star}
 \citation{mrimaster2024}
+\citation{chavhan2009t2star}
 \citation{verhelst2025denoising}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Schematic overview of the MRI acquisition pipeline.}}{7}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:acquisition_pipeline}{{2}{7}{Schematic overview of the MRI acquisition pipeline}{figure.caption.6}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Image Datasets}{7}{subsection.2.4}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces  Overview of the scan and image parameters used to acquire high- and low-resolution data of mice.}}{7}{table.caption.6}\protected@file@percent }
-\newlabel{tab:mri}{{1}{7}{Overview of the scan and image parameters used to acquire high- and low-resolution data of mice}{table.caption.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces  Overview of the scan and image parameters used to acquire high- and low-resolution data of mice.}}{7}{table.caption.7}\protected@file@percent }
+\newlabel{tab:mri}{{1}{7}{Overview of the scan and image parameters used to acquire high- and low-resolution data of mice}{table.caption.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Pre-processing and data augmentation}{7}{section.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Removal of bad image slices}{7}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Cropping of the image slices}{7}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Zarr arrays}{7}{subsection.3.3}\protected@file@percent }
 \citation{ronneberger2015unet}
-\citation{10.1145/3292500.3330701}
+\citation{datacamp_optuna}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Cropping of the image slices}{8}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Zarr arrays}{8}{subsection.3.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Normalization}{8}{subsection.3.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Padding and random flipping}{8}{subsection.3.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4}Neural Network and Training Process}{8}{section.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Model architecture}{8}{subsection.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Hyperparameter Optimization for Training of the U-Net}{8}{subsection.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Hyperparameters fo the Network Structure }{8}{subsubsection.4.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Features main and features skip}{8}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Encoder-Decoder Model: Hyperparameter Optimization}{8}{subsection.4.2}\protected@file@percent }
+\citation{10.1145/3292500.3330701}
 \citation{dhanushkumar-2023}
 \citation{unknown-author-no-date2}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces U-Net architecture.}}{9}{figure.caption.7}\protected@file@percent }
-\newlabel{fig:U-Net}{{2}{9}{U-Net architecture}{figure.caption.7}{}}
-\@writefile{toc}{\contentsline {paragraph}{Downsampling method}{9}{section*.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Upsampling}{9}{section*.13}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Downsampling - Maxpool}}{9}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:maxpool}{{3}{9}{Downsampling - Maxpool}{figure.caption.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Downsampling - Meanpool}}{9}{figure.caption.11}\protected@file@percent }
-\newlabel{fig:meanpool}{{4}{9}{Downsampling - Meanpool}{figure.caption.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Downsampling - convStrided}}{9}{figure.caption.12}\protected@file@percent }
-\newlabel{fig:convStrided}{{5}{9}{Downsampling - convStrided}{figure.caption.12}{}}
-\citation{amanrao-2023}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces U-Net architecture.}}{9}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:U-Net}{{3}{9}{U-Net architecture}{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Hyperparameters of the Network Structure }{9}{subsubsection.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Features main and features skip}{9}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Downsampling method}{9}{section*.10}\protected@file@percent }
 \citation{unknown-author-2025}
+\citation{amanrao-2023}
 \citation{bharatiya_2019_comprehensive}
-\citation{unknown-author-no-date3}
-\citation{isbhargav-2020}
-\@writefile{toc}{\contentsline {paragraph}{Activation function}{10}{section*.14}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Downsampling - Maxpool}}{10}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:maxpool}{{4}{10}{Downsampling - Maxpool}{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Downsampling - Meanpool}}{10}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:meanpool}{{5}{10}{Downsampling - Meanpool}{figure.caption.12}{}}
+\@writefile{toc}{\contentsline {paragraph}{Upsampling}{10}{section*.14}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Downsampling - convStrided}}{10}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:convStrided}{{6}{10}{Downsampling - convStrided}{figure.caption.13}{}}
+\@writefile{toc}{\contentsline {paragraph}{Activation function}{10}{section*.15}\protected@file@percent }
 \newlabel{eq:4}{{1}{10}{Activation function}{equation.1}{}}
 \newlabel{eq:5}{{2}{10}{Activation function}{equation.2}{}}
 \newlabel{eq:6}{{3}{10}{Activation function}{equation.3}{}}
 \newlabel{eq:7}{{4}{10}{Activation function}{equation.4}{}}
-\@writefile{toc}{\contentsline {paragraph}{Residual learning}{10}{section*.15}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Hyperparameters of the Training Process}{10}{subsubsection.4.2.2}\protected@file@percent }
-\newlabel{subsec:LearningRateStrategies}{{4.2.2}{10}{Learning Rate Strategies}{section*.16}{}}
-\@writefile{toc}{\contentsline {paragraph}{Learning Rate Strategies}{10}{section*.16}\protected@file@percent }
+\citation{unknown-author-no-date3}
+\citation{isbhargav-2020}
 \citation{jordan_2018_setting}
 \citation{pykes-2021}
 \citation{sanghvirajit-2025}
 \citation{anderson_2023_loss}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Comparison of different learning rates}}{11}{figure.caption.17}\protected@file@percent }
-\newlabel{fig:Learnrate}{{6}{11}{Comparison of different learning rates}{figure.caption.17}{}}
+\@writefile{toc}{\contentsline {paragraph}{Residual learning}{11}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Hyperparameters of the Training Process}{11}{subsubsection.4.2.2}\protected@file@percent }
+\newlabel{hyperparameters training}{{4.2.2}{11}{Hyperparameters of the Training Process}{subsubsection.4.2.2}{}}
+\newlabel{subsec:LearningRateStrategies}{{4.2.2}{11}{Learning Rate Strategies}{section*.17}{}}
+\@writefile{toc}{\contentsline {paragraph}{Learning Rate Strategies}{11}{section*.17}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Comparison of different learning rates}}{11}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:Learnrate}{{7}{11}{Comparison of different learning rates}{figure.caption.18}{}}
 \newlabel{eq:1}{{5}{11}{Learning Rate Strategies}{equation.5}{}}
 \newlabel{eq:2}{{6}{11}{Learning Rate Strategies}{equation.6}{}}
-\@writefile{toc}{\contentsline {paragraph}{Optimizer}{11}{section*.18}\protected@file@percent }
-\newlabel{loss_function}{{4.2.2}{11}{Loss function}{section*.19}{}}
-\@writefile{toc}{\contentsline {paragraph}{Loss function}{11}{section*.19}\protected@file@percent }
-\newlabel{eq:3}{{7}{11}{Loss function}{equation.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{Optimizer}{11}{section*.19}\protected@file@percent }
+\citation{DDPM}
+\newlabel{loss_function}{{4.2.2}{12}{Loss function}{section*.20}{}}
+\@writefile{toc}{\contentsline {paragraph}{Loss function}{12}{section*.20}\protected@file@percent }
+\newlabel{eq:3}{{7}{12}{Loss function}{equation.7}{}}
 \newlabel{eq:SSIM}{{8}{12}{Loss function}{equation.8}{}}
-\@writefile{toc}{\contentsline {paragraph}{Others}{12}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Others}{12}{section*.21}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Anchored Path Diffusion Denoising Model (APDDM)}{12}{subsection.4.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Forward Diffusion Process}{12}{subsubsection.4.3.1}\protected@file@percent }
-\newlabel{eq:Markov chain}{{9}{12}{Forward Diffusion Process}{equation.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces forward diffusion APDDM.}}{12}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:forward APDDM}{{7}{12}{forward diffusion APDDM}{figure.caption.21}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Reverse Process and Training}{12}{subsubsection.4.3.2}\protected@file@percent }
-\citation{mseJim}
-\citation{dosselmann-2009}
+\newlabel{eq:Markov chain}{{9}{13}{Forward Diffusion Process}{equation.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces forward diffusion APDDM.}}{13}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:forward APDDM}{{8}{13}{forward diffusion APDDM}{figure.caption.22}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Reverse Process and Training}{13}{subsubsection.4.3.2}\protected@file@percent }
 \newlabel{eq:Markov chain}{{10}{13}{Reverse Process and Training}{equation.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces training overview of APDDM.}}{13}{figure.caption.22}\protected@file@percent }
-\newlabel{fig:APDDM}{{8}{13}{training overview of APDDM}{figure.caption.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces training overview of APDDM.}}{13}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:APDDM}{{9}{13}{training overview of APDDM}{figure.caption.23}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Integration}{13}{subsubsection.4.3.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5}Model performance evaluation}{13}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Mean squared error}{13}{subsection.5.1}\protected@file@percent }
-\newlabel{eq:MSE}{{12}{13}{Mean squared error}{equation.12}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Structural similarity index measure}{13}{subsection.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Contrast-to-noise ratio}{13}{subsection.5.3}\protected@file@percent }
-\newlabel{CNR}{{13}{13}{Contrast-to-noise ratio}{equation.13}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Visual comparison}{13}{subsection.5.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Visual representation of the loss function over different epochs. geen assen!!!}}{14}{figure.caption.23}\protected@file@percent }
-\newlabel{fig:first_loss}{{9}{14}{Visual representation of the loss function over different epochs. geen assen!!!}{figure.caption.23}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Visual comparison}{13}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Mean squared error}{13}{subsection.5.2}\protected@file@percent }
+\citation{mseJim}
+\citation{dosselmann-2009}
+\newlabel{eq:MSE}{{12}{14}{Mean squared error}{equation.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Structural similarity index measure}{14}{subsection.5.3}\protected@file@percent }
+\newlabel{Structural similarity index measure}{{5.3}{14}{Structural similarity index measure}{subsection.5.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Contrast-to-noise ratio}{14}{subsection.5.4}\protected@file@percent }
+\newlabel{CNR}{{13}{14}{Contrast-to-noise ratio}{equation.13}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {6}Results}{14}{section.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1}First results}{14}{subsection.6.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces  Mouse distribution across training, validation, and testing sets.}}{14}{table.caption.27}\protected@file@percent }
-\newlabel{tab:mouse_distribution}{{2}{14}{Mouse distribution across training, validation, and testing sets}{table.caption.27}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Trained hyperparameters}{14}{subsection.6.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces First results of abdomen of training mouse.}}{15}{figure.caption.24}\protected@file@percent }
-\newlabel{fig:first_sagittal}{{10}{15}{First results of abdomen of training mouse}{figure.caption.24}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Visual representation of the loss function over different epochs. geen assen!!!}}{14}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:first_loss}{{10}{14}{Visual representation of the loss function over different epochs. geen assen!!!}{figure.caption.24}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces  Mouse distribution across training, validation, and testing sets.}}{14}{table.caption.28}\protected@file@percent }
+\newlabel{tab:mouse_distribution}{{2}{14}{Mouse distribution across training, validation, and testing sets}{table.caption.28}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces First results of abdomen of training mouse.}}{15}{figure.caption.25}\protected@file@percent }
-\newlabel{fig:first_transax}{{11}{15}{First results of abdomen of training mouse}{figure.caption.25}{}}
+\newlabel{fig:first_sagittal}{{11}{15}{First results of abdomen of training mouse}{figure.caption.25}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces First results of abdomen of training mouse.}}{15}{figure.caption.26}\protected@file@percent }
-\newlabel{fig:first_coronal}{{12}{15}{First results of abdomen of training mouse}{figure.caption.26}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Visual representation of the loss function over trials in hyperparameter tuning}}{16}{figure.caption.28}\protected@file@percent }
-\newlabel{fig:loss_hyperparameter}{{13}{16}{Visual representation of the loss function over trials in hyperparameter tuning}{figure.caption.28}{}}
+\newlabel{fig:first_transax}{{12}{15}{First results of abdomen of training mouse}{figure.caption.26}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces First results of abdomen of training mouse.}}{15}{figure.caption.27}\protected@file@percent }
+\newlabel{fig:first_coronal}{{13}{15}{First results of abdomen of training mouse}{figure.caption.27}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Trained hyperparameters}{16}{subsection.6.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Visual representation of the loss function over trials in hyperparameter tuning}}{16}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:loss_hyperparameter}{{14}{16}{Visual representation of the loss function over trials in hyperparameter tuning}{figure.caption.29}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Results after hyperparameter training}{16}{subsection.6.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.4}APDDM}{16}{subsection.6.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Validation}{16}{subsection.6.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.1}Contrast-to-noise ratio}{16}{subsubsection.6.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.2}Visual comparison}{16}{subsubsection.6.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Discussion}{16}{section.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}First results}{16}{subsection.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Trained hyperparameters}{16}{subsection.7.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Results after hyperparameter tuning of abdomen of training mouse.}}{17}{figure.caption.29}\protected@file@percent }
-\newlabel{fig:second_sagittal}{{14}{17}{Results after hyperparameter tuning of abdomen of training mouse}{figure.caption.29}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.1}Visual comparison}{16}{subsubsection.6.5.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Results after hyperparameter tuning of abdomen of training mouse.}}{17}{figure.caption.30}\protected@file@percent }
-\newlabel{fig:second_transax}{{15}{17}{Results after hyperparameter tuning of abdomen of training mouse}{figure.caption.30}{}}
+\newlabel{fig:second_sagittal}{{15}{17}{Results after hyperparameter tuning of abdomen of training mouse}{figure.caption.30}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Results after hyperparameter tuning of abdomen of training mouse.}}{17}{figure.caption.31}\protected@file@percent }
-\newlabel{fig:second_coronal}{{16}{17}{Results after hyperparameter tuning of abdomen of training mouse}{figure.caption.31}{}}
+\newlabel{fig:second_transax}{{16}{17}{Results after hyperparameter tuning of abdomen of training mouse}{figure.caption.31}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Results after hyperparameter tuning of abdomen of training mouse.}}{17}{figure.caption.32}\protected@file@percent }
+\newlabel{fig:second_coronal}{{17}{17}{Results after hyperparameter tuning of abdomen of training mouse}{figure.caption.32}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Sagittal view of the mouse thorax-abdomen region (Mouse01)}}{17}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:val_1}{{18}{17}{Sagittal view of the mouse thorax-abdomen region (Mouse01)}{figure.caption.33}{}}
 \citation{springenberg2014}
 \citation{kolarik2019}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.2}MSE and SSIM}{18}{subsubsection.6.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.3}Contrast-to-noise ratio}{18}{subsubsection.6.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.4}LEGO phantom test}{18}{subsubsection.6.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Discussion}{18}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}First results}{18}{subsection.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Trained hyperparameters}{18}{subsection.7.2}\protected@file@percent }
 \citation{xu2024}
 \citation{1284395}
 \citation{chavhan2009t2star}
 \citation{zhang2018unreasonableeffectivenessdeepfeatures}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces  Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images.}}{18}{table.caption.32}\protected@file@percent }
-\newlabel{tab:CNR}{{3}{18}{Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images}{table.caption.32}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Coronal view of the thorax-abdomen (Mouse06).}}{19}{figure.caption.34}\protected@file@percent }
+\newlabel{fig:val_2}{{19}{19}{Coronal view of the thorax-abdomen (Mouse06)}{figure.caption.34}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Sagittal view of the spine and pelvic region (Mouse10).}}{19}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:val_3}{{20}{19}{Sagittal view of the spine and pelvic region (Mouse10)}{figure.caption.35}{}}
 \citation{MSE}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Results after hyperparameter training}{19}{subsection.7.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}APDDM}{19}{subsection.7.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}Validation}{19}{subsection.7.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.5.1}Visual comparison}{19}{subsubsection.7.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{19}{section.8}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces  Overview of the mice, slices and planes used to obtain MSE and SSIM.}}{20}{table.caption.36}\protected@file@percent }
+\newlabel{tab:MSE_SSIM}{{3}{20}{Overview of the mice, slices and planes used to obtain MSE and SSIM}{table.caption.36}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Results after hyperparameter training}{20}{subsection.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}APDDM}{20}{subsection.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}Validation}{20}{subsection.7.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.5.1}Visual comparison}{20}{subsubsection.7.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.5.2}LEGO brick phantom}{20}{subsubsection.7.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces  Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}}{21}{table.caption.37}\protected@file@percent }
+\newlabel{tab:CNR}{{4}{21}{Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax}{table.caption.37}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{21}{section.8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Results after hyperparameter tuning of LEGO phantom.}}{22}{figure.caption.38}\protected@file@percent }
+\newlabel{fig:lego_phantom_test}{{21}{22}{Results after hyperparameter tuning of LEGO phantom}{figure.caption.38}{}}
 \citation{*}
 \bibcite{brown2014magnetic}{1}
 \bibcite{mrimaster2024}{2}
@@ -159,54 +178,56 @@
 \bibcite{amanrao-2023}{19}
 \bibcite{jordan_2018_setting}{20}
 \bibcite{anderson_2023_loss}{21}
-\bibcite{bharatiya_2019_comprehensive}{22}
-\bibcite{mseJim}{23}
-\bibcite{dosselmann-2009}{24}
-\bibcite{9036442}{25}
-\bibcite{Dastmalchi}{26}
-\bibcite{relu}{27}
-\bibcite{1284395}{28}
-\bibcite{zhang2018unreasonableeffectivenessdeepfeatures}{29}
-\bibcite{springenberg2014}{30}
-\bibcite{xu2024}{31}
-\bibcite{kolarik2019}{32}
-\bibcite{MSE}{33}
-\@writefile{toc}{\contentsline {section}{Appendices}{22}{section*.34}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {A}Appendix: Gantt chart}{22}{appendix.1.A}\protected@file@percent }
-\newlabel{appendix:Division of tasks}{{A}{22}{Appendix: Gantt chart}{appendix.1.A}{}}
+\bibcite{DDPM}{22}
+\bibcite{bharatiya_2019_comprehensive}{23}
+\bibcite{mseJim}{24}
+\bibcite{dosselmann-2009}{25}
+\bibcite{9036442}{26}
+\bibcite{Dastmalchi}{27}
+\bibcite{relu}{28}
+\bibcite{1284395}{29}
+\bibcite{zhang2018unreasonableeffectivenessdeepfeatures}{30}
+\bibcite{springenberg2014}{31}
+\bibcite{xu2024}{32}
+\bibcite{kolarik2019}{33}
+\bibcite{MSE}{34}
+\bibcite{datacamp_optuna}{35}
+\@writefile{toc}{\contentsline {section}{Appendices}{26}{section*.40}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A}Appendix: Gantt chart}{26}{appendix.1.A}\protected@file@percent }
+\newlabel{appendix:Division of tasks}{{A}{26}{Appendix: Gantt chart}{appendix.1.A}{}}
 \gtt@chartextrasize{0}{177.46619pt}
-\@writefile{toc}{\contentsline {section}{\numberline {B}Appendix: Figures Preprocessing}{23}{appendix.1.B}\protected@file@percent }
-\newlabel{Appendix: Figures Preprocessing}{{B}{23}{Appendix: Figures Preprocessing}{appendix.1.B}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Example of a bad slice.}}{23}{figure.caption.35}\protected@file@percent }
-\newlabel{fig:bad_slice}{{17}{23}{Example of a bad slice}{figure.caption.35}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces The left figure shows the original slice, while the right figure is the cropped slice.}}{23}{figure.caption.35}\protected@file@percent }
-\newlabel{fig:comparision-cropped}{{18}{23}{The left figure shows the original slice, while the right figure is the cropped slice}{figure.caption.35}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {C}Appendix: Mathematics APDDM}{24}{appendix.1.C}\protected@file@percent }
-\newlabel{appendix:Mathematics APDDM}{{C}{24}{Appendix: Mathematics APDDM}{appendix.1.C}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Ansatz: linear interpolation between image pair}{24}{subsection.1.C.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}Proposition of the Markovian process}{24}{subsection.1.C.2}\protected@file@percent }
-\newlabel{eq:f(t)}{{19}{24}{Proposition of the Markovian process}{equation.19}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces \textit  {Demonstration of coherent edge artifact accumulation when no rotation is applied. }}}{25}{figure.caption.36}\protected@file@percent }
-\newlabel{fig:edge artifacts}{{19}{25}{\textit {Demonstration of coherent edge artifact accumulation when no rotation is applied. }}{figure.caption.36}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Expected value of the endpoint}{25}{subsection.1.C.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.4}Variance of the endpoint}{25}{subsection.1.C.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5}Controlling the variance}{26}{subsection.1.C.5}\protected@file@percent }
-\newlabel{eq:beta}{{31}{26}{Controlling the variance}{equation.31}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.6}MSE stability}{26}{subsection.1.C.6}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces \textit  {Plot of $MSE(x_T, x_T^*)$ against beta. }}}{27}{figure.caption.37}\protected@file@percent }
-\newlabel{fig:beta sweep}{{20}{27}{\textit {Plot of $MSE(x_T, x_T^*)$ against beta. }}{figure.caption.37}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {D}Appendix: Figures Results}{28}{appendix.1.D}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {D.1}Appendix: first results}{28}{subsection.1.D.1}\protected@file@percent }
-\newlabel{Appendix: first results}{{D.1}{28}{Appendix: first results}{subsection.1.D.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces First results of abdomen of test mouse.}}{28}{figure.caption.38}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces First results of abdomen of test mouse.}}{28}{figure.caption.39}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces First results of abdomen of test mouse.}}{28}{figure.caption.40}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {D.2}Appendix: results after hyperparameter tuning}{29}{subsection.1.D.2}\protected@file@percent }
-\newlabel{Appendix: results after tuning}{{D.2}{29}{Appendix: results after hyperparameter tuning}{subsection.1.D.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{29}{figure.caption.41}\protected@file@percent }
-\newlabel{mouse10_s_19}{{24}{29}{Results after hyperparameter tuning of abdomen of test mouse}{figure.caption.41}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {25}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{29}{figure.caption.42}\protected@file@percent }
-\newlabel{mouse10_t_16}{{25}{29}{Results after hyperparameter tuning of abdomen of test mouse}{figure.caption.42}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {26}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{29}{figure.caption.43}\protected@file@percent }
-\newlabel{mouse06_c_12}{{26}{29}{Results after hyperparameter tuning of abdomen of test mouse}{figure.caption.43}{}}
-\gdef \@abspage@last{30}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Appendix: Figures Preprocessing}{27}{appendix.1.B}\protected@file@percent }
+\newlabel{Appendix: Figures Preprocessing}{{B}{27}{Appendix: Figures Preprocessing}{appendix.1.B}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces Example of a bad slice.}}{27}{figure.caption.41}\protected@file@percent }
+\newlabel{fig:bad_slice}{{22}{27}{Example of a bad slice}{figure.caption.41}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces The left figure shows the original slice, while the right figure is the cropped slice.}}{27}{figure.caption.41}\protected@file@percent }
+\newlabel{fig:comparision-cropped}{{23}{27}{The left figure shows the original slice, while the right figure is the cropped slice}{figure.caption.41}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C}Appendix: Mathematics APDDM}{28}{appendix.1.C}\protected@file@percent }
+\newlabel{appendix:Mathematics APDDM}{{C}{28}{Appendix: Mathematics APDDM}{appendix.1.C}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Ansatz: linear interpolation between image pair}{28}{subsection.1.C.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}Proposition of the Markovian process}{28}{subsection.1.C.2}\protected@file@percent }
+\newlabel{eq:f(t)}{{19}{28}{Proposition of the Markovian process}{equation.19}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces \textit  {Demonstration of coherent edge artifact accumulation when no rotation is applied. }}}{29}{figure.caption.42}\protected@file@percent }
+\newlabel{fig:edge artifacts}{{24}{29}{\textit {Demonstration of coherent edge artifact accumulation when no rotation is applied. }}{figure.caption.42}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Expected value of the endpoint}{29}{subsection.1.C.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.4}Variance of the endpoint}{29}{subsection.1.C.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5}Controlling the variance}{30}{subsection.1.C.5}\protected@file@percent }
+\newlabel{eq:beta}{{31}{30}{Controlling the variance}{equation.31}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.6}MSE stability}{30}{subsection.1.C.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {25}{\ignorespaces \textit  {Plot of $MSE(x_T, x_T^*)$ against beta. }}}{31}{figure.caption.43}\protected@file@percent }
+\newlabel{fig:beta sweep}{{25}{31}{\textit {Plot of $MSE(x_T, x_T^*)$ against beta. }}{figure.caption.43}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Appendix: Figures Results}{32}{appendix.1.D}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.1}Appendix: first results}{32}{subsection.1.D.1}\protected@file@percent }
+\newlabel{Appendix: first results}{{D.1}{32}{Appendix: first results}{subsection.1.D.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {26}{\ignorespaces First results of abdomen of test mouse.}}{32}{figure.caption.44}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {27}{\ignorespaces First results of abdomen of test mouse.}}{32}{figure.caption.45}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {28}{\ignorespaces First results of abdomen of test mouse.}}{32}{figure.caption.46}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.2}Appendix: results after hyperparameter tuning}{33}{subsection.1.D.2}\protected@file@percent }
+\newlabel{Appendix: results after tuning}{{D.2}{33}{Appendix: results after hyperparameter tuning}{subsection.1.D.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {29}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{33}{figure.caption.47}\protected@file@percent }
+\newlabel{mouse10_s_19}{{29}{33}{Results after hyperparameter tuning of abdomen of test mouse}{figure.caption.47}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {30}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{33}{figure.caption.48}\protected@file@percent }
+\newlabel{mouse10_t_16}{{30}{33}{Results after hyperparameter tuning of abdomen of test mouse}{figure.caption.48}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {31}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{33}{figure.caption.49}\protected@file@percent }
+\newlabel{mouse06_c_12}{{31}{33}{Results after hyperparameter tuning of abdomen of test mouse}{figure.caption.49}{}}
+\gdef \@abspage@last{34}

@@ -557,7 +557,7 @@ Too few epochs can result in underfitting, while too many may lead to overfittin
 \subsection{Anchored Path Diffusion Denoising Model (APDDM)}
 To complement the direct image-to-image denoising approach, discussed in the previous section, a second model was implemented, 
 the Anchored Path Diffusion Denoising Model (APDDM). 
-This model is a diffusion based framework designed specifically for paired high and low SNR images, in this case the high-resolution (12-minute) scans and the low-resolution (1-minute) scan. Unlike conventional denoising diffusion models that add noise to the HNR images until the endpoint is complete Gaussian noise, APDDM uses the actual low SNR image as the endpoint, allowing the model to incorporate real noise from the dataset into the forward process. 
+This model is a diffusion based framework based on the original DDPM by Ho et al. (2020) \cite{DDPM}. It is designed specifically for paired high and low SNR images, in this case the high-resolution (12-minute) scans and the low-resolution (1-minute) scan. Unlike conventional denoising diffusion models that add noise to the HNR images until the endpoint is complete Gaussian noise, APDDM uses the actual low SNR image as the endpoint, allowing the model to incorporate real noise from the dataset into the forward process. 
 
 \subsubsection{Forward Diffusion Process}
 The forward process defines a stochastic path that gradually transforms the clean image $x_0$ into a noisy version $x_t$, with the endpoint distribution anchored around the real noisy scan $x_T^*$. 
@@ -1089,6 +1089,8 @@ It is important to note that MSE and SSIM are purely quantitative metrics and sh
     
     \bibitem{anderson_2023_loss} Anderson, M. (2023, February). Loss Functions in Machine Learning - Metaphysic.ai. Retrieved April 13, 2025, from \url{https://blog.metaphysic.ai/loss-functions-in-machine-learning/}.
     
+    \bibitem{DDPM} Ho, J., Jain, A., \& Abbeel, P. (2020). Denoising diffusion probabilistic models. Advances in neural information processing systems, 33, 6840-6851.
+
     \bibitem{bharatiya_2019_comprehensive} Bharatiya, P. (2019, September). Comprehensive Guide to the ReLU Activation Function in Neural Networks: Definition, Role, and Type Explained. Retrieved from \href{https://data-intelligence.hashnode.dev/comprehensive-guide-to-the-relu-activation-function-in-neural-networks-definition-role-and-type-explained}{https://data-intelligence.hashnode.dev/comprehensive-guide-to-the-relu-activation-function-in-neural-networks-definition-role-and-type-explained}.
     
     \bibitem{mseJim} Frost, J. (2023). Mean Squared Error (MSE). Retrieved April 30, 2025, from \url{https://statisticsbyjim.com/regression/mean-squared-error-mse/}.
