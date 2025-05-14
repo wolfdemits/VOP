@@ -806,23 +806,58 @@ The same division of mice was used, as in indicated in Table \ref{tab:mouse_dist
 
 
 \subsubsection{Visual comparison}
-Figure \ref{fig:first_sagittal} shows a sagittal view of the mouse spine and surrounding anatomy. 
-The LR input of the spine and organ boundaries is quite noisy. The DL output is somewhat sharper for example the white spine column and rib edges are brighter and better defined than in LR. 
+Figure \ref{fig:val_1} shows a sagittal view of the mouse spine and surrounding anatomy. 
+The yellow box highlights the lower thoracic to lumbar spine, an area where fine bone structure is particularly important. 
+The LR input of the spine and organ boundaries is quite noisy. 
+The DL output is somewhat sharper for example, the white spine column and rib edges within the yellow-highlighted region are brighter and better defined than in LR. 
 However, the DL image still lacks the crisp detail of the HR reference. 
-Subtle textures are smoothed out. 
+Subtle textures, especially within and around the spine, are smoothed out.
 
-On Figure \ref{mouse06_c_12} the coronal view shows the spine vertically at the center and bilateral organs on each side. The LR slice is very grainy. 
-The DL output reduces noise and enhances structures for example the kidney outlines and the vertebral column appear a bit clearer than in LR. 
-Contrast along bone boundaries and organ edges is higher in DL but not as sharp as HR.
-The HR-LR residual highlight the kidneys and spine quite strongly, whereas DL-HR show weaker residuals that trace those same shapes. 
-In conclusion, DL recovers some large-scale anatomy from LR but `smears over` finer details. 
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse01_Sagittal_val.png}
+    \caption{Sagittal view of the mouse thorax-abdomen region (Mouse01)}
+    \label{fig:val_1}
+\end{figure*}
 
-Figure \ref{mouse10_s_19} shows the spinal column (bright vertebrae) and pelvic region below with softer tissues above. 
-DL gain some edge clarity over LR but this is limited. The vertebral outline are only faintly improved. 
-In HR-LR, the vertebral bone edges and joint edges appear very strongly. The DL-HR residual shows reduced but still traces at those same locations, signifying partial detail recovery. 
-This is especially noticeable in the residual maps, the HR-LR difference shows strong edge signal around the spin and organs, while the DL-HR has only half the amplitude. 
-The network removes large-scale blur but leaves persistent contours at edges. 
-Overall, DL improves global sharpness over LR but retains an over-smoothed appearances with blurred finer details.
+In Figure \ref{fig:val_2}, the coronal view shows the spine vertically at the center and organs. 
+The yellow box at the top highlights a region of upper thoracic anatomy. 
+In the LR image, this area is extremely grainy, it's difficult to distinguish between noise and actual anatomical detail. 
+However, in the DL output, this region appears less noisy, making the underlying structures slightly more recognizable. 
+The noise reduction improves the clarity of texture, helping to separate anatomy from background artifacts. 
+While still not as crisp as the HR reference, this DL improvement aids interpretability.
+The green circle marks the kidney and mid-abdominal area. 
+Here, too, the DL output reduces noise and enhances structure visibility. 
+For example, the kidney outlines and the vertebral column (centerline) appear a bit clearer than in LR. 
+Contrast along bone boundaries and organ edges is higher in DL, particularly within these highlighted areas, but still not as sharp as HR. 
+The HR-LR residuals highlight the kidneys and spine quite strongly, whereas DL-HR shows weaker residuals that still trace those same shapes.
+ In conclusion, DL recovers some large-scale anatomy from LR but smears over finer details.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_Coronal_val.png}
+    \caption{Coronal view of the thorax-abdomen (Mouse06).}
+    \label{fig:val_2}
+\end{figure*}
+
+Figure \ref{fig:val_3} shows the spinal column (bright vertebrae, highlighted by the yellow rectangle) and pelvic region below, with thoracic soft tissues above (highlighted by the green circle). 
+In the LR image, the green-circled region is dominated by noise, making it hard to distinguish anatomical content from background variation. 
+In the DL output, this area shows reduced noise, which improves the visibility of the underlying structures, though fine detail remains limited. 
+The noise suppression makes it easier to infer the presence of soft tissue textures that are otherwise obscured in the LR input.
+DL gains some edge clarity over LR, especially around the vertebral column (yellow rectangle), but this improvement is still modest. 
+The vertebral outlines are only faintly improved. In the HR-LR difference map, the vertebral bone and joint edges stand out strongly, reflecting the detail missing in LR. 
+The DL-HR residual still traces those same locations, though with reduced amplitude, indicating partial recovery of anatomical edges. 
+This pattern is evident throughout both highlighted areas: the network removes large-scale blur and suppresses noise but leaves behind residual contours at anatomical edges. 
+Overall, DL improves global sharpness and interpretability over LR, especially in noisy regions like the top soft tissue (green circle), but continues to blur finer anatomical features.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse10_Sagittal_val.png}
+    \caption{Sagittal view of the spine and pelvic region (Mouse10).}
+    \label{fig:val_3}
+\end{figure*}
+
+
 
 \subsubsection{MSE and SSIM}
 
@@ -865,7 +900,7 @@ I (Fea) am still busy working with amide to get the CNR. This table is an indica
 \begin{table*}[h]
     \centering
     \resizebox{0.8\linewidth}{!}{
-    \begin{tabular}{l|c|c|c|c|c|c}
+    \begin{tabular}{l|c|c|c|c|c|c|c}
     \toprule
      & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} & \textbf{LR CNR} & \textbf{DL CNR} & \textbf{HR CNR} \\
     \midrule
