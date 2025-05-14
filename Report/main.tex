@@ -643,7 +643,7 @@ X represents the number of pixels in a row and y denotes the number of pixels in
 
 The MSE was calculated for the high resolution and the result of the deep learning model. After these calculations the ratio is taken of these two.
 
-\subsection{Structural similarity index measure}
+\subsection{Structural similarity index measure}\label{Structural similarity index measure}
 
 As previously introduced in section \ref{loss_function}, the Structural Similarity Index Measure (SSIM) is also used independently as an evaluation metric in this study.  
 While it forms part of the hybrid loss function, SSIM is valuable on its own for assessing perceptual image quality, as it accounts for luminance, contrast, and structural consistency.
@@ -930,7 +930,7 @@ I (Fea) am still busy working with amide to get the CNR. This table is an indica
 \end{table*}
 
 \subsubsection{LEGO phantom test}
-For extra validation the model was tested on a 1 min scan of a LEGO brick and compared to its 12 min scan target. The results can be seen in \ref{fig:lego_phantom_test}.
+For extra validation the model was tested on a 1 min scan of a LEGO brick and compared to its 12 min scan target. The results can be seen in Figure \ref{fig:lego_phantom_test}.
 The DL output has suppressed some echo artifacts that are present in the LR image between the black pins. The residuals show that the sharper edges and rectangular shapes are closer to the HR image in the LR image. A more in depth quantitative and qualitative discussion follows in \ref{LEGO brick phantom}.
 
 \section{Discussion}
