@@ -1078,6 +1078,10 @@ It is important to note that MSE and SSIM are purely quantitative metrics and sh
 
 \section{Conclusion}
 
+Both the U-Net and APDDM deep learning methods improved image quality of LR images. The main improvement is the denoising, however fine details may still get lost due to an 'oversmoothing' effect that is attirbuted to the use of the MSE as loss function, which penalizes pixel-wise errors. And as could be concluded from the LEGO phantom quality control, orthogonal borders and shapes are better preserved in the LR image than in the DL image.
+Furthermore, it wwas demonstrated that the APDDM outperformed the U-Net.
+
+
 \newpage
 \onecolumn
 \nocite{*}
