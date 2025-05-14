@@ -1068,6 +1068,11 @@ It is important to note that MSE and SSIM are purely quantitative metrics and sh
     \label{fig:lego_phantom_test}
 \end{figure*}
 
+\subsubsection{MSE and SSIM}
+High SSIM values in Mouse 23, Transax slice 19 demonstrate accurate preservation of simpler structures. The lower SSIM in Mouse 6, Coronal slice 12, however, suggests difficulty in accurately reconstructing its more complex anatomical details. The overall low MSE values, imply that the overall pixel intensity is preserved well in the deep learning reconstruction.  
+These MSE values together with the varying SSIM values, suggests that while the network correctly preserves the general appearance, the accuracy of fine anatomical details varies. Further investigation into the specific anatomical features present in the slices with lower SSIM could be a guide of how the model can be improved.
+
+
 
 \section{Conclusion}
 
