@@ -922,35 +922,35 @@ I (Fea) am still busy working with amide to get the CNR. This table is an indica
     \resizebox{0.8\linewidth}{!}{
     \begin{tabular}{l|c|c|c|c|c|c|c}
     \toprule
-     & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} & \textbf{LR CNR} & \textbf{DL CNR} & \textbf{HR CNR} \\
+     & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} & \textbf{LR normalised variance} & \textbf{DL normalised variance} & \textbf{HR normalised variance} \\
     \midrule
-     & 1  & Sagittal   & 6             &TA              &                 &                 &                   \\
-     &    & Transaxial & 13             &TA              &                 &                 &                   \\
-     &    & Coronal    & 10            &TA              &                 &                 &                   \\
+     & 1  & Sagittal   & 6             &TA              &0.571                 &0.112                 &0.558                   \\
+     &    & Transaxial & 13             &TA              &0.005                 &0.001                 &0.003                   \\
+     &    & Coronal    & 10            &TA              &0.051                 &0.002                &0.004                   \\
     \midrule
-     & 23 & Sagittal    & 10            &TA              &                 &                 &                   \\
-     &    & Transaxial   & 4             &TA              &                 &                 &                   \\
-     &    & Coronal    & 22            &HT              &                 &                 &                   \\
+     & 23 & Sagittal    & 10            &TA              &0.099                 &0.095                 &0.057                   \\
+     &    & Transaxial   & 4             &TA              &0.091                 &0.081                 &0.130                   \\
+     &    & Coronal    & 22            &HT              &0.153                 &0.800               &0.134                   \\
     \midrule
-     & 6 & Sagittal    & 10            &TA              &                 &                 &                   \\
-     &    & Transaxial   & 21             &HT              &                 &                 &                   \\
-     &    & Coronal    & 7            &TA              &                 &                 &                   \\
+     & 6 & Sagittal    & 10            &TA              &0.449                 &0.102                 &0.657                   \\
+     &    & Transaxial   & 21             &HT              &0.119                 &0.040                 &0.157                   \\
+     &    & Coronal    & 7            &TA              &0.188                 &0.067                 &0.180                   \\
     \midrule
-     & 10 & Sagittal & 11            &TA              &                 &                 &                   \\
-     &    & Transaxial & 22            &HT              &                 &                 &                   \\
-     &    & Coronal & 5            &TA              &                 &                 &                   \\
+     & 10 & Sagittal & 11            &TA              &0.273                 &0.0164                 &0.260                   \\
+     &    & Transaxial & 22            &HT              &0.045                 &0.032                 &0.067                   \\
+     &    & Coronal & 5            &TA              &0.097                 &0.071                 &0.115                   \\
     \midrule
-     & 7  & Sagittal & 11            &TA              &                 &                 &                   \\
-     &    & Transaxial & 12            &TA              &                 &                 &                   \\
-     &    & Coronal & 11            &TA              &                 &                 &                   \\
+     & 7  & Sagittal & 11            &TA              &0.259                 &0.132                 &0.263                   \\
+     &    & Transaxial & 12            &TA              &0.170                &0.082                 &0.175                   \\
+     &    & Coronal & 11            &TA              &0.288               &0.123                 &0.228                   \\
     \midrule
-     & 22 & Sagittal & 12            &HT              &                 &                 &                   \\
-     &    & Transaxial & 8            &TA              &                 &                 &                   \\
-     &    & Coronal & 13            &TA              &                 &                 &                   \\
+     & 22 & Sagittal & 12            &HT              &0.107                 &0.090                 &0.090                   \\
+     &    & Transaxial & 8            &TA              &0.190                 &0.151                 &0.190                   \\
+     &    & Coronal & 13            &TA              &0.187                 &0.113                 &0.188                   \\
      \bottomrule
     \end{tabular}
     }
-    \caption{\label{tab:CNR} Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
+    \caption{\label{tab:norm_var} Overview of the mice, slices and planes used to obtain normalised variance in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
 \end{table*}
 
 \begin{figure}
