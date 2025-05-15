@@ -102,9 +102,9 @@ Finally, we would like to thank Niels Verhelst and Joran Courtens for acquiring 
 \section{Introduction}
 % meer bronnen in dit gedeelte
 Magnetic resonance imaging (MRI) is a non‐invasive imaging technique that uses magnetic fields and radio frequency pulses to generate detailed anatomical images. 
-Dedicated micro-MRI systems are available for preclinical imaging that provides excellent soft tissue contrast for anatomical visualization in rodent models. 
+Dedicated micro-MRI systems are available for preclinical imaging that provides excellent soft tissue contrast for anatomical visualization in rodent models. \cite{marzola2003high} 
 To visualize the animal's anatomy with sufficient details, a high spatial resolution is important. Reducing voxel size improves spatial resolution but also decreases the signal and lowers the signal-to-noise ratio (SNR). 
-On the other hand, increasing acquisition time can enhance signal quality and SNR. However, this increases the risk of artefacts, blurring, and motion-related distortions. 
+On the other hand, increasing acquisition time can enhance signal quality and SNR \cite{grover2015mri}. However, this increases the risk of artefacts, blurring, and motion-related distortions.
 Additionally, longer scan times are often impractical in real-life imaging workflows, where efficiency and throughput are essential. 
 A good balance between spatial resolution, acquisition time and SNR is needed.
 Image processing/restoration tools can be used to improve the quality of the acquired image, but traditional techniques relied on manual tuning or fixed
@@ -1157,78 +1157,84 @@ This could further improve model generalization and detail preservation.
 \nocite{*}
 \begin{thebibliography}{99}
 
-    \bibitem{brown2014magnetic} Brown, R. W., Cheng, Y.-C. N., Haacke, E. M., Thompson, M. R., \& Venkatesan, R. (2014). \textit{Magnetic Resonance Imaging: Physical Principles and Sequence Design}. John Wiley \& Sons.
-    
-    \bibitem{mrimaster2024} Mrimaster. (2024, June). TR and TE in MRI — TR (repetition time), TE (echo time) and image contrast. Retrieved March 25, 2025, from \url{https://mrimaster.com/tr-and-te-in-mri/}.
-    
-    \bibitem{ronneberger2015unet} Ronneberger, O., Fischer, P., \& Brox, T. (2015). U-/Net: Convolutional Networks for Biomedical Image Segmentation. In \textit{Medical Image Computing and Computer-Assisted Intervention (MICCAI)} (pp. 234–241). Springer. \url{https://doi.org/10.1007/978-3-319-24574-4_28}.
-    
-    \bibitem{bruker2025pharmascan} Bruker. (2025). PharmaScan — Preclinical MRI. Retrieved March 25, 2025, from \url{https://www.bruker.com/en/products-and-solutions/preclinical-imaging/mri/pharmascan-new.html}.
+    \bibitem{marzola2003high} P. Marzola, F. Osculati, and A. Sbarbati (2003). “High field mri in preclinical research”  \textit{European Journal of Radiology}, 48(2), 165–170.
     
     \bibitem{grover2015mri} Grover, V. P. B., Tognarelli, J. M., Crossey, M. M. E., Cox, I. J., Taylor-Robinson, S. D., \& McPhail, M. J. W. (2015). Magnetic Resonance Imaging: Principles and Techniques: Lessons for Clinicians. \textit{Journal of Clinical and Experimental Hepatology}, 5(3), 246–255. \url{https://doi.org/10.1016/j.jceh.2015.08.001}.
     
-    \bibitem{chavhan2009t2star} Chavhan, G. B., Babyn, P. S., Thomas, B., Shroff, M. M., \& Haacke, E. M. (2009). Principles, Techniques, and Applications of T2/*-based MR Imaging and Its Special Applications. \textit{Radiographics}, 29(5), 1433–1449. \url{https://doi.org/10.1148/rg.295095034}.
+    \bibitem{brown2014magnetic} Brown, R. W., Cheng, Y.-C. N., Haacke, E. M., Thompson, M. R., \& Venkatesan, R. (2014). \textit{Magnetic Resonance Imaging: Physical Principles and Sequence Design}. John Wiley \& Sons.
     
-    \bibitem{tran2025unet} Tran, M. (2025, January). Understanding U-/Net. Retrieved March 25, 2025, from \url{https://towardsdatascience.com/understanding-u-net-61276b10f360/}.
+    \bibitem{bruker2025pharmascan} Bruker. (2025). PharmaScan — Preclinical MRI. Retrieved March 25, 2025, from \url{https://www.bruker.com/en/products-and-solutions/preclinical-imaging/mri/pharmascan-new.html}.
+    
+    \bibitem{mrimaster2024} Mrimaster. (2024, June). TR and TE in MRI — TR (repetition time), TE (echo time) and image contrast. Retrieved March 25, 2025, from \url{https://mrimaster.com/tr-and-te-in-mri/}.
+    
+    \bibitem{chavhan2009t2star} Chavhan, G. B., Babyn, P. S., Thomas, B., Shroff, M. M., \& Haacke, E. M. (2009). Principles, Techniques, and Applications of T2/*-based MR Imaging and Its Special Applications. \textit{Radiographics}, 29(5), 1433–1449. \url{https://doi.org/10.1148/rg.295095034}.
     
     \bibitem{verhelst2025denoising} Verhelst, N., Courtens, J., Vervenne, B., Abi Akl, M., Maebe, J., Lajtos, M., Vandenberghe, S., Vanhove, C., \& Muller, F. M. (2025). Deep Learning for Denoising and Super-Resolution in Low-Resolution Micro-MRI for Mouse Imaging: Achieving Shorter Scan Times. In \textit{Proceedings of the 20th European Molecular Imaging Meeting (EMIM)} (p. 1).
     
+    \bibitem{ronneberger2015unet} Ronneberger, O., Fischer, P., \& Brox, T. (2015). U-/Net: Convolutional Networks for Biomedical Image Segmentation. In \textit{Medical Image Computing and Computer-Assisted Intervention (MICCAI)} (pp. 234–241). Springer. \url{https://doi.org/10.1007/978-3-319-24574-4_28}.
+    
+    \bibitem{datacamp_optuna} DataCamp, ``Optuna for Deep Reinforcement Learning in Python,'' \textit{DataCamp Tutorials}, Aug. 2024. [Online]. Available: \url{https://www.datacamp.com/tutorial/optuna}.
+    
     \bibitem{10.1145/3292500.3330701} Akiba, T., Sano, S., Yanase, T., Ohta, T., \& Koyama, M. (2019). Optuna: A Next-generation Hyperparameter Optimization Framework. In \textit{Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining} (pp. 2623–2631). ACM. \url{https://doi.org/10.1145/3292500.3330701}.
-    
-    \bibitem{unknown-author-no-date} Unknown Author. (n.d.). Tutorials. Retrieved from \url{https://www.overleaf.com/learn/latex/Tutorials}.
-    
-    \bibitem{massed-compute-2025} Massed Compute. (2025, February). FAQ Answers - Massed compute. Retrieved from \url{https://massedcompute.com/faq-answers/?question=What%20are%20the%20key%20differences%20between%20Adam%20and%20SGD%20optimizers%20in%20large%20language%20model%20training?}.
-    
-    \bibitem{sanghvirajit-2025} Sanghvirajit. (2025, March). Everything you need to know about Adam and RMSprop Optimizer. Retrieved from \url{https://medium.com/analytics-vidhya/a-complete-guide-to-adam-and-rmsprop-optimizer-75f4502d83be}.
-    
-    \bibitem{pykes-2021} Pykes, K. (2021, October). AdamW Optimizer in PyTorch Tutorial. Retrieved from \url{https://www.datacamp.com/tutorial/adamw-optimizer-in-pytorch}.
     
     \bibitem{dhanushkumar-2023} DhanushKumar. (2023, November). MAX POOLING - DhanushKumar - Medium. Retrieved from \url{https://medium.com/@danushidk507/max-pooling-ef545993b6e4}.
     
     \bibitem{unknown-author-no-date2} Unknown Author. (n.d.). 7.3. Padding and Stride — Dive into Deep Learning 1.0.3 documentation. Retrieved from \url{https://d2l.ai/chapter_convolutional-neural-networks/padding-and-strides.html}.
-    
-    \bibitem{isbhargav-2020} Isbhargav. (2020, July). Guide to Pytorch Learning Rate Scheduling. Retrieved from \url{https://www.kaggle.com/code/isbhargav/guide-to-pytorch-learning-rate-scheduling}.
-    
-    \bibitem{unknown-author-no-date3} Unknown Author. (n.d.). Comprehensive overview of learning rate schedulers in Machine Learning | CloudFactory Computer Vision Wiki. Retrieved from \url{https://wiki.cloudfactory.com/docs/mp-wiki/scheduler}.
-    
+
     \bibitem{unknown-author-2025} Unknown Author. (2025, April). Bicubic Interpolation | CloudInary. Retrieved from \url{https://cloudinary.com/glossary/bicubic-interpolation}.
     
     \bibitem{amanrao-2023} Amanrao. (2023, September). Image Upscaling using Bicubic Interpolation - Amanrao - Medium. Retrieved from \url{https://medium.com/@amanrao032/image-upscaling-using-bicubic-interpolation-ddb37295df0}.
     
+    \bibitem{bharatiya_2019_comprehensive} Bharatiya, P. (2019, September). Comprehensive Guide to the ReLU Activation Function in Neural Networks: Definition, Role, and Type Explained. Retrieved from \href{https://data-intelligence.hashnode.dev/comprehensive-guide-to-the-relu-activation-function-in-neural-networks-definition-role-and-type-explained}{https://data-intelligence.hashnode.dev/comprehensive-guide-to-the-relu-activation-function-in-neural-networks-definition-role-and-type-explained}.
+    
+    \bibitem{unknown-author-no-date3} Unknown Author. (n.d.). Comprehensive overview of learning rate schedulers in Machine Learning | CloudFactory Computer Vision Wiki. Retrieved from \url{https://wiki.cloudfactory.com/docs/mp-wiki/scheduler}.
+    
+    \bibitem{isbhargav-2020} Isbhargav. (2020, July). Guide to Pytorch Learning Rate Scheduling. Retrieved from \url{https://www.kaggle.com/code/isbhargav/guide-to-pytorch-learning-rate-scheduling}.
+    
     \bibitem{jordan_2018_setting} Jordan, J. (2018, March). Setting the learning rate of your neural network. Retrieved from \url{https://www.jeremyjordan.me/nn-learning-rate/}.
+    
+    \bibitem{pykes-2021} Pykes, K. (2021, October). AdamW Optimizer in PyTorch Tutorial. Retrieved from \url{https://www.datacamp.com/tutorial/adamw-optimizer-in-pytorch}.
+    
+    \bibitem{sanghvirajit-2025} Sanghvirajit. (2025, March). Everything you need to know about Adam and RMSprop Optimizer. Retrieved from \url{https://medium.com/analytics-vidhya/a-complete-guide-to-adam-and-rmsprop-optimizer-75f4502d83be}.
     
     \bibitem{anderson_2023_loss} Anderson, M. (2023, February). Loss Functions in Machine Learning - Metaphysic.ai. Retrieved April 13, 2025, from \url{https://blog.metaphysic.ai/loss-functions-in-machine-learning/}.
     
     \bibitem{DDPM} Ho, J., Jain, A., \& Abbeel, P. (2020). Denoising diffusion probabilistic models. Advances in neural information processing systems, 33, 6840-6851.
-
-    \bibitem{bharatiya_2019_comprehensive} Bharatiya, P. (2019, September). Comprehensive Guide to the ReLU Activation Function in Neural Networks: Definition, Role, and Type Explained. Retrieved from \href{https://data-intelligence.hashnode.dev/comprehensive-guide-to-the-relu-activation-function-in-neural-networks-definition-role-and-type-explained}{https://data-intelligence.hashnode.dev/comprehensive-guide-to-the-relu-activation-function-in-neural-networks-definition-role-and-type-explained}.
     
     \bibitem{mseJim} Frost, J. (2023). Mean Squared Error (MSE). Retrieved April 30, 2025, from \url{https://statisticsbyjim.com/regression/mean-squared-error-mse/}.
     
     \bibitem{dosselmann-2009} Dosselmann, R., \& Yang, X. D. (2009). A comprehensive assessment of the structural similarity index. \textit{Signal Image and Video Processing}, 5(1), 81–91. \url{https://doi.org/10.1007/s11760-009-0144-1}.
     
+    \bibitem{features} C. Cong and H. Zhang, ``Invert-U-Net DNN segmentation model for MRI cardiac left ventricle segmentation,'' *The Journal of Engineering*, vol. 2019, no. 16, pp. 1702–1707, 2019. doi:10.1049/joe.2018.8302.
+    
+    \bibitem{springenberg2014} Springenberg, J. T., Dosovitskiy, A., Brox, T., \& Riedmiller, M. (2014). Striving for simplicity: The all convolutional net. \textit{arXiv preprint arXiv:1412.6806}. \url{https://arxiv.org/abs/1412.6806}.
+    
+    \bibitem{kolarik2019} Kolařík, M., Burget, R., \& Říha, K. (2019). Upsampling Algorithms for Autoencoder Segmentation Neural Networks: A Comparison Study. \textit{2019 11th International Congress on Ultra Modern Telecommunications and Control Systems and Workshops (ICUMT)}, 1–7. \url{https://ieeexplore.ieee.org/document/8970918}
+    
+    \bibitem{xu2024} Xu, G., Wang, X., Wu, X., Leng, X., \& Xu, Y. (2024). Development of Skip Connection in Deep Neural Networks for Computer Vision and Medical Image Analysis: A Survey. \textit{arXiv preprint arXiv:2405.01725}. \url{https://arxiv.org/abs/2405.01725}
+    
+    \bibitem{1284395} Wang, Z., Bovik, A. C., Sheikh, H. R., \& Simoncelli, E. P. (2004). Image quality assessment: from error visibility to structural similarity. \textit{IEEE Transactions on Image Processing}, 13(4), 600–612. \url{https://doi.org/10.1109/TIP.2003.819861}.
+    
+    \bibitem{zhang2018unreasonableeffectivenessdeepfeatures} Zhang, R., Isola, P., Efros, A. A., Shechtman, E., \& Wang, O. (2018). The Unreasonable Effectiveness of Deep Features as a Perceptual Metric. \textit{arXiv:1801.03924}. Retrieved from \url{https://arxiv.org/abs/1801.03924}.
+    
+    
+    \bibitem{MSE} C.~Ledig, L.~Theis, F.~Huszar, J.~Caballero, A.~Cunningham, A.~Acosta, A.~Aitken, A.~Tejani, J.~Totz, Z.~Wang, and W.~Shi, ``Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network,'' in \emph{Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}
+
+    %vanaf hieronder niet geciteerd in tekst?
+  
+    \bibitem{tran2025unet} Tran, M. (2025, January). Understanding U-/Net. Retrieved March 25, 2025, from \url{https://towardsdatascience.com/understanding-u-net-61276b10f360/}.
+            
+    
+    \bibitem{massed-compute-2025} Massed Compute. (2025, February). FAQ Answers - Massed compute. Retrieved from \url{https://massedcompute.com/faq-answers/?question=What%20are%20the%20key%20differences%20between%20Adam%20and%20SGD%20optimizers%20in%20large%20language%20model%20training?}.
+                                 
+          
     \bibitem{9036442} Zaheer, R., \& Shaziya, H. (2019). A Study of the Optimization Algorithms in Deep Learning. In \textit{2019 Third International Conference on Inventive Systems and Control (ICISC)} (pp. 536-539). IEEE. \url{https://doi.org/10.1109/ICISC44355.2019.9036442}.
     
     \bibitem{Dastmalchi} Dastmalchi, H., \& Aghaeinia, H. (2022, June). Super-resolution of very low-resolution face images with a wavelet integrated, identity preserving, adversarial network. \textit{Signal Processing: Image Communication}, 107, 116755. \url{https://doi.org/10.1016/j.image.2022.116755}.
     
     \bibitem{relu} Maniatopoulos, A., \& Mitianoudis, N. (2021). Learnable Leaky ReLU (LeLeLU): An Alternative Accuracy-Optimized Activation Function. \textit{Information}, 12(12), 513. \url{https://www.mdpi.com/2078-2489/12/12/513}.
     
-    \bibitem{1284395} Wang, Z., Bovik, A. C., Sheikh, H. R., \& Simoncelli, E. P. (2004). Image quality assessment: from error visibility to structural similarity. \textit{IEEE Transactions on Image Processing}, 13(4), 600–612. \url{https://doi.org/10.1109/TIP.2003.819861}.
-    
-    \bibitem{zhang2018unreasonableeffectivenessdeepfeatures} Zhang, R., Isola, P., Efros, A. A., Shechtman, E., \& Wang, O. (2018). The Unreasonable Effectiveness of Deep Features as a Perceptual Metric. \textit{arXiv:1801.03924}. Retrieved from \url{https://arxiv.org/abs/1801.03924}.
-
-    \bibitem{springenberg2014} Springenberg, J. T., Dosovitskiy, A., Brox, T., \& Riedmiller, M. (2014). Striving for simplicity: The all convolutional net. \textit{arXiv preprint arXiv:1412.6806}. \url{https://arxiv.org/abs/1412.6806}.
-  
-    \bibitem{xu2024} Xu, G., Wang, X., Wu, X., Leng, X., \& Xu, Y. (2024). Development of Skip Connection in Deep Neural Networks for Computer Vision and Medical Image Analysis: A Survey. \textit{arXiv preprint arXiv:2405.01725}. \url{https://arxiv.org/abs/2405.01725}
-
-    \bibitem{kolarik2019} Kolařík, M., Burget, R., \& Říha, K. (2019). Upsampling Algorithms for Autoencoder Segmentation Neural Networks: A Comparison Study. \textit{2019 11th International Congress on Ultra Modern Telecommunications and Control Systems and Workshops (ICUMT)}, 1–7. \url{https://ieeexplore.ieee.org/document/8970918}
-
-    \bibitem{MSE} C.~Ledig, L.~Theis, F.~Huszar, J.~Caballero, A.~Cunningham, A.~Acosta, A.~Aitken, A.~Tejani, J.~Totz, Z.~Wang, and W.~Shi, ``Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network,'' in \emph{Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}
-
-    \bibitem{datacamp_optuna} DataCamp, ``Optuna for Deep Reinforcement Learning in Python,'' \textit{DataCamp Tutorials}, Aug. 2024. [Online]. Available: \url{https://www.datacamp.com/tutorial/optuna}.
-
-    \bibitem{features} C. Cong and H. Zhang, ``Invert-U-Net DNN segmentation model for MRI cardiac left ventricle segmentation,'' *The Journal of Engineering*, vol. 2019, no. 16, pp. 1702–1707, 2019. doi:10.1049/joe.2018.8302.
-
+    \bibitem{unknown-author-no-date} Unknown Author. (n.d.). Tutorials. Retrieved from \url{https://www.overleaf.com/learn/latex/Tutorials}.  %check of deze wel klopt
 
   \end{thebibliography}
 
