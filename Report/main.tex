@@ -1016,8 +1016,11 @@ As said, the results are very promising but there is also room for improvement. 
 The results of the hyperparameter optimization provide insights into the performance of the model. 
 Several key hyperparameter choices reflect current best practices in deep learning formedical image restoration, while others diverge in notable ways
 
-The feature dimensions were set to 128, 128, 64, showing that the moderately deep but not excessively wide netwroks achieved optimal performance. 
-This allows the network to capture a sufficientrange of spatial features while avoiding overfitting, which is a risk in smaller-scale datasets such as micro-MRI.
+The feature dimension were [128,128,64], this does deviate from the typical dimension used in a U-Net design where feature depth increases with depth (e.g. [64,128,256]).
+This setup resembles an `inverted`channel structure, where more filters are placed at shallow layers rather than deep layers.
+Such a design emphasizes the extraction of rich low-level features early in the network. 
+This can be particularly beneficial for denoising with fine textures and subtle contrast differences. 
+Additionally, reducing depth later in the network lowers the overall parameter count, helping to prevent overfitting on limited data \cite{features}. 
 
 Strided convolution (convStrided) was preferred over pooling for downsampling. 
 This aligns with expectations from common CNN practive. 
@@ -1127,8 +1130,26 @@ It is important to note that MSE and SSIM are purely quantitative metrics and sh
 
 \section{Conclusion}
 
-Both the U-Net and APDDM deep learning methods improved image quality of LR images. The main improvement is the denoising, however fine details may still get lost due to an 'oversmoothing' effect that is attirbuted to the use of the MSE as loss function, which penalizes pixel-wise errors. And as could be concluded from the LEGO phantom quality control, orthogonal borders and shapes are better preserved in the LR image than in the DL image.
-Furthermore, it wwas demonstrated that the APDDM outperformed the U-Net.
+
+The project successfully developed and validated 2 deep learning frameworks, U-Net and APDDM, to enhance micro-MRI images through denoising. 
+Both approaches achieved improvements in image quality, allowing for reduced acquisition times while delivering image quality that improves anatomical visibility compared to low-resolution input, though still not fully equivalent to high-resolution scans. 
+
+The U-net model, after hyperparameter tuning, demonstrated noise reduction. 
+However, due to the loss function MSE, the model showed a tendency to oversmooth fine anatomical details. 
+This highlights a limitation of pixel-wise loss function in preserving detailed textures and contrast, which is especially valuable in medical imaging.
+
+The APDDM approach provided a realistic noise modeling strategy, using the noise of the paired dataset. 
+While this model is still in its early development, APDDM showed very promising results in learning to reconstruct images using data-driven noise paths. 
+This offers a different and possibly more robust direction than conventional methods. 
+
+Validation through both quantitative metrics and visual inspection, confirmed that the model does enhance low-resolution scans. 
+Additionally, an external LEGO phantom scan suggested the networks’s generalization capacity, though it also exposed limitations such smoothing due to the chosen loss function. 
+
+In summary, this project forms a foundation for integrating deep learning into preclinical image workflows, aiding in faster acquisition times without sacrificing diagnostic value. 
+Future improvements could explore alternative loss function, such as SSIM or perceptual losses, and expand the training dataset to include more variation. 
+This could further improve model generalization and detail preservation.
+
+
 
 
 \newpage
@@ -1205,6 +1226,8 @@ Furthermore, it wwas demonstrated that the APDDM outperformed the U-Net.
     \bibitem{MSE} C.~Ledig, L.~Theis, F.~Huszar, J.~Caballero, A.~Cunningham, A.~Acosta, A.~Aitken, A.~Tejani, J.~Totz, Z.~Wang, and W.~Shi, ``Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network,'' in \emph{Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}
 
     \bibitem{datacamp_optuna} DataCamp, ``Optuna for Deep Reinforcement Learning in Python,'' \textit{DataCamp Tutorials}, Aug. 2024. [Online]. Available: \url{https://www.datacamp.com/tutorial/optuna}.
+
+    \bibitem{features} C. Cong and H. Zhang, ``Invert-U-Net DNN segmentation model for MRI cardiac left ventricle segmentation,'' *The Journal of Engineering*, vol. 2019, no. 16, pp. 1702–1707, 2019. doi:10.1049/joe.2018.8302.
 
 
   \end{thebibliography}
