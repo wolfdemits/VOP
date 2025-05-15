@@ -1083,6 +1083,19 @@ High SSIM values in Mouse 23, Transax slice 4 demonstrate accurate preservation 
 These MSE values together with the varying SSIM values, suggests that while the network correctly preserves the general appearance, the accuracy of fine anatomical details varies. Further investigation into the specific anatomical features present in the slices with lower SSIM could be a guide for how the model can be improved.
 
 \subsubsection{Contrast-to-noise ratio}
+First, the CNR was examined across the different image types. When comparing absolute values the DL\_CNR is consistenlty the highest but no consistent pattern can be observed between the LR\_CNR and HR\_CNR. 
+This variability can be attributed to several factors. First, MRI is not a quantitive imagining technique. Pixel intensity values are relative rather than standardized. There is a certain maximum pixel value, which is influenced by acquisition parameters, reconstruction algorithms and normalization steps.
+A key factor affecting the CNR is the dynamic range of the image. Dynamic range refers to the difference between the minimum and maximum intensity values in an image.
+The LR image contains more noise, which means the pixel values are more similar. This directly affects the dynamic range because the difference between minimum and maximum intensity values becomes smaller, resulting in a lower CNR.
+On the other hand, a HR image has less noise, which means the difference between minimum and maximum intensity will be higher. This leads to a higher dynamic range and, consequently, a higher CNR. 
+Furthermore, interpolation is done, which results in a smoothing. This smoothing alters the intensity distribution and direclty implies CNR.
+
+After these observations were made, the normalized variation was also evaluated. As shown in Table \ref{tab:norm_var}, a clear and consistent pattern emerges: the DL-normalized variation is consistently the lowest across all cases, while the LR-normalized variation is consistently the highest.
+This trend can be attributed to the behavior of the deep learning model, which is trained to reduce the noise while preserving structural information. As a result, the standard deviation of the background region is significantly reduced, while the mean background intensity remains relatively stable.
+This leads to lower normalized variation values for DL images, which is indicative of improved image quality and less noise.
+Conversely, the LR image exhibit higher normalized variation due to increased noise levels. In these images, the mean of the background is generally higher.
+A detailed overview is given in Appendix \ref{Appendix: val}.
+
 
 \subsubsection{LEGO brick phantom}
 As an extra validation step, an MRI scan of a LEGO brick with a 1-minute scan time was given as input to the trained model and compared with its 12-minute scan time counterpart. This can show whether the model is overtrained and whether it could potentially be used to denoise and improve shorter scan time images of objects other than mice. The images discussed here can be seen in Figure \ref{fig:lego_phantom_test}.
@@ -1481,6 +1494,8 @@ This result can be demonstrated by a simulation where beta is varied and the mea
     \label{mouse06_c_12}
 \end{figure*}
 
+\section{Appendix: Validation}
+\label{Appendix: val}
 
 \end{appendices}
 
