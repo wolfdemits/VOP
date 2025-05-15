@@ -611,7 +611,7 @@ This concept is illustrated in Figure \ref{fig:forward APDDM}. The forward diffu
 \begin{figure*}
     \centering
     \includegraphics[width=0.8\linewidth]{forward APDDM.png}
-    \caption{forward diffusion APDDM.}
+    \caption{Forward diffusion APDDM.}
     \label{fig:forward APDDM}
 \end{figure*}
 
@@ -625,14 +625,14 @@ The predicted noise is then subtracted to obtain an estimate of $\hat{x_0}$, and
     \mathcal{L}=\|x_0-\hat{x_0}\|^2
 \end{equation}
 The network does not need to generate high-quality images from scratch but only needs to estimate the noise added from the forward process. 
-Figure \ref{fig:APDDM} shows the training strategy. The clean image $x_0$ is transformed into $x_t$ via forward diffusion and the network is trained to reverse this transformation by removing predicted noise and minimizing the loss. 
+Figure \ref{fig:APDDM_train} shows the training strategy. The clean image $x_0$ is transformed into $x_t$ via forward diffusion and the network is trained to reverse this transformation by removing predicted noise and minimizing the loss. 
 This setup allows the network to focus on denoising realistic degraded images, guided by noise from the data.
 
 \begin{figure*}[H]
     \centering
-    \includegraphics[width=1\linewidth]{full APDDM .png}
-    \caption{training overview of APDDM.}
-    \label{fig:APDDM}
+    \includegraphics[width=1\linewidth]{full APDDM.png}
+    \caption{Training overview of APDDM.}
+    \label{fig:APDDM_train}
 \end{figure*}
 
 \subsubsection{Integration}
