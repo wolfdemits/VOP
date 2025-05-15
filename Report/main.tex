@@ -676,7 +676,7 @@ The SSIM score ranges from 0 to 1, with values closer to 1 indicating higher str
 
 \subsection{Contrast-to-noise ratio}
 Contrast-to-noise ratio (CNR) is a metric that evaluates the quality of an image by measuring how well a region of interest (for example, liver) can be distinguished from the surrounding background.
-\begin{equation}\label{CNR}
+\begin{equation}\label{eq:CNR}
 \text{CNR}=\frac{\mu_{ROI}-\mu_b}{\sigma_b}
 \end{equation}
 
@@ -686,7 +686,7 @@ To obtain the CNR, the program Amide is used. First, slices were randomly select
 These slices were saved as raw data files, with their shape corresponding shape information. Both were loaded into amide. A ROI of interest was selected and a box was drawn in it. The same procedure was followed for the background region.
 Figure \ref{fig:CNR} visualises the procedure described above. 
 Next to the CNR, the normalised variation was also calculated. This follows the same procedure as the CNR and is defined as:
-\begin{equation}
+\begin{equation}\label{eq:normsigma}
 \sigma_{\text{norm}} = \frac{\mu_b}{\sigma_b}
 \end{equation}
 
@@ -892,7 +892,7 @@ Overall, DL improves global sharpness and interpretability over LR, especially i
 \subsubsection{MSE and SSIM}
 Table \ref{tab:MSE_SSIM}  shows the obtained values for MSE and SSIM. The SSIM values range from 0.138 to 0.666, and the MSE values range from 0.001 to 0.055.
 
-\begin{table*}
+\begin{table*}[h!]
     \centering
     \caption{\label{tab:MSE_SSIM} MSE and SSIM values.}
     \resizebox{0.8\linewidth}{!}{
@@ -928,8 +928,10 @@ Table \ref{tab:MSE_SSIM}  shows the obtained values for MSE and SSIM. The SSIM v
 
 
 \subsubsection{Contrast-to-noise ratio}
- 
-\begin{table*}
+The obtained values values of Amide were inserted in Equation \ref{eq:CNR} and Equation \ref{eq:normsigma}.
+The final values for the CNR are represented in Table \ref{tab:CNR} and the normalised variation values are shown in Table \ref{tab:norm_var}.
+
+\begin{table*}[h!]
     \centering
     \caption{\label{tab:CNR} Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
     \resizebox{0.8\linewidth}{!}{
@@ -955,7 +957,7 @@ Table \ref{tab:MSE_SSIM}  shows the obtained values for MSE and SSIM. The SSIM v
     }
 \end{table*}
 
-\begin{table*}
+\begin{table*}[h!]
     \centering
     \caption{\label{tab:norm_var} Overview of the mice, slices and planes used to obtain normalised variance in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
     \resizebox{0.8\linewidth}{!}{
@@ -1079,6 +1081,8 @@ MSE encourages finding pixel-wise averages of solutions, producing overly-smooth
 \subsubsection{MSE and SSIM}
 High SSIM values in Mouse 23, Transax slice 4 demonstrate accurate preservation of simpler structures. The lower SSIM in Mouse 7, Sagittal slice 11, however, suggests difficulty in accurately reconstructing its more complex anatomical details. The overall low MSE values, imply that the overall pixel intensity is preserved well in the deep learning reconstruction.  
 These MSE values together with the varying SSIM values, suggests that while the network correctly preserves the general appearance, the accuracy of fine anatomical details varies. Further investigation into the specific anatomical features present in the slices with lower SSIM could be a guide for how the model can be improved.
+
+\subsubsection{Contrast-to-noise ratio}
 
 \subsubsection{LEGO brick phantom}
 As an extra validation step, an MRI scan of a LEGO brick with a 1-minute scan time was given as input to the trained model and compared with its 12-minute scan time counterpart. This can show whether the model is overtrained and whether it could potentially be used to denoise and improve shorter scan time images of objects other than mice. The images discussed here can be seen in Figure \ref{fig:lego_phantom_test}.
