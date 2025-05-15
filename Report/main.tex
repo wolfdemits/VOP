@@ -130,7 +130,7 @@ Each mouse was scanned in two different fields-of-view; once with the head-thora
 Supports and tape were used to fixate the mouse. 
 
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=0.47\linewidth]{head-region.png}
     \hfill
@@ -559,14 +559,6 @@ Too few epochs can result in underfitting, while too many may lead to overfittin
 
 
 \subsection{Anchored Path Diffusion Denoising Model (APDDM)}
-To complement the direct image-to-image denoising approach discussed earlier, a second model was implemented: the Anchored Path Diffusion Denoising Model (APDDM). 
-This method is based on the original DDPM framework by Ho et al. (2020) \cite{DDPM}. 
-A schematic representation can be found in Figure \ref{fig:PDDM} and Figure \ref{fig:APDDM} for PDDM and APDDM, respectively.
-Unlike DDPM, which is trained on unpaired data and gradually adds Gaussian noise until the image becomes entirely random, APDDM is adapted for use with paired high- and low-SNR MRI images, in this case, the 12-minute high-resolution scans and the 1-minute low-resolution scans.
-Instead of diffusing toward a generic Gaussian distribution, APDDM anchors the diffusion process around the actual low-SNR image. This allows the model to introduce realistic, data-driven noise during training.
-Moreover, APDDM does not rely on variational inference, but instead follows a more controlled and interpretable forward process tailored to the dataset.
-These changes make it better suited for applications like medical imaging, where noise is often structured and non-Gaussian.
-
 \begin{figure*}
     \centering
     \includegraphics[width=1\linewidth]{DDPM_model.png}
@@ -581,8 +573,13 @@ These changes make it better suited for applications like medical imaging, where
     \label{fig:APDDM}
 \end{figure*}
 
-
-
+To complement the direct image-to-image denoising approach discussed earlier, a second model was implemented: the Anchored Path Diffusion Denoising Model (APDDM). 
+This method is based on the original DDPM framework by Ho et al. (2020) \cite{DDPM}. 
+A schematic representation can be found in Figure \ref{fig:PDDM} and Figure \ref{fig:APDDM} for PDDM and APDDM, respectively.
+Unlike DDPM, which is trained on unpaired data and gradually adds Gaussian noise until the image becomes entirely random, APDDM is adapted for use with paired high- and low-SNR MRI images, in this case, the 12-minute high-resolution scans and the 1-minute low-resolution scans.
+Instead of diffusing toward a generic Gaussian distribution, APDDM anchors the diffusion process around the actual low-SNR image. This allows the model to introduce realistic, data-driven noise during training.
+Moreover, APDDM does not rely on variational inference, but instead follows a more controlled and interpretable forward process tailored to the dataset.
+These changes make it better suited for applications like medical imaging, where noise is often structured and non-Gaussian.
 
 \subsubsection{Forward Diffusion Process}
 The forward process defines a stochastic path that gradually transforms the clean image $x_0$ into a noisy version $x_t$, with the endpoint distribution anchored around the real noisy scan $x_T^*$. 
@@ -605,34 +602,34 @@ t=1,2,...,T
 
 The approach guarantees that the endpoint of the forward diffusion $x_T$ is close to the true low-SNR image $x_T^*$. 
 By anchoring the path to $x_T^*$, the model maintains connected to the real noise present in the dataset. 
-This concept is illustrated in Figure \ref{fig:forward APDDM}. The forward diffusion path (indicated in orange) gradually moves from the high-SNR image $x_0$ toward a distribution centered around the noise image $x_T^*$, with each step adding increasing amount of noise. 
+This concept is illustrated in Figure \ref{fig:forward_APDDM}. The forward diffusion path (indicated in orange) gradually moves from the high-SNR image $x_0$ toward a distribution centered around the noise image $x_T^*$, with each step adding increasing amount of noise. 
 
 
 \begin{figure*}
     \centering
-    \includegraphics[width=0.8\linewidth]{forward APDDM.png}
+    \includegraphics[width=1\linewidth]{forward APDDM.png}
     \caption{Forward diffusion APDDM.}
-    \label{fig:forward APDDM}
+    \label{fig:forward_APDDM}
 \end{figure*}
 
 \subsubsection{Reverse Process and Training}
 To reconstruct $x_0$ from any intermediate $x_t$, a U-Net model $r_{\theta}$ is trained to predict the added noise. 
 The predicted noise is then subtracted to obtain an estimate of $\hat{x_0}$, and training is performed using mean squared error loss: 
-\begin{equation}\label{eq:Markov chain}
+\begin{equation}\label{eq:Markov chain prediction}
     \hat{x_0}=x_t-f(t) \cdot r_{\theta}(x_t,\frac{t}{T})
 \end{equation}
 \begin{equation}
     \mathcal{L}=\|x_0-\hat{x_0}\|^2
 \end{equation}
 The network does not need to generate high-quality images from scratch but only needs to estimate the noise added from the forward process. 
-Figure \ref{fig:APDDM_train} shows the training strategy. The clean image $x_0$ is transformed into $x_t$ via forward diffusion and the network is trained to reverse this transformation by removing predicted noise and minimizing the loss. 
+Figure \ref{fig:full_APDDM} shows the training strategy. The clean image $x_0$ is transformed into $x_t$ via forward diffusion and the network is trained to reverse this transformation by removing predicted noise and minimizing the loss. 
 This setup allows the network to focus on denoising realistic degraded images, guided by noise from the data.
 
-\begin{figure*}[H]
+\begin{figure*}
     \centering
-    \includegraphics[width=1\linewidth]{full APDDM.png}
+    \includegraphics[width=1\linewidth]{full APDDM .png}
     \caption{Training overview of APDDM.}
-    \label{fig:APDDM_train}
+    \label{fig:full_APDDM}
 \end{figure*}
 
 \subsubsection{Integration}
@@ -708,7 +705,7 @@ In the best epoch the loss of the training is equal to 0.481, while the one of t
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\linewidth]{First_results_loss.png}
+    \includegraphics[width=1\linewidth]{loss-curve.png}
     \caption{Visual representation of the loss function over different epochs. NO AXIS -> change with new figure at PC of Wolf}
     \label{fig:first_loss}
 \end{figure}
@@ -808,7 +805,7 @@ This consistency supports the robustness of the design.
 
 
 \subsection{Results after hyperparameter training}
-After hyperparameter tuning, the model was runned again. Hereby, the parameters of section 7.2 were used.
+After hyperparameter tuning, the model was ran again. Hereby, the parameters of section 7.2 were used.
 As in the part of the first results, the images of the training mice can be found in this section.
 Figure \ref{fig:second_sagittal}, Figure \ref{fig:second_transax} and Figure \ref{fig:second_coronal} represent the different planes.
 Images of the test mice can be found in Appendix \ref{Appendix: results after tuning}.
@@ -836,7 +833,24 @@ The same division of mice was used, as in indicated in Table \ref{tab:mouse_dist
 \end{figure*}
    
 
-\subsection{APDDM}
+\subsection{APDDM Results}
+A simplified version of the APDDM forward process was implemented to train a new UNet model. As a simplification, only images from the last timestep were fed to the network. This way there was no need for a time-embedding. This approach functioned as a type of data augmentation.
+Some examples of test mice slices from the simplified APDDM model, compared to the same slices from the base UNet model can be seen in Figure \ref{fig:HT_coronal_Diffusion}\\
+More examples of each combination of region and anatomical Plane can be found in Appendix \ref{Appendix: APDDM Results}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Coronal_14_Diffusion.png}
+    \caption{Simplified APDDM model output of a test mouse slice. }
+    \label{fig:HT_coronal_Diffusion}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Coronal_14_UNet.png}
+    \caption{Base UNet model output of a test mouse slice. }
+    \label{fig:HT_coronal_UNet}
+\end{figure*}
 
 \subsection{Validation}
 
@@ -1518,6 +1532,86 @@ This result can be demonstrated by a simulation where beta is varied and the mea
     \label{mouse06_c_12}
 \end{figure*}
 
+
+\clearpage
+\newpage
+\subsection{Appendix: APDDM Results}
+\label{Appendix: APDDM Results}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Coronal_14_Diffusion.png}
+    \caption{Simplified APDDM model output of a coronal, head-thorax test mouse slice. }
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Coronal_14_UNet.png}
+    \caption{Base UNet model output of a coronal, head-thorax test mouse slice. }
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Sagittal_14_Diffusion.png}
+    \caption{Simplified APDDM model output of a sagittal, head-thorax test mouse slice. }
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Sagittal_14_UNet.png}
+    \caption{Base UNet model output of a sagittal, head-thorax test mouse slice. }
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Transax_20_Diffusion.png}
+    \caption{Simplified APDDM model output of a transaxial, head-thorax test mouse slice. }
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Transax_20_UNet.png}
+    \caption{Base UNet model output of a transaxial, head-thorax test mouse slice. }
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_THORAX-ABDOMEN_Coronal_17_Diffusion.png}
+    \caption{Simplified APDDM model output of a coronal, thorax-abdomen test mouse slice. }
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_THORAX-ABDOMEN_Coronal_17_UNet.png}
+    \caption{Base UNet model output of a coronal, thorax-abdomen test mouse slice. }
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_THORAX-ABDOMEN_Sagittal_17_Diffusion.png}
+    \caption{Simplified APDDM model output of a sagittal, thorax-abdomen test mouse slice. }
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_THORAX-ABDOMEN_Sagittal_17_UNet.png}
+    \caption{Base UNet model output of a sagittal, thorax-abdomen test mouse slice. }
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse10_THORAX-ABDOMEN_Transax_16_Diffusion.png}
+    \caption{Simplified APDDM model output of a transaxial, thorax-abdomen test mouse slice. }
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse10_THORAX-ABDOMEN_Transax_16_UNet.png}
+    \caption{Base UNet model output of a transaxial, thorax-abdomen test mouse slice. }
+\end{figure*}
+
+\clearpage
+\newpage
 \section{Appendix: Validation}\label{Appendix: val}
 \begin{sidewaystable}[h]
     \centering
