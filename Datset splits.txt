@@ -1,9 +1,0 @@
-HYPERPARAMETER TUNING:
-Train: Mouse01, Mouse02, Mouse14, Mouse09, Mouse23
-Val: Mouse10, Mouse06, Mouse21, Mouse17, Mouse05
-
-TRAINING:
-Train: Mouse01, Mouse02, Mouse03, Mouse04, Mouse05, Mouse08, Mouse09, Mouse11, Mouse12, Mouse13, Mouse14, Mouse15, Mouse17, Mouse18, Mouse19, Mouse20, Mouse21, Mouse23
-Val: Mouse10, Mouse06 (part of hyperparameter val)
-
-Test: Mouse16, Mouse07, Mouse22
