@@ -35,7 +35,8 @@
     {\LARGE \textbf{Development of a Deep Learning Denoising and Super-Resolution Framework for Micro-MRI} \par}
     \vspace{0.5cm}
 
-    {\Large Darío Conejo Rupp, Magali De Poortere, Wolf De Mits, Fea Suy, Daan Vleurick \par}
+    {\Large Darío Conejo Rupp, Magali De Poortere, Wolf De Mits,\\
+     Fea Suy, Daan Vleurick \par}
     \vspace{2cm}
 
     {\large Research group: Medical Imaging and Signal Processing (Medisip) \par}
@@ -606,13 +607,12 @@ By anchoring the path to $x_T^*$, the model maintains connected to the real nois
 This concept is illustrated in Figure \ref{fig:forward APDDM}. The forward diffusion path (indicated in orange) gradually moves from the high-SNR image $x_0$ toward a distribution centered around the noise image $x_T^*$, with each step adding increasing amount of noise. 
 
 
-\begin{figure}[H]
+\begin{figure*}[H]
     \centering
     \includegraphics[width=1\linewidth]{forward APDDM.png}
     \caption{forward diffusion APDDM.}
     \label{fig:forward APDDM}
-\end{figure}
-%The figure that is useful to add for the report is the one that Wolf made comparing conventional diffusion and the APDDM, at multiple time steps. For these figures, I would also advise that they span over two columns.
+\end{figure*}
 
 \subsubsection{Reverse Process and Training}
 To reconstruct $x_0$ from any intermediate $x_t$, a U-Net model $r_{\theta}$ is trained to predict the added noise. 
@@ -627,12 +627,12 @@ The network does not need to generate high-quality images from scratch but only 
 Figure \ref{fig:APDDM} shows the training strategy. The clean image $x_0$ is transformed into $x_t$ via forward diffusion and the network is trained to reverse this transformation by removing predicted noise and minimizing the loss. 
 This setup allows the network to focus on denoising realistic degraded images, guided by noise from the data.
 
-\begin{figure}[H]
+\begin{figure*}[H]
     \centering
     \includegraphics[width=1\linewidth]{full APDDM .png}
     \caption{training overview of APDDM.}
     \label{fig:APDDM}
-\end{figure}
+\end{figure*}
 
 \subsubsection{Integration}
 APDDM is particularly well suited for our micro-MRI dataset, where paired scans with varying SNR levels are available. 
@@ -680,10 +680,22 @@ Contrast-to-noise ratio (CNR) is a metric that evaluates the quality of an image
 \text{CNR}=\frac{\mu_{ROI}-\mu_b}{\sigma_b}
 \end{equation}
 
-$\mu_{ROI}$ is the mean of the region of interest, $\mu_b$ is the mean of the background and $\sigma_b$ is the noise in the background.
+$\mu_{ROI}$ is the mean of the region of interest (ROI), $\mu_b$ is the mean of the background and $\sigma_b$ is the noise in the background.
 A higher CNR value indicates better differentiation of the region of interest from its background.
-To obtain the CNR the program Amide is used.
+To obtain the CNR, the program Amide is used. First, slices were randomly selected from 2 mice in each of the training, validation and test set. For each of these mice, one slice was selected from each anatomical plane-sagittal, transaxial and coronal- resulting in one slice per mouse.
+These slices were saved as raw data files, with their shape corresponding shape information. Both were loaded into amide. A ROI of interest was selected and a box was drawn in it. The same procedure was followed for the background region.
+Figure \ref{fig:CNR} visualises the procedure described above. 
+Next to the CNR, the normalised variation was also calculated. This follows the same procedure as the CNR and is defined as:
+\begin{equation}
+\sigma_{\text{norm}} = \frac{\mu_b}{\sigma_b}
+\end{equation}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.35\linewidth]{CNR.jpeg}
+    \caption{Example of ROI and background indication}
+    \label{fig:CNR}
+\end{figure}
 
 \section{Results}
 \subsection{First results}
@@ -696,7 +708,7 @@ In the best epoch the loss of the training is equal to 0.481, while the one of t
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{First_results_loss.png}
-    \caption{Visual representation of the loss function over different epochs. geen assen!!!}
+    \caption{Visual representation of the loss function over different epochs. NO AXIS -> change with new figure at PC of Wolf}
     \label{fig:first_loss}
 \end{figure}
 
@@ -743,6 +755,7 @@ Each image depicts another plane of the mouse. Also, images of the test mice can
 
 \begin{table}[h]
     \centering
+    \caption{\label{tab:mouse_distribution} Mouse distribution across training, validation, and testing sets.}
     \resizebox{0.8\linewidth}{!}{
     \begin{tabular}{l|c|c|c}
     \toprule
@@ -755,7 +768,6 @@ Each image depicts another plane of the mouse. Also, images of the test mice can
     \bottomrule
     \end{tabular}
     }
-    \caption{\label{tab:mouse_distribution} Mouse distribution across training, validation, and testing sets.}
 \end{table}
 
 \subsection{Trained hyperparameters}
@@ -774,6 +786,7 @@ The best-performing configuration achieved a validation MSE of 0.03034 and this 
     \item Adam optimizer 
     \item step-wise learning rate scheduler
 \end{itemize}
+
 In addition to these hyperparameters, the activation function and loss function were fixed as ReLU and MSE, respectively. 
 These choices were guided by prior literature and informed by earlier tuning, during which alternative activations such as LeakyReLU and PReLU, and loss functions including SSIM-based objectives, were preliminarily evaluated but did not yield consistent improvements. 
 ReLU demonstrated stable convergence behavior and compatibility with the U-Net architecture, while MSE remained the most reliable objective for optimizing pixel-wise accuracy during supervised training.
@@ -825,7 +838,6 @@ The same division of mice was used, as in indicated in Table \ref{tab:mouse_dist
 \subsection{APDDM}
 
 \subsection{Validation}
-
 
 
 \subsubsection{Visual comparison}
@@ -880,8 +892,9 @@ Overall, DL improves global sharpness and interpretability over LR, especially i
 \subsubsection{MSE and SSIM}
 Table \ref{tab:MSE_SSIM}  shows the obtained values for MSE and SSIM. The SSIM values range from 0.138 to 0.666, and the MSE values range from 0.001 to 0.055.
 
-\begin{table*}[h]
+\begin{table*}
     \centering
+    \caption{\label{tab:MSE_SSIM} MSE and SSIM values.}
     \resizebox{0.8\linewidth}{!}{
     \begin{tabular}{l|c|c|c|c|c|c}
     \toprule
@@ -909,17 +922,16 @@ Table \ref{tab:MSE_SSIM}  shows the obtained values for MSE and SSIM. The SSIM v
     \bottomrule
     \end{tabular}
     }
-    \caption{\label{tab:MSE_SSIM} MSE and SSIM values.}
 \end{table*}
 
 
 
 
 \subsubsection{Contrast-to-noise ratio}
-I (Fea) am still busy working with amide to get the CNR. This table is an indication of how I will represent the results. I will also add a detailed table with the calculations in the appendices. 
-
-\begin{table*}[h]
+ 
+\begin{table*}
     \centering
+    \caption{\label{tab:CNR} Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
     \resizebox{0.8\linewidth}{!}{
     \begin{tabular}{l|c|c|c|c|c|c|c}
     \toprule
@@ -941,11 +953,11 @@ I (Fea) am still busy working with amide to get the CNR. This table is an indica
      \bottomrule
     \end{tabular}
     }
-    \caption{\label{tab:CNR} Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
 \end{table*}
 
-\begin{table*}[h]
+\begin{table*}
     \centering
+    \caption{\label{tab:norm_var} Overview of the mice, slices and planes used to obtain normalised variance in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
     \resizebox{0.8\linewidth}{!}{
     \begin{tabular}{l|c|c|c|c|c|c|c}
     \toprule
@@ -977,16 +989,7 @@ I (Fea) am still busy working with amide to get the CNR. This table is an indica
      \bottomrule
     \end{tabular}
     }
-    \caption{\label{tab:norm_var} Overview of the mice, slices and planes used to obtain normalised variance in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
 \end{table*}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.35\linewidth]{CNR.jpeg}
-    \caption{Example of ROI}
-    \label{fig:CNR}
-\end{figure}
-
 
 \subsubsection{LEGO phantom test}
 For extra validation the model was tested on a 1 min scan of a LEGO brick and compared to its 12 min scan target. The results can be seen in Figure \ref{fig:lego_phantom_test}.
@@ -1039,7 +1042,6 @@ Although ReLU is susceptible to the "dying neuron" problem, it remains a robust 
 Initial exploratory tests showed no instability or gradient vanishing that would necessitate more complex activations. 
 The network’s stable convergence confirmed that ReLU was a suitable choice for this task.
 
-%dit deel en het volgende heeft zo een rare lijn nr elkaar maar deze 2 delen bespreken iets anders 
 The loss function was fixed as mean squared error (MSE), a standard objective for pixel-wise regression tasks. 
 MSE offers a simple, differentiable, and interpretable loss landscape that aligns well with the goal of minimizing reconstruction error. 
 While alternative loss functions, such as SSIM or perceptual loss, were considered, MSE was retained due to its stability and its compatibility with the validation metric used during tuning. 
@@ -1229,7 +1231,7 @@ Furthermore, it wwas demonstrated that the APDDM outperformed the U-Net.
   \ganttbar{Final report}{7}{13}\\
   \ganttbar{Poster}{10}{13}\\
   \ganttbar{Validation}{11}{13}\\
-  \ganttbar{Training the model}{12}{13}
+  \ganttbar{Training the model}{12}{12}
   
 
 \end{ganttchart}
