@@ -271,7 +271,7 @@ This improves the model generalization. Since input may have varying dimensions,
 
 
 \section{Neural Network and Training Process}
-\subsection{Model architecture}
+\subsection{Encoder-Decoder Denoising Model}
 For the denoising deep learning model, a convolutional neural network based on the U-Net architecture was used. 
 U-Net is a form of autoencoder, consisting of two main parts: an encoder and a decoder (see Figure~\ref{fig:U-Net}) \cite{ronneberger2015unet}.
 
@@ -282,7 +282,7 @@ The encoder comprises a series of convolutional layers followed by downsampling 
 These layers extract hierarchical features while reducing spatial resolution and increasing the number of feature channels.
 
 The decoder mirrors the encoder structure and consists of upsampling layers (e.g., transposed convolutions or interpolation followed by convolution) that reconstruct the spatial resolution of the input. 
-To preserve spatial information and enhance feature propagation, **skip connections** are added between corresponding layers of the encoder and decoder. 
+To preserve spatial information and enhance feature propagation, skip connections are added between corresponding layers of the encoder and decoder. 
 These allow the decoder to directly access feature maps from earlier stages in the encoder, improving the model’s ability to recover fine details.
 
 In this implementation, residual learning is optionally used—not between intermediate layers, but globally between the input and output of the network. 
@@ -303,16 +303,16 @@ The rationale behind using this U-Net structure is that the encoder condenses an
 \subsection{Encoder-Decoder Model: Hyperparameter Optimization}
 To get the best results for the deep learning model for micro MRI image denoising and super-resolution, the hyperparameters need to be fine-tuned. 
 Given the number of components and interactions within the model, manual tuning would be inefficient and inconsistent. 
-Therefore, an open-source optimization software, such as Optuna, was used \cite{datacamp_optuna}. 
+Therefore, the open-source optimization software Optuna was used \cite{datacamp_optuna}. 
 
 Each trial corresponds to the training of the model with a specific set of hyperparameters. 
 The performance metrics are recorded after each trial, for example a validation loss. These metrics are used as a guide for the search. 
 A built-in sampler selects new parameter values to explore, while a pruners stops trials early if the model is clearly not improving. 
-This combination is especially helpful to reduce the number of trainings that need to be run, this saves computational resources. 
+This combination is especially helpful to reduce the number of trainings that need to be run, and to save computational resources. 
 
 One of the advantages of Optuna is its define-by-run approach \cite{10.1145/3292500.3330701}. 
-This means that instead of predefining the entire parameter space before the optimization, the search space is defined dynamically while being executed. 
-This gives more flexibility especially in cases where certain parameters are only relevant under specific conditions. 
+This means that, instead of predefining the entire parameter space before the optimization, the search space is defined dynamically, while being executed. 
+This gives more flexibility, especially in cases where certain parameters are only relevant under specific conditions. 
 Instead of testing all combinations blindly, Optuna can selectively explore subsets of the parameter space based on earlier decisions within the same trial. 
 The avoidance of meaningless testing makes the optimizations process  more efficient. 
 
@@ -561,7 +561,7 @@ Too few epochs can result in underfitting, while too many may lead to overfittin
 \subsection{Anchored Path Diffusion Denoising Model (APDDM)}
 To complement the direct image-to-image denoising approach discussed earlier, a second model was implemented: the Anchored Path Diffusion Denoising Model (APDDM). 
 This method is based on the original DDPM framework by Ho et al. (2020) \cite{DDPM}. 
-A schematic representation can be found in Figure \ref{fig:PDDM} and Figure \ref{fig:APDDM} for PDDM and APDDM, respectively.
+A schematic representation can be found in Figure \ref{fig:PDDM} and Figure \ref{fig:APDDM} for DDPM and APDDM, respectively.
 Unlike DDPM, which is trained on unpaired data and gradually adds Gaussian noise until the image becomes entirely random, APDDM is adapted for use with paired high- and low-SNR MRI images, in this case, the 12-minute high-resolution scans and the 1-minute low-resolution scans.
 Instead of diffusing toward a generic Gaussian distribution, APDDM anchors the diffusion process around the actual low-SNR image. This allows the model to introduce realistic, data-driven noise during training.
 Moreover, APDDM does not rely on variational inference, but instead follows a more controlled and interpretable forward process tailored to the dataset.
@@ -647,6 +647,24 @@ The mathematical derivations that support this model can be found in Appendix \r
 
 \section{Model performance evaluation}
 In this section, the used validation methods are described. All the methods check the performance of the model. 
+In the script, the training, validation and test mice were defined. A detailed overview can be found in Table \ref{tab:mouse_distribution}.
+
+\begin{table}[h]
+    \centering
+    \caption{\label{tab:mouse_distribution} Mouse distribution across training, validation, and testing sets.}
+    \resizebox{0.8\linewidth}{!}{
+    \begin{tabular}{l|c|c|c}
+    \toprule
+     & \textbf{Training} & \textbf{Validation}& \textbf{Testing} \\
+    \hline
+    \midrule
+    Mouse & \makecell{1, 2, 3, 4, 5, 8 \\ 9, 11, 12, 13, 14, 15 \\ 17, 18, 19, 20, 21, 23} 
+              & \makecell{6, 10}
+              & \makecell{7, 16, 22} \\
+    \bottomrule
+    \end{tabular}
+    }
+\end{table}
 
 \subsection{Visual comparison}
 A visual inspection can also be done to evaluate the quality of the reconstructed images. 
@@ -683,7 +701,7 @@ Contrast-to-noise ratio (CNR) is a metric that evaluates the quality of an image
 
 $\mu_{ROI}$ is the mean of the region of interest (ROI), $\mu_b$ is the mean of the background and $\sigma_b$ is the noise in the background.
 A higher CNR value indicates better differentiation of the region of interest from its background.
-To obtain the CNR, the program Amide is used. First, slices were randomly selected from 2 mice in each of the training, validation and test set. For each of these mice, one slice was selected from each anatomical plane-sagittal, transaxial and coronal- resulting in one slice per mouse.
+To obtain the CNR, the program Amide is used. First, slices were randomly selected from 2 mice in each of the training, validation and test set. For each of these mice, one slice was selected from each anatomical plane-sagittal, transaxial and coronal, resulting in one slice per mouse.
 These slices were saved as raw data files, with their shape corresponding shape information. Both were loaded into amide. A ROI of interest was selected and a box was drawn in it. The same procedure was followed for the background region.
 Figure \ref{fig:CNR} visualises the procedure described above. 
 Next to the CNR, the normalised variation was also calculated. This follows the same procedure as the CNR and is defined as:
@@ -700,18 +718,10 @@ Next to the CNR, the normalised variation was also calculated. This follows the 
 
 \section{Results}
 \subsection{First results}
+
 First the model was run on the hpc to check whether all components were implemented correctly. 
 With this first run, the pre-processing steps could be verified and the first results could be observed. 
-The training was done on the accelgor cluster. 
-The 11th epoch was the best, as can be observed in Figure \ref{fig:first_loss}.
-In the best epoch the loss of the training is equal to 0.481, while the one of the validation equals 0.426.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{First_results_loss.png}
-    \caption{Visual representation of the loss function over different epochs. NO AXIS -> change with new figure at PC of Wolf}
-    \label{fig:first_loss}
-\end{figure}
+The training was done on the accelgor clustern because of its GPU capability. 
 
 In this script the training, validation and test mice were defined. A detailed overview can be found in Table \ref{tab:mouse_distribution}.
 The hyperparameters were chosen based on knowledge and guessing what the best one would be. They were chosen as followed:
@@ -728,10 +738,18 @@ The hyperparameters were chosen based on knowledge and guessing what the best on
 \end{itemize}
 The model was trained with a batch size of 32 and training was conducted over 200 epochs. MSE was employed as the loss function and ReLU was the activation function.
 
-
+The 11th epoch was the best, as can be observed in Figure \ref{fig:first_loss}.
+In the best epoch the loss of the training is equal to 0.481, while the one of the validation equals 0.426.
 In Figure \ref{fig:first_sagittal}, Figure \ref{fig:first_transax} and Figure \ref{fig:first_coronal} the results can be observed, where each is an example of the training mice. 
 Since the output gave not all images back, Figure \ref{fig:first_coronal} is a result of the 13th epoch.
 Each image depicts another plane of the mouse. Also, images of the test mice can be found in Appendix \ref{Appendix: first results}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{First_results_loss.png}
+    \caption{Visual representation of the loss function over different epochs. NO AXIS -> change with new figure at PC of Wolf}
+    \label{fig:first_loss}
+\end{figure}
 
 \begin{figure*}
     \centering
@@ -754,22 +772,7 @@ Each image depicts another plane of the mouse. Also, images of the test mice can
     \label{fig:first_coronal}
 \end{figure*}
 
-\begin{table}[h]
-    \centering
-    \caption{\label{tab:mouse_distribution} Mouse distribution across training, validation, and testing sets.}
-    \resizebox{0.8\linewidth}{!}{
-    \begin{tabular}{l|c|c|c}
-    \toprule
-     & \textbf{Training} & \textbf{Validation}& \textbf{Testing} \\
-    \hline
-    \midrule
-    Mouse & \makecell{1, 2, 3, 4, 5, 8 \\ 9, 11, 12, 13, 14, 15 \\ 17, 18, 19, 20, 21, 23} 
-              & \makecell{6, 10}
-              & \makecell{7, 16, 22} \\
-    \bottomrule
-    \end{tabular}
-    }
-\end{table}
+
 
 \subsection{Trained hyperparameters}
 To improve the performance of the model, hyperparameter tuning was done using Optuna's framework. 
@@ -895,7 +898,7 @@ Table \ref{tab:MSE_SSIM}  shows the obtained values for MSE and SSIM. The SSIM v
 
 \begin{table*}[h!]
     \centering
-    \caption{\label{tab:MSE_SSIM} MSE and SSIM values.}
+    \caption{\label{tab:MSE_SSIM} MSE and SSIM values. TA stands for thorax-abdomen, while HT is used for head-thorax.}
     \resizebox{0.8\linewidth}{!}{
     \begin{tabular}{l|c|c|c|c|c|c}
     \toprule
@@ -1003,7 +1006,6 @@ The DL output has suppressed some echo artifacts that are present in the LR imag
 After obtaining the first results, a visual validation was made. At first sight, the results were very promising. 
 Figure \ref{fig:first_sagittal}, Figure \ref{fig:first_transax} and Figure \ref{fig:first_coronal} shows that the deep learning (DL) image has clearly higher quality and sharper details compared to the low resolution (LR) image at the left side. 
 The DL image approaches the high resolution (HR), but still has noise and structures that are not totally visible. 
-%add picture with arrow indication of this 
 Also, some parts are depicted more black than in the HR.
 The maximum intensity of the DL image is always lower than the one of the HR and the one of the LR. 
 This indicates small intensity bias or scaling difference. This is also due to the background that is cropped in the original images but depicted at the edges and not depicted in the DL output. 
@@ -1073,17 +1075,25 @@ The edges are less smeared out and a bit sharper.
 The loss of structural information is still present, but less than previously. 
 
 \subsection{APDDM}
+A simplified version of the APDDM forward process was implemented to train a new UNet model. 
+As a simplification, only images from the last timestep were fed to the network. 
+This way there was no need for a time-embedding. 
+This approach functioned as a type of data augmentation. 
+Some examples of test mice slices from the simplified APDDM model, compared to the same slices from the base UNet model can be seen in %AANPASSEN. %
+More examples of each combination of region
+and anatomical Plane can be found in Appendix D.3. %AANPASSEN%
+
 
 \subsection{Validation}
 
 \subsubsection{Visual comparison}
-In all cases the DL output appears to be smoother than the HR reference. This over-smoothing is a known effect of using MSE loss. 
-This is due to the network learning to average high-frequency patterns which results on blurred textures. 
+In all cases, the DL output appears to be smoother than the HR reference. This over-smoothing is a known effect of using MSE loss. 
+This is due to the network learning to average high-frequency patterns which results in blurred textures. 
 The residuals of DL-HR consistently have lower amplitudes than the HR-LR, this means the network shrinks the differences but is unable to restore all fine details \cite{MSE}. 
 MSE encourages finding pixel-wise averages of solutions, producing overly-smooth results. Our visual inspection confirms this.
 
 \subsubsection{MSE and SSIM}
-High SSIM values in Mouse 23, Transax slice 4 demonstrate accurate preservation of simpler structures. The lower SSIM in Mouse 7, Sagittal slice 11, however, suggests difficulty in accurately reconstructing its more complex anatomical details. The overall low MSE values, imply that the overall pixel intensity is preserved well in the deep learning reconstruction.  
+High SSIM values in Mouse 23 (Transax slice 4) demonstrate accurate preservation of simpler structures. The lower SSIM in Mouse 7 (Sagittal slice 11) however, suggests difficulty in accurately reconstructing its more complex anatomical details. The overall low MSE values, imply that the overall pixel intensity is preserved well in the deep learning reconstruction.  
 These MSE values together with the varying SSIM values, suggests that while the network correctly preserves the general appearance, the accuracy of fine anatomical details varies. Further investigation into the specific anatomical features present in the slices with lower SSIM could be a guide for how the model can be improved.
 
 \subsubsection{Contrast-to-noise ratio}
@@ -1102,16 +1112,14 @@ A detailed overview is given in Appendix \ref{Appendix: val}.
 
 
 \subsubsection{LEGO brick phantom}
-As an extra validation step, an MRI scan of a LEGO brick with a 1-minute scan time was given as input to the trained model and compared with its 12-minute scan time counterpart. This can show whether the model is overtrained and whether it could potentially be used to denoise and improve shorter scan time images of objects other than mice. The images discussed here can be seen in Figure \ref{fig:lego_phantom_test}.
-
+As an extra validation step, a MRI scan of a LEGO brick with a 1-minute scan time was given as input to the trained model and compared with its 12-minute scan time counterpart. 
+This can show whether the model is overtrained and whether it could potentially be used to denoise and improve shorter scan time images of objects other than mice. 
+This also provides a phantom-object of known shape and dimensions, with sharp edges, which can be used to assess the super-resolution performance in better retaining sharper borders.
+The images discussed here can be seen in Figure \ref{fig:lego_phantom_test}.
 Visually, the model produces an output that strongly resembles both the LR and HR images. The model removes noise in the grey regions from the LR image, as well as echo artifacts that can be seen, for example, between the black LEGO pins at the top. The rectangular shapes are preserved, although the training data of mice did not contain many such shapes.
-
 However, comparing the residuals shows that the LR image is closer to the HR image in terms of the rectangles than the DL image. This could be due to the fact that the model was trained on mouse scans, which, as mentioned, do not contain the sharp edges characteristic of a LEGO brick, and that the model used MSE as the loss function during training. MSE penalizes large pixel errors, so the model tends to smooth out sharp changes.
-
 The MSE between the DL and HR images is 0.1269, and between the LR and HR images is 0.0737 (an increase of 72\% from the LR to the DL image). This means that if we only consider the pixel-wise error, the LR image remains a better approximation of the HR image than the DL image.
-
 Another indicator of image quality is the Structural Similarity Index Measure (SSIM), as discussed in section \ref{Structural similarity index measure}. The DL and HR images have an SSIM of 0.4548, while the LR and HR images have one of 0.4624. So the SSIMs differ by only 1.6\%, indicating that according to SSIM, neither the LR nor the DL image is clearly a better approximation of the HR image. Very similar conclusions regarding MSE and SSIM can be drawn from examining other slices of the LEGO phantom.
-
 It is important to note that MSE and SSIM are purely quantitative metrics and should be considered as supplementary to qualitative visual assessment. Despite the DL image having a slightly higher MSE and lower SSIM than the LR image, it remains a strong approximation of the HR image due to its effective denoising and artifact suppression capabilities, also for objects different from mice.
 
 
@@ -1124,30 +1132,31 @@ It is important to note that MSE and SSIM are purely quantitative metrics and sh
     \label{fig:lego_phantom_test}
 \end{figure*}
 
-
-
-
-
 \section{Conclusion}
 
 
 The project successfully developed and validated 2 deep learning frameworks, U-Net and APDDM, to enhance micro-MRI images through denoising. 
-Both approaches achieved improvements in image quality, allowing for reduced acquisition times while delivering image quality that improves anatomical visibility compared to low-resolution input, though still not fully equivalent to high-resolution scans. 
+Both approaches achieved improvements in image quality, allowing for reduced acquisition times, while delivering image quality that improves anatomical visibility compared to low-resolution input, though still not fully equivalent to high-resolution scans. 
 
-The U-net model, after hyperparameter tuning, demonstrated noise reduction. 
+The U-net model, after hyperparameter tuning via an optimized search framework with Optuna, demonstrated noise reduction. 
 However, due to the loss function MSE, the model showed a tendency to oversmooth fine anatomical details. 
-This highlights a limitation of pixel-wise loss function in preserving detailed textures and contrast, which is especially valuable in medical imaging.
+This highlights a limitation of pixel-wise loss function in not preserving detailed textures and contrast, which is especially valuable in medical imaging.
 
 The APDDM approach provided a realistic noise modeling strategy, using the noise of the paired dataset. 
 While this model is still in its early development, APDDM showed very promising results in learning to reconstruct images using data-driven noise paths. 
 This offers a different and possibly more robust direction than conventional methods. 
 
-Validation through both quantitative metrics and visual inspection, confirmed that the model does enhance low-resolution scans. 
+Validation through both quantitative metrics and visual inspection confirmed that the model enhances low-resolution scans, potentially enabling 1-min scans in preclinical MRI settings, but further model optimization and more training data is required to result in more consistent and robust outcomes.
 Additionally, an external LEGO phantom scan suggested the networks’s generalization capacity, though it also exposed limitations such smoothing due to the chosen loss function. 
 
-In summary, this project forms a foundation for integrating deep learning into preclinical image workflows, aiding in faster acquisition times without sacrificing diagnostic value. 
-Future improvements could explore alternative loss function, such as SSIM or perceptual losses, and expand the training dataset to include more variation. 
+In summary, this project forms a foundation for integrating deep learning into preclinical imaging workflows, aiding in faster acquisition times without sacrificing diagnostic value. 
+Future improvements could explore alternative loss functions, such as SSIM or perceptual losses, and expand the training dataset to include more variation. 
 This could further improve model generalization and detail preservation.
+
+
+
+
+
 
 
 
@@ -1479,6 +1488,52 @@ This result can be demonstrated by a simulation where beta is varied and the mea
 
 \clearpage
 \newpage
+\section{Appendix: Figures Results}
+\subsection{Appendix: first results}
+\label{Appendix: first results}
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_Sagittal_10_epoch_10.png}
+    \caption{First results of abdomen of test mouse.}
+\end{figure*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_Transax_28_epoch_10.png}
+    \caption{First results of abdomen of test mouse.}
+\end{figure*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse10_Coronal_0_epoch_10.png}
+    \caption{First results of abdomen of test mouse.}
+\end{figure*}
+
+\newpage
+\subsection{Appendix: results after hyperparameter tuning}
+\label{Appendix: results after tuning}
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse10_Sagittal_THORAX-ABDOMEN_19_epoch_0.png}
+    \caption{Results after hyperparameter tuning of abdomen of test mouse.}
+    \label{mouse10_s_19}
+\end{figure*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse10_Transax_THORAX-ABDOMEN_16_epoch_0.png}
+    \caption{Results after hyperparameter tuning of abdomen of test mouse.}
+    \label{mouse10_t_16}
+\end{figure*}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_Coronal_THORAX-ABDOMEN_12_epoch_0.png}
+    \caption{Results after hyperparameter tuning of abdomen of test mouse.}
+    \label{mouse06_c_12}
+\end{figure*}
+
+\newpage
 \subsection{Appendix: APDDM Results}
 \label{Appendix: APDDM Results}
 
@@ -1553,6 +1608,8 @@ This result can be demonstrated by a simulation where beta is varied and the mea
     \includegraphics[width=1\linewidth]{Mouse10_THORAX-ABDOMEN_Transax_16_UNet.png}
     \caption{Base UNet model output of a transaxial, thorax-abdomen test mouse slice. }
 \end{figure*}
+
+
 
 \clearpage
 \newpage
