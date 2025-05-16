@@ -1074,7 +1074,7 @@ This way there was no need for a time-embedding.
 This approach functioned as a type of data augmentation. 
 Some examples of test mice slices from the simplified APDDM model, compared to the same slices from the base UNet model can be seen in %AANPASSEN. %
 More examples of each combination of region
-and anatomical Plane can be found in Appendix D.3. %AANPASSEN%
+and anatomical Plane can be found in Appendix \ref{appendix:var}.
 
 
 \subsection{Validation}
@@ -1376,7 +1376,7 @@ If we assume $\mathbb{E}[\hat{\epsilon}] = 0$:
     \boxed{\mathbb{E}[\bold{x}_T] = \bold{x}_T^*}
 \end{equation}
 
-\subsection{Variance of the endpoint}
+\subsection{Variance of the endpoint}\label{appendix:var}
 We will now derive the expression for the variance on our enpoint $\bold{x}_T$:
 \begin{multline}
     Var[\bold{x}_T] = Var[q(q(...q(\bold{x}_0)..))] = Var[\bold{x}_0 + \bold{R} + \sum_{t=1}^{T} f(t) \cdot \hat{\epsilon}_t] = Var[\sum_{t=1}^{T} f(t) \cdot \hat{\epsilon}_t]\\ = \sum_{t=1}^{T} f(t)^2 Var[\hat{\epsilon}_t] + \sum_{i \neq j}^{T} f(i) f(j) Cov[\hat{\epsilon}_i, \hat{\epsilon}_j] = \sum_{t=1}^{T} f(t)^2 Var[\hat{\epsilon}_t]
