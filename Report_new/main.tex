@@ -1089,9 +1089,10 @@ The loss of structural information is still present, but less than previously.
 \subsection{APDDM}
 First of all, it must be noted that the APDDM model is trained on slightly different normalisation techniques and hyperparameters, in the intrest of time. 
 It can be observed that the background noise around the mouse gets smoothed out nicely, while still preserving and sharpening the edges of the anatomy. \\
-When comparing with the results of the base U-Net, the darkening of certain regions of the images is less of a problem in the case of the APDDM results, which might be attributed to the use of a different normalization technique. 
-Parts of the anatomy show signs of excessive smoothing, similar as in the case of the base U-Net, as discussed above, which results in some anatomical structures not being visible, while being visible on the HR images. \\
+When comparing with the results of the base UNet, the darkening of certain regions of the images is less of a problem in the case of the APDDM results, which might be attributed to the use of a different normalization technique. 
+Some parts of the anatomy do get oversmoothed like in the case of the base UNet, as discussed above, which results in some anatomical structures not being visible, while being visible on the HR images. \\
 The most import part is that the simplfied APDDM was succesfully implemented, and was able to denoise the images, as seen by comparing HR-LR and HR-DL images.
+
 
 
 \subsection{Validation}
