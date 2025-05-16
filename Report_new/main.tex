@@ -515,7 +515,7 @@ This loss function penalizes large errors more severely because the errors are s
 This method is effective for achieving high numerical accuracy but can lead to overly smooth outputs with less fine structural detail.
 MAE computes the average of the absolute differences between predicted and true pixel values. 
 This method preserves edges and sharper transitions better than MSE but it is less sensitive to small errors and can converge more slowly \cite{anderson_2023_loss}.
-The last option, the hybrid loss, is a custom-defined loss which combines mean squared error (MSE) and structural similarity index (SSIM).
+The last option, the hybrid loss, is a custom-defined loss which combines MSE and structural similarity index (SSIM).
 \begin{equation}\label{eq:3}
 \mathcal{L}_{\text{hybrid}} = \alpha \cdot \mathcal{L}_{\text{MSE}} + (1 - \alpha) \cdot (1 - \text{SSIM})
 \end{equation}
@@ -577,7 +577,7 @@ These changes make it better suited for applications like medical imaging, where
 \begin{figure*}
     \centering
     \includegraphics[width=1\linewidth]{ADDPM_model.png}
-    \caption{Schematic representation of the APDDPM model.}
+    \caption{Schematic representation of the APDDM model.}
     \label{fig:APDDM}
 \end{figure*}
 
@@ -673,7 +673,7 @@ Ideally the residual of HR and DL images should be close to zero in most regions
 
 
 \subsection{Mean squared error}
-The mean squared error (MSE) measures the amount of error in statistical models by taking the average squared difference between the observed and predicted values. 
+The MSE measures the amount of error in statistical models by taking the average squared difference between the observed and predicted values. 
 If there is no error, the MSE will become zero. Formula \ref{eq:MSE} can be used to calculate the MSE: 
 
 \begin{equation}\label{eq:MSE}
@@ -704,8 +704,8 @@ A higher CNR value indicates better differentiation of the region of interest fr
 To obtain the CNR, the program Amide is used. First, slices were randomly selected from 2 mice in each of the training, validation and test set. For each of these mice, one slice was selected from each anatomical plane (sagittal, transaxial and coronal), resulting in one slice per mouse.
 These slices were saved as raw data files, with their shape corresponding shape information. Both were loaded into Amide. A ROI was selected and a box was drawn in it. The same procedure was followed for the background region.
 Figure \ref{fig:CNR} visualises the procedure described above. 
-Next to the CNR, the normalised standard deviation was also calculated. This follows the same procedure as the CNR and is defined as:
-\begin{equation}\label{eq:normsigma}
+Next to the CNR, the  standard deviation was also calculated. This follows the same procedure as the CNR and is defined as:
+\begin{equation}\label{eq:sigma}
 \sigma_{\text{norm}} = \frac{\sigma_b}{\mu_b}
 \end{equation}
 
@@ -872,14 +872,14 @@ Subtle textures, especially within and around the spine, are smoothed out.
 \begin{figure*}
     \centering
     \includegraphics[width=1\linewidth]{Mouse01_Sagittal_val.png}
-    \caption{Sagittal view of the mouse thorax-abdomen region (Mouse01)}
+    \caption{Sagittal view of a training mouse thorax-abdomen region.}
     \label{fig:val_1}
 \end{figure*}
 
 
 In Figure \ref{fig:val_2} the yellow arrow is pointing to the lung cavity, where the DL output preserves some fine internal structures,
 that are obscured by noise in the LR image. This demonstrates that the DL model can retain anatomical detail in high contrast regions. 
-The green circle on the other hand highlights a region where the noisiness in the LR image is replaced by blurring in the DL output. 
+The green circle, on the other hand, highlights a region where the noisiness in the LR image is replaced by blurring in the DL output. 
 While the DL network successfully suppresses random noise, it also removes some potential subtle textures, which can be seen in the HR image. 
 This is distinct from the classic oversmoothing, as in this case the input itself lacks clear structure. 
 This does show the tendency of the model to flatten areas instead of attempting high-frequency recovery.
@@ -888,7 +888,7 @@ The residual maps further emphasize these differences.
 \begin{figure*}
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_Sagittal_val.png}
-    \caption{Sagittal view of the mouse thorax-abdomen region (Mouse06)}
+    \caption{Sagittal view of a validation mouse thorax-abdomen region.}
     \label{fig:val_2}
 \end{figure*}
 
@@ -904,7 +904,7 @@ Overall, DL improves global sharpness and interpretability over LR, especially i
 \begin{figure*}
     \centering
     \includegraphics[width=1\linewidth]{Mouse10_Sagittal_val.png}
-    \caption{Sagittal view of the spine and pelvic region (Mouse10).}
+    \caption{Sagittal view of the spine and pelvic region of a validation mouse.}
     \label{fig:val_3}
 \end{figure*}
 
@@ -948,7 +948,7 @@ Table \ref{tab:MSE_SSIM}  shows the obtained values for MSE and SSIM. The SSIM v
 
 \subsubsection{Contrast-to-noise ratio}
 The obtained values of Amide were inserted in Equation \ref{eq:CNR} and Equation \ref{eq:normsigma}.
-The final values for the CNR are represented in Table \ref{tab:CNR} and the normalised standard deviation values are shown in Table \ref{tab:norm_var}.
+The final values for the CNR are represented in Table \ref{tab:CNR} and the standard deviation values are shown in Table \ref{tab:norm_var}.
 
 \begin{table*}[h!]
     \centering
@@ -976,10 +976,10 @@ The final values for the CNR are represented in Table \ref{tab:CNR} and the norm
 
 \begin{sidewaystable*}[h!]
     \centering
-    \caption{\label{tab:norm_var} Overview of the mice, slices and planes used to obtain normalised standard deviation in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
+    \caption{\label{tab:norm_var} Overview of the mice, slices and planes used to obtain standard deviation in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
     \begin{tabular}{l|c|c|c|c|c|c|c}
     \toprule
-     & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} & \textbf{LR normalised standard deviation} & \textbf{DL normalised standard deviation} & \textbf{HR normalised standard deviation} \\
+     & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} & \textbf{LR standard deviation} & \textbf{DL standard deviation} & \textbf{HR standard deviation} \\
     \midrule
      & 1  & Sagittal   & 6             &TA              &0.571                 &0.112                 &0.558                   \\
      &    & Transaxial & 13             &TA              &0.005                 &0.001                 &0.003                   \\
@@ -1062,7 +1062,7 @@ Although ReLU is susceptible to the "dying neuron" problem, it remains a robust 
 Initial exploratory tests showed no instability or gradient vanishing that would necessitate more complex activations. 
 The network’s stable convergence confirmed that ReLU was a suitable choice for this task.
 
-The loss function was fixed as mean squared error (MSE), a standard objective for pixel-wise regression tasks. 
+The loss function was fixed as MSE, a standard objective for pixel-wise regression tasks. 
 MSE offers a simple, differentiable, and interpretable loss landscape that aligns well with the goal of minimizing reconstruction error. 
 While alternative loss functions, such as SSIM or perceptual loss, were considered, MSE was retained due to its stability and its compatibility with the validation metric used during tuning. 
 
@@ -1075,7 +1075,7 @@ Future work could benefit from using alternative validation metrics, such as SNR
 Metrics such as LPIPS (Learned Perceptual Image Patch Similarity) offer a promising alternative by leveraging deep features that align more closely with human perception and quality \cite{zhang2018unreasonableeffectivenessdeepfeatures}.
 
 \subsection{Results after hyperparameter training}
-When looking at the results after hyperparameter, it can be seen that the model is still working quite good. 
+When looking at the results after hyperparameter tuning, it can be seen that the model is still working quite good. 
 The DL image in Figure \ref{fig:second_sagittal}, Figure \ref{fig:second_transax} and Figure \ref{fig:second_coronal} shows again sharper details and higher quality compared to the LR image.
 The DL image is still more black than the HR image.
 The maximum intensity of the DL image is again lower than the ones of the LR and HR image, but the difference is not a lot. 
@@ -1091,7 +1091,7 @@ First of all, it must be noted that the APDDM model is trained on slightly diffe
 It can be observed that the background noise around the mouse gets smoothed out nicely, while still preserving and sharpening the edges of the anatomy. \\
 When comparing with the results of the base UNet, the darkening of certain regions of the images is less of a problem in the case of the APDDM results, which might be attributed to the use of a different normalization technique. 
 Some parts of the anatomy do get oversmoothed like in the case of the base UNet, as discussed above, which results in some anatomical structures not being visible, while being visible on the HR images. \\
-The most import part is that the simplfied APDDM was succesfully implemented, and was able to denoise the images, as seen by comparing HR-LR and HR-DL images.
+The most import part is that simplfied APDDM was succesfully implemented, and was able to denoise the images, as seen by comparing HR-LR and HR-DL images.
 
 
 
@@ -1113,7 +1113,7 @@ This variability can be attributed to several factors. First, MRI is not a quant
 A key factor affecting the CNR is the dynamic range of the image. Dynamic range refers to the difference between the minimum and maximum intensity values in an image.
 The LR image contains more noise, which means the pixel values are more similar. This directly affects the dynamic range because the difference between minimum and maximum intensity values becomes smaller, resulting in a lower CNR.
 On the other hand, a HR image has less noise, which means the difference between minimum and maximum intensity will be higher. This leads to a higher dynamic range and, consequently, a higher CNR. 
-Furthermore, interpolation is done, which results in a smoothing. This smoothing alters the intensity distribution and direclty implies CNR.
+Furthermore, interpolation is done, which results in a smoothing. This smoothing alters the intensity distribution and direclty affects CNR.
 
 After these observations were made, the normalized standard deviation was also evaluated. As shown in Table \ref{tab:norm_var}, a clear and consistent pattern emerges: the DL-normalized standard deviation is consistently the lowest across all cases, while the LR-normalized standard deviation is consistently the highest.
 This trend can be attributed to the behavior of the DL model, which is trained to reduce the noise while preserving structural information. As a result, the standard deviation of the background region is significantly reduced, while the mean background intensity remains relatively stable.
@@ -1154,7 +1154,7 @@ While this model is still in its early development, APDDM showed very promising 
 This offers a different and possibly more robust direction than conventional methods. 
 
 Validation through both quantitative metrics and visual inspection confirmed that the model enhances LR scans, potentially enabling 1-min scans in preclinical MRI settings, but further model optimization and more training data is required to result in more consistent and robust outcomes.
-Additionally, an external LEGO phantom scan suggested the networks’s generalization capacity, though it also exposed limitations such smoothing due to the chosen loss function. 
+Additionally, an external LEGO phantom scan suggested the networks’s generalization capacity, though it also exposed limitations such as smoothing due to the chosen loss function. 
 
 In summary, this project forms a foundation for integrating DL into preclinical imaging workflows, aiding in faster acquisition times without sacrificing diagnostic value. 
 Future improvements could explore alternative loss functions, such as SSIM or perceptual losses, and expand the training dataset to include more variation. 
@@ -1604,11 +1604,11 @@ This result can be demonstrated by a simulation where beta is varied and the mea
 \section{Appendix: Validation}\label{Appendix: val}
 \begin{sidewaystable}[h]
     \centering
-    \caption{Overview of the mice, slices and planes used to obtain CNR and normalised variance in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
+    \caption{Overview of the mice, slices and planes used to obtain CNR and standard variation in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
     \resizebox{0.8\linewidth}{!}{
     \begin{tabular}{l|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c}
     \toprule
-     & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} &&\textbf{LR mean ROI} &\textbf{LR mean background} &\textbf{LR STD background}&\textbf{LR CNR}& \textbf{LR normalised variance} & &\textbf{DL mean ROI} &\textbf{DL mean background} &\textbf{DL STD background}&\textbf{DL CNR}&\textbf{DL normalised variance} &&\textbf{HR mean ROI} &\textbf{HR mean background} &\textbf{HR STD background}&\textbf{HR CNR}& \textbf{HR normalised variance} \\
+     & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} &&\textbf{LR mean ROI} &\textbf{LR mean background} &\textbf{LR STD background}&\textbf{LR CNR}& \textbf{LR variance} & &\textbf{DL mean ROI} &\textbf{DL mean background} &\textbf{DL STD background}&\textbf{DL CNR}&\textbf{DL variance} &&\textbf{HR mean ROI} &\textbf{HR mean background} &\textbf{HR STD background}&\textbf{HR CNR}& \textbf{HR variance} \\
     \midrule
      & 1  & Sagittal   & 6&TA           &   &1.103&0.212&0.121&0.736&0.571       &          &0.690&0.152&0.017&31.441&0.112           &      &0.883&0.188&0.105&6.616&0.558                   \\
      &    & Transaxial & 13&TA          &   &0.866&3.319&0.016&-155.242&0.005      &        &0.581&2.312&0.002&-706.785&0.001         &      &0.565&2.288&0.006&-270.741&0.003                   \\
