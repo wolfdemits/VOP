@@ -280,7 +280,7 @@ The input to the network is a low-resolution ($150 \times 150$ pixels), which is
 The network then processes this input to produce a denoised output with a higher signal-to-noise ratio (SNR).
 
 The encoder comprises a series of convolutional layers followed by downsampling steps (e.g., pooling or strided convolutions). 
-These layers extract hierarchical features while reducing spatial resolution and increasing the number of feature channels.
+These layers extract hierarchical features while reducing spatial resolution and increasing the number of feature channels \cite{tran2025unet}.
 
 The decoder mirrors the encoder structure and consists of upsampling layers (e.g., transposed convolutions or interpolation followed by convolution) that reconstruct the spatial resolution of the input. 
 To preserve spatial information and enhance feature propagation, skip connections are added between corresponding layers of the encoder and decoder. 
@@ -402,7 +402,7 @@ Without an activation function, the network would behave like a linear system an
 Different options were tested such as ReLU,  LeakyReLU, ELU and PReLu. Each of these options come with their own set of advantages and difficulties. 
 ReLU (Rectified Linear Unit) is most commonly used as an activation function because of its simplicity and computational efficiency. 
 This function \ref{eq:4} returns the positive inputs directly and zero if negative. One of the limitations is a phenomenon called `dying neurons`,  if a neuron only receives negative inputs, it will always output zero and stop learning.
-LeakyReLU addresses this problem by allowing small negative outputs. This function \ref{eq:5} helps keeps neurons active and keeping them active. 
+LeakyReLU addresses this problem by allowing small negative outputs \cite{relu}. This function \ref{eq:5} helps keeps neurons active and keeping them active. 
 This technique keeps the simplicity or ReLU while improving stability. 
 ELU is similar to LeakyReLU in sense that negative outputs are generated, but in this case with a smooth exponential curve \ref{eq:6}  instead of a constant curve. 
 Finally, PReLU (Parametric ReLU) also starts from LeakyReLU but in this case the negative slope is a learnable parameter and not a fixed value. 
@@ -496,11 +496,11 @@ $}
 The optimizer plays a crucial role in fine-tuning the model's weights during training to minimize the loss function. 
 Different methods are available, each with its own advantages and disadvantages. 
 In this project, four different optimizers will be tested: Adam, AdamW, SGD and RMSprop. 
-One of its limitations is the way it incorporates L2 regularization directly into the gradient update, which can sometimes negatively affect the performance. 
-Stochastic gradient descent(SGD) updates the model’s parameters basedon the gradient loss function. Unlike Adam, ituses a fixed learning rate and does not estimate moments of the gradients
+One of Adam's limitations is the way it incorporates L2 regularization directly into the gradient update, which can sometimes negatively affect the performance. 
+Stochastic gradient descent (SGD) updates the model’s parameters based on the gradient loss function. Unlike Adam, it uses a fixed learning rate and does not estimate moments of the gradients \cite{massed-compute-2025}.
 In contrast, AdamW decouples weight decay from the gradient update, applying it separately after the parameter update, which provides a more effective approach \cite{pykes-2021}.
 RMSprop, also known as root mean square propagation, is another gradient-based optimization algorithm. It uses a moving average of the squared gradients to adapt the learning rate for each parameter. 
-This means it does not rely solely on the current gradient, but also incorporates information from previous updates. By "remembering" the magnitude of recent gradients, RMSprop smooths out noisy updates and helps stabilize the training process. 
+This means it does not rely solely on the current gradient, but also incorporates information from previous updates. By ``remembering'' the magnitude of recent gradients, RMSprop smooths out noisy updates and helps stabilize the training process. 
 This leads to faster and more reliable convergence, particularly in settings with sparse gradients or noisy data, functioning similarly to momentum-based methods.
 It uses an adaptive learning rate instead of treating the learning rate as a hyperparameter, which results in a change of learning rate over time. 
 This can result in faster convergence \cite{sanghvirajit-2025}.
@@ -535,7 +535,7 @@ This makes it particularly suitable for applications like medical imaging, where
 
 \begin{itemize}
     \item $\mu_a,\mu_b$ : mean intensities of images A and B
-    \item $\sigma_A^2, \sigma_B^2$ :variances
+    \item $\sigma_A^2, \sigma_B^2$ : variances
     \item $\sigma_{AB}$ : covariances
     \item $c_1,c_2$ : 2 variables which stabilize the division (both are typically small values)
 \end{itemize}
@@ -688,7 +688,7 @@ The MSE was calculated for the high resolution and the result of the deep learni
 
 \subsection{Structural similarity index measure}\label{Structural similarity index measure}
 
-As previously introduced in section \ref{loss_function}, the Structural Similarity Index Measure (SSIM) is also used independently as an evaluation metric in this study.  
+As previously introduced in section \ref{loss_function}, the structural similarity index measure (SSIM) is also used independently as an evaluation metric in this study.  
 While it forms part of the hybrid loss function, SSIM is valuable on its own for assessing perceptual image quality, as it accounts for luminance, contrast, and structural consistency.
 In this context, SSIM is used to compare the predicted images to the high-resolution reference scans.  
 This is particularly relevant in medical imaging, where preserving structural details is critical.  
@@ -702,12 +702,12 @@ Contrast-to-noise ratio (CNR) is a metric that evaluates the quality of an image
 
 $\mu_{ROI}$ is the mean of the region of interest (ROI), $\mu_b$ is the mean of the background and $\sigma_b$ is the noise in the background.
 A higher CNR value indicates better differentiation of the region of interest from its background.
-To obtain the CNR, the program Amide is used. First, slices were randomly selected from 2 mice in each of the training, validation and test set. For each of these mice, one slice was selected from each anatomical plane-sagittal, transaxial and coronal, resulting in one slice per mouse.
-These slices were saved as raw data files, with their shape corresponding shape information. Both were loaded into amide. A ROI of interest was selected and a box was drawn in it. The same procedure was followed for the background region.
+To obtain the CNR, the program Amide is used. First, slices were randomly selected from 2 mice in each of the training, validation and test set. For each of these mice, one slice was selected from each anatomical plane (sagittal, transaxial and coronal), resulting in one slice per mouse.
+These slices were saved as raw data files, with their shape corresponding shape information. Both were loaded into Amide. A ROI of interest was selected and a box was drawn in it. The same procedure was followed for the background region.
 Figure \ref{fig:CNR} visualises the procedure described above. 
-Next to the CNR, the normalised variation was also calculated. This follows the same procedure as the CNR and is defined as:
+Next to the CNR, the normalised standard deviation was also calculated. This follows the same procedure as the CNR and is defined as:
 \begin{equation}\label{eq:normsigma}
-\sigma_{\text{norm}} = \frac{\mu_b}{\sigma_b}
+\sigma_{\text{norm}} = \frac{\sigma_b}{\mu_b}
 \end{equation}
 
 \begin{figure}
@@ -811,7 +811,7 @@ This consistency supports the robustness of the design.
 
 
 \subsection{Results after hyperparameter training}
-After hyperparameter tuning, the model was runned again. Hereby, the parameters of section 7.2 were used.
+After hyperparameter tuning, the model was run again. Hereby, the parameters of section 7.2 were used.
 As in the part of the first results, the images of the training mice can be found in this section.
 Figure \ref{fig:second_sagittal}, Figure \ref{fig:second_transax} and Figure \ref{fig:second_coronal} represent the different planes.
 Images of the test mice can be found in Appendix \ref{Appendix: results after tuning}.
@@ -842,7 +842,7 @@ The same division of mice was used, as in indicated in Table \ref{tab:mouse_dist
 \subsection{APDDM}
 A simplified version of the APDDM forward process was implemented to train a new UNet model. 
 As a simplification, only images from the last timestep were fed to the network. 
-This way there was no need for a time-embedding. 
+This way, there was no need for a time-embedding. 
 This approach functioned as a type of data augmentation. 
 Some examples of test mice slices from the simplified APDDM model, compared to the same slices from the base UNet model can be seen in Figure \ref{fig:diffusion_example} and \ref{fig:unet_diffusion_comparison}. More examples of each combination of region
 and anatomical plane can be found in Appendix \ref{Appendix: APDDM Results}.
@@ -866,7 +866,7 @@ and anatomical plane can be found in Appendix \ref{Appendix: APDDM Results}.
 Figure \ref{fig:val_1} shows a sagittal view of the mouse spine and surrounding anatomy. 
 The yellow box highlights the lower thoracic to lumbar spine, an area where fine bone structure is particularly important. 
 The LR input of the spine and organ boundaries is quite noisy. 
-The DL output is somewhat sharper for example, the white spine column and rib edges within the yellow-highlighted region are brighter and better defined than in LR. 
+The DL output is somewhat sharper: for example, the white spinal column and rib edges within the yellow-highlighted region are brighter and better defined than in LR. 
 However, the DL image still lacks the crisp detail of the HR reference. 
 Subtle textures, especially within and around the spine, are smoothed out.
 
@@ -949,7 +949,7 @@ Table \ref{tab:MSE_SSIM}  shows the obtained values for MSE and SSIM. The SSIM v
 
 \subsubsection{Contrast-to-noise ratio}
 The obtained values values of Amide were inserted in Equation \ref{eq:CNR} and Equation \ref{eq:normsigma}.
-The final values for the CNR are represented in Table \ref{tab:CNR} and the normalised variation values are shown in Table \ref{tab:norm_var}.
+The final values for the CNR are represented in Table \ref{tab:CNR} and the normalised standard deviation values are shown in Table \ref{tab:norm_var}.
 
 \begin{table*}[h!]
     \centering
@@ -977,10 +977,10 @@ The final values for the CNR are represented in Table \ref{tab:CNR} and the norm
 
 \begin{sidewaystable*}[h!]
     \centering
-    \caption{\label{tab:norm_var} Overview of the mice, slices and planes used to obtain normalised variance in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
+    \caption{\label{tab:norm_var} Overview of the mice, slices and planes used to obtain normalised standard deviation in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
     \begin{tabular}{l|c|c|c|c|c|c|c}
     \toprule
-     & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} & \textbf{LR normalised variance} & \textbf{DL normalised variance} & \textbf{HR normalised variance} \\
+     & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} & \textbf{LR normalised standard deviation & \textbf{DL normalised standard deviation} & \textbf{HR normalised standard deviation} \\
     \midrule
      & 1  & Sagittal   & 6             &TA              &0.571                 &0.112                 &0.558                   \\
      &    & Transaxial & 13             &TA              &0.005                 &0.001                 &0.003                   \\
@@ -1115,10 +1115,10 @@ The LR image contains more noise, which means the pixel values are more similar.
 On the other hand, a HR image has less noise, which means the difference between minimum and maximum intensity will be higher. This leads to a higher dynamic range and, consequently, a higher CNR. 
 Furthermore, interpolation is done, which results in a smoothing. This smoothing alters the intensity distribution and direclty implies CNR.
 
-After these observations were made, the normalized variation was also evaluated. As shown in Table \ref{tab:norm_var}, a clear and consistent pattern emerges: the DL-normalized variation is consistently the lowest across all cases, while the LR-normalized variation is consistently the highest.
+After these observations were made, the normalized standard deviation was also evaluated. As shown in Table \ref{tab:norm_var}, a clear and consistent pattern emerges: the DL-normalized standard deviation is consistently the lowest across all cases, while the LR-normalized standard deviation is consistently the highest.
 This trend can be attributed to the behavior of the deep learning model, which is trained to reduce the noise while preserving structural information. As a result, the standard deviation of the background region is significantly reduced, while the mean background intensity remains relatively stable.
-This leads to lower normalized variation values for DL images, which is indicative of improved image quality and less noise.
-Conversely, the LR image exhibit higher normalized variation due to increased noise levels. In these images, the mean of the background is generally higher.
+This leads to lower normalized standard deviation values for DL images, which is indicative of improved image quality and less noise.
+Conversely, the LR image exhibit higher normalized standard deviation due to increased noise levels. In these images, the mean of the background is generally higher.
 A detailed overview is given in Appendix \ref{Appendix: val}.
 
 
@@ -1181,6 +1181,8 @@ This could further improve model generalization and detail preservation.
     
     \bibitem{ronneberger2015unet} Ronneberger, O., Fischer, P., \& Brox, T. (2015). U-/Net: Convolutional Networks for Biomedical Image Segmentation. In \textit{Medical Image Computing and Computer-Assisted Intervention (MICCAI)} (pp. 234–241). Springer. \url{https://doi.org/10.1007/978-3-319-24574-4_28}.
     
+    \bibitem{tran2025unet} Tran, M. (2025, January). Understanding U-/Net. Retrieved March 25, 2025, from \url{https://towardsdatascience.com/understanding-u-net-61276b10f360/}.
+    
     \bibitem{datacamp_optuna} DataCamp, ``Optuna for Deep Reinforcement Learning in Python,'' \textit{DataCamp Tutorials}, Aug. 2024. [Online]. Available: \url{https://www.datacamp.com/tutorial/optuna}.
     
     \bibitem{10.1145/3292500.3330701} Akiba, T., Sano, S., Yanase, T., Ohta, T., \& Koyama, M. (2019). Optuna: A Next-generation Hyperparameter Optimization Framework. In \textit{Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery \& Data Mining} (pp. 2623–2631). ACM. \url{https://doi.org/10.1145/3292500.3330701}.
@@ -1192,6 +1194,8 @@ This could further improve model generalization and detail preservation.
     \bibitem{unknown-author-2025} Unknown Author. (2025, April). Bicubic Interpolation | CloudInary. Retrieved from \url{https://cloudinary.com/glossary/bicubic-interpolation}.
     
     \bibitem{amanrao-2023} Amanrao. (2023, September). Image Upscaling using Bicubic Interpolation - Amanrao - Medium. Retrieved from \url{https://medium.com/@amanrao032/image-upscaling-using-bicubic-interpolation-ddb37295df0}.
+
+    \bibitem{relu} Maniatopoulos, A., \& Mitianoudis, N. (2021). Learnable Leaky ReLU (LeLeLU): An Alternative Accuracy-Optimized Activation Function. \textit{Information}, 12(12), 513. \url{https://www.mdpi.com/2078-2489/12/12/513}.
     
     \bibitem{bharatiya_2019_comprehensive} Bharatiya, P. (2019, September). Comprehensive Guide to the ReLU Activation Function in Neural Networks: Definition, Role, and Type Explained. Retrieved from \href{https://data-intelligence.hashnode.dev/comprehensive-guide-to-the-relu-activation-function-in-neural-networks-definition-role-and-type-explained}{https://data-intelligence.hashnode.dev/comprehensive-guide-to-the-relu-activation-function-in-neural-networks-definition-role-and-type-explained}.
     
@@ -1200,6 +1204,8 @@ This could further improve model generalization and detail preservation.
     \bibitem{isbhargav-2020} Isbhargav. (2020, July). Guide to Pytorch Learning Rate Scheduling. Retrieved from \url{https://www.kaggle.com/code/isbhargav/guide-to-pytorch-learning-rate-scheduling}.
     
     \bibitem{jordan_2018_setting} Jordan, J. (2018, March). Setting the learning rate of your neural network. Retrieved from \url{https://www.jeremyjordan.me/nn-learning-rate/}.
+
+     \bibitem{massed-compute-2025} Massed Compute. (2025, February). FAQ Answers - Massed compute. Retrieved from \url{https://massedcompute.com/faq-answers/?question=What\%20are%20the%20key%20differences%20between%20Adam%20and%20SGD%20optimizers%20in%20large%20language%20model%20training?}.
     
     \bibitem{pykes-2021} Pykes, K. (2021, October). AdamW Optimizer in PyTorch Tutorial. Retrieved from \url{https://www.datacamp.com/tutorial/adamw-optimizer-in-pytorch}.
     
@@ -1225,18 +1231,9 @@ This could further improve model generalization and detail preservation.
     
     \bibitem{zhang2018unreasonableeffectivenessdeepfeatures} Zhang, R., Isola, P., Efros, A. A., Shechtman, E., \& Wang, O. (2018). The Unreasonable Effectiveness of Deep Features as a Perceptual Metric. \textit{arXiv:1801.03924}. Retrieved from \url{https://arxiv.org/abs/1801.03924}.
     
-    
-    \bibitem{MSE} C.~Ledig, L.~Theis, F.~Huszar, J.~Caballero, A.~Cunningham, A.~Acosta, A.~Aitken, A.~Tejani, J.~Totz, Z.~Wang, and W.~Shi, ``Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network,'' in \emph{Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}
-  
-    \bibitem{tran2025unet} Tran, M. (2025, January). Understanding U-/Net. Retrieved March 25, 2025, from \url{https://towardsdatascience.com/understanding-u-net-61276b10f360/}.
-    %hoort bij 4.1        
-    
-    \bibitem{massed-compute-2025} Massed Compute. (2025, February). FAQ Answers - Massed compute. Retrieved from \url{https://massedcompute.com/faq-answers/?question=What%20are%20the%20key%20differences%20between%20Adam%20and%20SGD%20optimizers%20in%20large%20language%20model%20training?}.
-    %hoort bij optimizer 4.2.2                             
+    \bibitem{MSE} C.~Ledig, L.~Theis, F.~Huszar, J.~Caballero, A.~Cunningham, A.~Acosta, A.~Aitken, A.~Tejani, J.~Totz, Z.~Wang, and W.~Shi, ``Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network,'' in \emph{Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}                        
           
-    \bibitem{relu} Maniatopoulos, A., \& Mitianoudis, N. (2021). Learnable Leaky ReLU (LeLeLU): An Alternative Accuracy-Optimized Activation Function. \textit{Information}, 12(12), 513. \url{https://www.mdpi.com/2078-2489/12/12/513}.
-    %hoort bij activation function 4.2.1
-  \end{thebibliography}
+\end{thebibliography}
 
 \newpage
 \begin{appendices}
