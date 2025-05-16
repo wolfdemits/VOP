@@ -188,7 +188,7 @@ This sequence is often used in preclinical imaging because it produces images th
 T2-weighted images highlight  differences in transverse relaxation time, which reflects how quickly protons lose phase coherence after excitation by a radio frequency pulse. 
 This signal decay changes depending on its interaction within different types of tissues. 
 Shorter T2's, found in tissues such as muscle and fat, mean that the signal will decay very fast while tissues with a longer T2, for example fluids, retain the signal longer. 
-As a result, in fluids appearing brighter than muscle and fat in the image. 
+As a result, fluids will appeare brighter than muscle and fat in the image. 
 
 From a technical perspective, the T2-weighted contrast is created by selecting an appropriate echo time (TE) and repetition time (TR). 
 The echo time is the time between the initial radio frequency pulse and the measured MRI signal. 
@@ -279,7 +279,7 @@ U-Net is a form of autoencoder, consisting of two main parts: an encoder and a d
 The input to the network is a low-resolution ($150 \times 150$ pixels), which is first upsampled via interpolation to match the high-resolution target size ($300 \times 300$ pixels). 
 The network then processes this input to produce a denoised output with a higher signal-to-noise ratio (SNR).
 
-The encoder comprises a series of convolutional layers followed by downsampling steps (e.g., pooling or strided convolutions). 
+The encoder comprises of a series of convolutional layers with activation functions followed by downsampling steps (e.g., pooling or strided convolutions). 
 These layers extract hierarchical features while reducing spatial resolution and increasing the number of feature channels \cite{tran2025unet}.
 
 The decoder mirrors the encoder structure and consists of upsampling layers (e.g., transposed convolutions or interpolation followed by convolution) that reconstruct the spatial resolution of the input. 
@@ -402,7 +402,7 @@ Without an activation function, the network would behave like a linear system an
 Different options were tested such as ReLU,  LeakyReLU, ELU and PReLu. Each of these options come with their own set of advantages and difficulties. 
 ReLU (Rectified Linear Unit) is most commonly used as an activation function because of its simplicity and computational efficiency. 
 This function \ref{eq:4} returns the positive inputs directly and zero if negative. One of the limitations is a phenomenon called `dying neurons`,  if a neuron only receives negative inputs, it will always output zero and stop learning.
-LeakyReLU addresses this problem by allowing small negative outputs \cite{relu}. This function \ref{eq:5} helps keeps neurons active and keeping them active. 
+LeakyReLU addresses this problem by allowing small negative outputs \cite{relu}. This function \ref{eq:5} helps keep neurons active and keeping them active. 
 This technique keeps the simplicity or ReLU while improving stability. 
 ELU is similar to LeakyReLU in sense that negative outputs are generated, but in this case with a smooth exponential curve \ref{eq:6}  instead of a constant curve. 
 Finally, PReLU (Parametric ReLU) also starts from LeakyReLU but in this case the negative slope is a learnable parameter and not a fixed value. 
@@ -497,7 +497,7 @@ The optimizer plays a crucial role in fine-tuning the model's weights during tra
 Different methods are available, each with its own advantages and disadvantages. 
 In this project, four different optimizers will be tested: Adam, AdamW, SGD and RMSprop. 
 One of Adam's limitations is the way it incorporates L2 regularization directly into the gradient update, which can sometimes negatively affect the performance. 
-Stochastic gradient descent (SGD) updates the model’s parameters based on the gradient loss function. Unlike Adam, it uses a fixed learning rate and does not estimate moments of the gradients \cite{massed-compute-2025}.
+Stochastic gradient descent (SGD) updates the model’s parameters based on the gradient loss function. Unlike Adam, it uses a fixed learning rate and does not estimate the moments of the gradients \cite{massed-compute-2025}.
 In contrast, AdamW decouples weight decay from the gradient update, applying it separately after the parameter update, which provides a more effective approach \cite{pykes-2021}.
 RMSprop, also known as root mean square propagation, is another gradient-based optimization algorithm. It uses a moving average of the squared gradients to adapt the learning rate for each parameter. 
 This means it does not rely solely on the current gradient, but also incorporates information from previous updates. By ``remembering'' the magnitude of recent gradients, RMSprop smooths out noisy updates and helps stabilize the training process. 
@@ -548,7 +548,7 @@ This allowed the model to adaptively prioritize pixel accuracy versus perceptual
 Several training-related settings were applied to control the model optimization process, including early stopping, batch size, and the number of training epochs.
 While these are not traditional hyperparameters in the architectural sense, they significantly influence model performance and training efficiency.
 
-Early stopping was used to prevent excessive training and potential overfitting. The criterion is based on a `no improvement`' threshold, where training stops if validation performance does not improve for a set number of epochs. 
+Early stopping was used to prevent excessive training and potential overfitting. The criterion is based on a `no improvement' threshold, where training stops if validation performance does not improve for a set number of epochs. 
 In this project, training was stopped if no improvement was observed after 6 consecutive epochs, with a minimum of 10 epochs always run to ensure sufficient learning.
 
 Batch size determines how many training samples are processed before updating the model weights. Larger batch sizes provide more stable gradient estimates, which can speed up training but require more memory and may generalize worse. 
@@ -629,9 +629,9 @@ The network does not need to generate high-quality images from scratch but only 
 Figure \ref{fig:APDDM_train} shows the training strategy. The clean image $x_0$ is transformed into $x_t$ via forward diffusion and the network is trained to reverse this transformation by removing predicted noise and minimizing the loss. 
 This setup allows the network to focus on denoising realistic degraded images, guided by noise from the data.
 
-\begin{figure*}[H]
+\begin{figure*}
     \centering
-    \includegraphics[width=1\linewidth]{full APDDM .png}
+    \includegraphics[width=0.8\linewidth]{full APDDM .png}
     \caption{Training overview of APDDM.}
     \label{fig:APDDM_train}
 \end{figure*}
@@ -980,7 +980,7 @@ The final values for the CNR are represented in Table \ref{tab:CNR} and the norm
     \caption{\label{tab:norm_var} Overview of the mice, slices and planes used to obtain normalised standard deviation in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}
     \begin{tabular}{l|c|c|c|c|c|c|c}
     \toprule
-     & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} & \textbf{LR normalised standard deviation & \textbf{DL normalised standard deviation} & \textbf{HR normalised standard deviation} \\
+     & \textbf{Mouse} & \textbf{Plane} & \textbf{Slice} & \textbf{Region} & \textbf{LR normalised standard deviation} & \textbf{DL normalised standard deviation} & \textbf{HR normalised standard deviation} \\
     \midrule
      & 1  & Sagittal   & 6             &TA              &0.571                 &0.112                 &0.558                   \\
      &    & Transaxial & 13             &TA              &0.005                 &0.001                 &0.003                   \\

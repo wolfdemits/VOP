@@ -9,6 +9,7 @@
 \contentsline {figure}{\numberline {8}{\ignorespaces Schematic representation of the DDPM model from the Ho et al. paper.}}{15}{figure.caption.22}%
 \contentsline {figure}{\numberline {9}{\ignorespaces Schematic representation of the ADDPM model.}}{15}{figure.caption.23}%
 \contentsline {figure}{\numberline {10}{\ignorespaces Forward diffusion APDDM.}}{15}{figure.caption.24}%
+\contentsline {figure}{\numberline {11}{\ignorespaces Training overview of APDDM.}}{15}{figure.caption.25}%
 \contentsline {figure}{\numberline {12}{\ignorespaces Example of ROI and background indication}}{16}{figure.caption.27}%
 \contentsline {figure}{\numberline {13}{\ignorespaces Visual representation of the loss function over different epochs.}}{17}{figure.caption.28}%
 \contentsline {figure}{\numberline {14}{\ignorespaces First results of abdomen of training mouse.}}{18}{figure.caption.29}%
