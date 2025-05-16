@@ -62,7 +62,7 @@
 Micro-MRI enables high-contrast anatomical imaging in small animal models but often requires a trade-off between spatial resolution, signal-to-noise ratio (SNR), and scan time.
 This study presents a deep learning framework designed to enhance image quality and reduce acquisition time by combining denoising and super-resolution techniques. 
 Paired T2-weighted scans were acquired for 24 mice using a 7T Bruker Pharmascan system, consisting of low-resolution (1-minute) and high-resolution (12-minute) images.
-For each mice, scans of multiple regions and along different planes were acquired.
+For each mouse, scans of multiple regions and along different planes were acquired.
 After data pre-processing, a convolutional neural network based on a U-Net structure was trained using automated hyperparameter optimization.
 This process systematically tested combinations of learning rates, optimizers, convolutional filter sizes, upsampling and downsampling strategies, loss and activation functions, batch size, and the inclusion of residual learning to identify the most effective network structure and training configuration. 
 Model performance was evaluated using global and local image quality metrics. Mean squared error (MSE) and structural similarity index (SSIM) quantified overall image accuracy and structural integrity, while contrast-to-noise ratio (CNR) assessed localized contrast improvements, particularly relevant for denoising effectiveness. 
@@ -92,7 +92,7 @@ Wolf focused on the anchored path diffusion. Fea and Magali focused on the liter
 They also give their input to develop the deep learning together with Daan and Darío.
 
 We want to thank Prof. Vandenberghe, Prof. Vanhove, Florence Muller, Boris Vervenne, Maya Abi Akl and Melissa Lajtos. 
-Also, we would like to express out gratitude to the MEDISIP team for providing the opportunity to use the INFINITY lab. 
+Also, we would like to express our gratitude to the MEDISIP team for providing the opportunity to use the INFINITY lab. 
 Each of the individuals mentioned offered their support and played an important role in the success of this project. \\
 
 Finally, we would like to thank Niels Verhelst and Joran Courtens for acquiring the mouse scans during the 2024 summer internship and for their preliminary contributions to the research.
@@ -104,13 +104,13 @@ Finally, we would like to thank Niels Verhelst and Joran Courtens for acquiring 
 % meer bronnen in dit gedeelte
 Magnetic resonance imaging (MRI) is a non‐invasive imaging technique that uses magnetic fields and radio frequency pulses to generate detailed anatomical images. 
 Dedicated micro-MRI systems are available for preclinical imaging that provides excellent soft tissue contrast for anatomical visualization in rodent models. \cite{marzola2003high} 
-To visualize the animal's anatomy with sufficient details, a high spatial resolution is important. Reducing voxel size improves spatial resolution but also decreases the signal and lowers the signal-to-noise ratio (SNR). 
-On the other hand, increasing acquisition time can enhance signal quality and SNR \cite{grover2015mri}. However, this increases the risk of artefacts, blurring, and motion-related distortions.
+To visualize the animal's anatomy with sufficient detail, a high spatial resolution is important. Reducing voxel size improves spatial resolution but also decreases the signal and lowers the signal-to-noise ratio (SNR). 
+On the other hand, increasing acquisition time can enhance signal quality and SNR \cite{grover2015mri}. However, this increases the risk of artifacts, blurring, and motion-related distortions.
 Additionally, longer scan times are often impractical in real-life imaging workflows, where efficiency and throughput are essential. 
 A good balance between spatial resolution, acquisition time and SNR is needed.
 Image processing/restoration tools can be used to improve the quality of the acquired image, but traditional techniques relied on manual tuning or fixed
 algorithms. More recently, deep learning has emerged, which can learn to restore fine details and reduce noise directly from
-examples of high and low quality images which has been demonstrated to provide better results. These models adress the trade-off between resolution and image quality \cite{brown2014magnetic}. 
+examples of high and low quality images which has been demonstrated to provide better results. These models address the trade-off between resolution and image quality \cite{brown2014magnetic}. 
 
 \section{Data collection}
 \subsection{Infinity lab}
@@ -401,8 +401,8 @@ Activation functions introduce a non-linearity into the network. This allows com
 Without an activation function, the network would behave like a linear system and would not be able to model intricate relationships such as edges and contrast. 
 Different options were tested such as ReLU,  LeakyReLU, ELU and PReLu. Each of these options come with their own set of advantages and difficulties. 
 ReLU (Rectified Linear Unit) is most commonly used as an activation function because of its simplicity and computational efficiency. 
-This function \ref{eq:4} returns the positive inputs directly and zero if negative. One of the limitations is a phenomenon called `dying neurons`',  if a neuron only receives negative inputs, it will always output zero and stop learning.
-LeakyReLU adresses this problem by allowing small negative outputs. This function \ref{eq:5} helps keeps neurons active and keeping them active. 
+This function \ref{eq:4} returns the positive inputs directly and zero if negative. One of the limitations is a phenomenon called `dying neurons`,  if a neuron only receives negative inputs, it will always output zero and stop learning.
+LeakyReLU addresses this problem by allowing small negative outputs. This function \ref{eq:5} helps keeps neurons active and keeping them active. 
 This technique keeps the simplicity or ReLU while improving stability. 
 ELU is similar to LeakyReLU in sense that negative outputs are generated, but in this case with a smooth exponential curve \ref{eq:6}  instead of a constant curve. 
 Finally, PReLU (Parametric ReLU) also starts from LeakyReLU but in this case the negative slope is a learnable parameter and not a fixed value. 
@@ -497,7 +497,7 @@ The optimizer plays a crucial role in fine-tuning the model's weights during tra
 Different methods are available, each with its own advantages and disadvantages. 
 In this project, four different optimizers will be tested: Adam, AdamW, SGD and RMSprop. 
 One of its limitations is the way it incorporates L2 regularization directly into the gradient update, which can sometimes negatively affect the performance. 
-Stochast gradient descent(SGD) updates the model’s parameteres basedon the gradient loss function. Unlike Adam, ituses a fixed learning rate and does not estimatemoments of the gradients
+Stochastic gradient descent(SGD) updates the model’s parameters basedon the gradient loss function. Unlike Adam, ituses a fixed learning rate and does not estimate moments of the gradients
 In contrast, AdamW decouples weight decay from the gradient update, applying it separately after the parameter update, which provides a more effective approach \cite{pykes-2021}.
 RMSprop, also known as root mean square propagation, is another gradient-based optimization algorithm. It uses a moving average of the squared gradients to adapt the learning rate for each parameter. 
 This means it does not rely solely on the current gradient, but also incorporates information from previous updates. By "remembering" the magnitude of recent gradients, RMSprop smooths out noisy updates and helps stabilize the training process. 
@@ -510,7 +510,7 @@ This can result in faster convergence \cite{sanghvirajit-2025}.
 \paragraph{Loss function}\label{loss_function}
 The loss function defines how well our model is performing by evaluating the prediction against the target images. 
 It guides the process by providing a measure of error which then can be minimized during training. 
-3 loss functions were tested: Mean Squared Error (MSE) , Mean Absolute Error (MAE) and a hybrid loss. 
+Three loss functions were tested: Mean Squared Error (MSE) , Mean Absolute Error (MAE) and a hybrid loss. 
 MSE penalizes the squared difference between the predicted and true pixel values. 
 This loss function penalizes large errors more severely because the errors are squared. 
 This method is effective for achieving high numerical accuracy but can lead to overly smooth outputs with less fine structural detail.
@@ -722,7 +722,7 @@ Next to the CNR, the normalised variation was also calculated. This follows the 
 
 First the model was run on the hpc to check whether all components were implemented correctly. 
 With this first run, the pre-processing steps could be verified and the first results could be observed. 
-The training was done on the accelgor clustern because of its GPU capability. 
+The training was done on the accelgor cluster because of its GPU capability. 
 
 In this script the training, validation and test mice were defined. A detailed overview can be found in Table \ref{tab:mouse_distribution}.
 The hyperparameters were chosen based on knowledge and guessing what the best one would be. They were chosen as followed:
@@ -779,7 +779,6 @@ Each image depicts another plane of the mouse. Also, images of the test mice can
 To improve the performance of the model, hyperparameter tuning was done using Optuna's framework. 
 The MSE was used as the validation metric. The search space included the number of filters in each layer, the downsampling, upsampling, presence of residual connections, learning rate, optimizer and the learning rate scheduler. 
 The best-performing configuration achieved a validation MSE of 0.03034 and this optimal network used: 
-%128,128,64 seems counterintuitive 
 \begin{itemize}
     \item 128 filters in the first layer
     \item 128 filters in the second layer
@@ -841,6 +840,26 @@ The same division of mice was used, as in indicated in Table \ref{tab:mouse_dist
    
 
 \subsection{APDDM}
+A simplified version of the APDDM forward process was implemented to train a new UNet model. 
+As a simplification, only images from the last timestep were fed to the network. 
+This way there was no need for a time-embedding. 
+This approach functioned as a type of data augmentation. 
+Some examples of test mice slices from the simplified APDDM model, compared to the same slices from the base UNet model can be seen in Figure \ref{fig:diffusion_example} and \ref{fig:unet_diffusion_comparison}. More examples of each combination of region
+and anatomical plane can be found in Appendix \ref{Appendix: APDDM Results}.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Coronal_14_Diffusion.png}
+    \caption{Simplified APDDM model output of a coronal, head-thorax test mouse slice. }
+    \label{fig:diffusion_example}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Coronal_14_UNet.png}
+    \caption{Base UNet model output of a coronal, head-thorax test mouse slice. }
+    \label{fig:unet_diffusion_comparison}
+\end{figure*}
 
 \subsection{Validation}
 \subsubsection{Visual comparison}
@@ -1009,20 +1028,21 @@ As said, the results are very promising but there is also room for improvement. 
 
 \subsection{Trained hyperparameters}
 The results of the hyperparameter optimization provide insights into the performance of the model. 
-Several key hyperparameter choices reflect current best practices in deep learning formedical image restoration, while others diverge in notable ways
+Several key hyperparameter choices reflect current best practices in deep learning for medical image restoration, while others diverge in notable ways
 
-The feature dimension were [128,128,64], this does deviate from the typical dimension used in a U-Net design where feature depth increases with depth (e.g. [64,128,256]).
-This setup resembles an `inverted`channel structure, where more filters are placed at shallow layers rather than deep layers.
+The feature dimensions were [128,128,64], this does deviate from the typical dimension used in a U-Net design where feature depth increases with depth (e.g. [64,128,256]).
+This setup resembles an `inverted` channel structure, where more filters are placed at shallow layers rather than deep layers.
 Such a design emphasizes the extraction of rich low-level features early in the network. 
 This can be particularly beneficial for denoising with fine textures and subtle contrast differences. 
 Additionally, reducing depth later in the network lowers the overall parameter count, helping to prevent overfitting on limited data \cite{features}. 
+It is also a possibility that the somewhat unintuitive result is by random chance, as the search space of the hyperparameters is very large. Optuna must sparsely search this space, so some hyperparameters might not be completely optimal. 
 
 Strided convolution (convStrided) was preferred over pooling for downsampling. 
-This aligns with expectations from common CNN practive. 
-Strided convolution allows the model to practive how to compress feature maps instead of relying on fixed operations such as meanpooling. 
+This aligns with expectations from common CNN practice. 
+Strided convolution allows the model to practice how to compress feature maps instead of relying on fixed operations such as meanpooling. 
 This learnability likely helped preserve critical structural details \cite{springenberg2014}.
 For upsampling, bilinear interpolation was favored over learned transposed convolutions. 
-Unlike transposed conolutions, which introduce additional parameters and are prone to artifacts, bilinear upsampling provides a smooth and stable to restore spatial dimensions. 
+Unlike transposed convolutions, which introduce additional parameters and are prone to artifacts, bilinear upsampling provides a smooth and stable to restore spatial dimensions. 
 This upsampling method does not learn to add high-frequency details \cite{kolarik2019}.
 The consistent selection of bilinear upsampling in high-performing trials suggests that its simplicity and robustness were well-suited for this task.
  
@@ -1062,19 +1082,17 @@ The DL image is still more black than the HR image.
 The maximum intensity of the DL image is again lower than the ones of the LR and HR image, but the difference is only $1$. 
 In the first results, this difference was much higher.
 This means the intensity bias and scaling difference are better than previously.
-The background also needs to be taken into account, which can also leads to other maximum intensities.
+The background also needs to be taken into account, which can also lead to other maximum intensities.
 Compared to Figure \ref{fig:first_sagittal}, Figure \ref{fig:first_transax} and Figure \ref{fig:first_coronal}, the images after hyperparameter tuning have sharper edges.
 The edges are less smeared out and a bit sharper.
 The loss of structural information is still present, but less than previously. 
 
 \subsection{APDDM}
-A simplified version of the APDDM forward process was implemented to train a new UNet model. 
-As a simplification, only images from the last timestep were fed to the network. 
-This way there was no need for a time-embedding. 
-This approach functioned as a type of data augmentation. 
-Some examples of test mice slices from the simplified APDDM model, compared to the same slices from the base UNet model can be seen in %AANPASSEN. %
-More examples of each combination of region
-and anatomical Plane can be found in Appendix \ref{appendix:var}.
+First of all, it must be noted that the APDDM model is trained on slightly different normalisation techniques and hyperparameters, in the intrest of time. 
+It can be observed that the background noise around the mouse gets smoothed out nicely, while still preserving and sharpening the edges of the anatomy. \\
+When comparing with the results of the base UNet, the darkening of certain regions of the images is less of a problem in the case of the APDDM results, which might be attributed to the use of a different normalization technique. 
+Some parts of the anatomy do get oversmoothed like in the case of the base UNet, as discussed above, which results in some anatomical structures not being visible, while being visible on the HR images. \\
+The most import part is that the simplfied APDDM was succesfully implemented, and was able to denoise the images, as seen by comparing HR-LR and HR-DL images.
 
 
 \subsection{Validation}
@@ -1506,85 +1524,85 @@ This result can be demonstrated by a simulation where beta is varied and the mea
     \label{mouse06_c_12}
 \end{figure*}
 
+\FloatBarrier
 \newpage
 \subsection{Appendix: APDDM Results}
 \label{Appendix: APDDM Results}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Coronal_14_Diffusion.png}
     \caption{Simplified APDDM model output of a coronal, head-thorax test mouse slice. }
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Coronal_14_UNet.png}
     \caption{Base UNet model output of a coronal, head-thorax test mouse slice. }
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Sagittal_14_Diffusion.png}
     \caption{Simplified APDDM model output of a sagittal, head-thorax test mouse slice. }
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Sagittal_14_UNet.png}
     \caption{Base UNet model output of a sagittal, head-thorax test mouse slice. }
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Transax_20_Diffusion.png}
     \caption{Simplified APDDM model output of a transaxial, head-thorax test mouse slice. }
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_HEAD-THORAX_Transax_20_UNet.png}
     \caption{Base UNet model output of a transaxial, head-thorax test mouse slice. }
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_THORAX-ABDOMEN_Coronal_17_Diffusion.png}
     \caption{Simplified APDDM model output of a coronal, thorax-abdomen test mouse slice. }
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_THORAX-ABDOMEN_Coronal_17_UNet.png}
     \caption{Base UNet model output of a coronal, thorax-abdomen test mouse slice. }
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_THORAX-ABDOMEN_Sagittal_17_Diffusion.png}
     \caption{Simplified APDDM model output of a sagittal, thorax-abdomen test mouse slice. }
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse06_THORAX-ABDOMEN_Sagittal_17_UNet.png}
     \caption{Base UNet model output of a sagittal, thorax-abdomen test mouse slice. }
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse10_THORAX-ABDOMEN_Transax_16_Diffusion.png}
     \caption{Simplified APDDM model output of a transaxial, thorax-abdomen test mouse slice. }
-\end{figure*}
+\end{figure}
 
-\begin{figure*}
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=1\linewidth]{Mouse10_THORAX-ABDOMEN_Transax_16_UNet.png}
     \caption{Base UNet model output of a transaxial, thorax-abdomen test mouse slice. }
-\end{figure*}
+\end{figure}
 
 
 
-\clearpage
 \newpage
 \section{Appendix: Validation}\label{Appendix: val}
 \begin{sidewaystable}[h]

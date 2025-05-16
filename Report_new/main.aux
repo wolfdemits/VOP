@@ -1,0 +1,268 @@
+\relax 
+\providecommand \babel@aux [2]{\global \let \babel@toc \@gobbletwo }
+\@nameuse{bbl@beforestart}
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\babel@aux{english}{}
+\@writefile{toc}{\contentsline {section}{Acknowledgements}{6}{section*.4}\protected@file@percent }
+\citation{marzola2003high}
+\citation{grover2015mri}
+\citation{brown2014magnetic}
+\citation{bruker2025pharmascan}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{7}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Data collection}{7}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Infinity lab}{7}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Preparation and calibration }{7}{subsection.2.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces MRI scan regions: head-thorax (left) and thorax-abdomen (right).}}{7}{figure.caption.5}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:scan-orientations}{{1}{7}{MRI scan regions: head-thorax (left) and thorax-abdomen (right)}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Performing the MRI scan}{7}{subsection.2.3}\protected@file@percent }
+\citation{mrimaster2024}
+\citation{chavhan2009t2star}
+\citation{verhelst2025denoising}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Schematic overview of the MRI acquisition pipeline.}}{8}{figure.caption.6}\protected@file@percent }
+\newlabel{fig:acquisition_pipeline}{{2}{8}{Schematic overview of the MRI acquisition pipeline}{figure.caption.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Image Datasets}{8}{subsection.2.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces  Overview of the scan and image parameters used to acquire high- and low-resolution data of mice.}}{8}{table.caption.7}\protected@file@percent }
+\newlabel{tab:mri}{{1}{8}{Overview of the scan and image parameters used to acquire high- and low-resolution data of mice}{table.caption.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Pre-processing and data augmentation}{8}{section.3}\protected@file@percent }
+\citation{ronneberger2015unet}
+\citation{datacamp_optuna}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Removal of bad image slices}{9}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Cropping of the image slices}{9}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Zarr arrays}{9}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Normalization}{9}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Padding and random flipping}{9}{subsection.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Neural Network and Training Process}{9}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Encoder-Decoder Denoising Model}{9}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Encoder-Decoder Model: Hyperparameter Optimization}{9}{subsection.4.2}\protected@file@percent }
+\citation{10.1145/3292500.3330701}
+\citation{dhanushkumar-2023}
+\citation{unknown-author-no-date2}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces U-Net architecture.}}{10}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:U-Net}{{3}{10}{U-Net architecture}{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Hyperparameters of the Network Structure }{10}{subsubsection.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Features main and features skip}{10}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Downsampling method}{10}{section*.10}\protected@file@percent }
+\citation{unknown-author-2025}
+\citation{amanrao-2023}
+\citation{bharatiya_2019_comprehensive}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Downsampling - Maxpool}}{11}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:maxpool}{{4}{11}{Downsampling - Maxpool}{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Downsampling - Meanpool}}{11}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:meanpool}{{5}{11}{Downsampling - Meanpool}{figure.caption.12}{}}
+\@writefile{toc}{\contentsline {paragraph}{Upsampling}{11}{section*.14}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Downsampling - convStrided}}{11}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:convStrided}{{6}{11}{Downsampling - convStrided}{figure.caption.13}{}}
+\@writefile{toc}{\contentsline {paragraph}{Activation function}{11}{section*.15}\protected@file@percent }
+\newlabel{eq:4}{{1}{11}{Activation function}{equation.1}{}}
+\citation{unknown-author-no-date3}
+\citation{isbhargav-2020}
+\citation{jordan_2018_setting}
+\citation{pykes-2021}
+\citation{sanghvirajit-2025}
+\newlabel{eq:5}{{2}{12}{Activation function}{equation.2}{}}
+\newlabel{eq:6}{{3}{12}{Activation function}{equation.3}{}}
+\newlabel{eq:7}{{4}{12}{Activation function}{equation.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Residual learning}{12}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Hyperparameters of the Training Process}{12}{subsubsection.4.2.2}\protected@file@percent }
+\newlabel{hyperparameters training}{{4.2.2}{12}{Hyperparameters of the Training Process}{subsubsection.4.2.2}{}}
+\newlabel{subsec:LearningRateStrategies}{{4.2.2}{12}{Learning Rate Strategies}{section*.17}{}}
+\@writefile{toc}{\contentsline {paragraph}{Learning Rate Strategies}{12}{section*.17}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Comparison of different learning rates}}{12}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:Learnrate}{{7}{12}{Comparison of different learning rates}{figure.caption.18}{}}
+\newlabel{eq:1}{{5}{12}{Learning Rate Strategies}{equation.5}{}}
+\newlabel{eq:2}{{6}{12}{Learning Rate Strategies}{equation.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{Optimizer}{12}{section*.19}\protected@file@percent }
+\citation{anderson_2023_loss}
+\citation{DDPM}
+\newlabel{loss_function}{{4.2.2}{13}{Loss function}{section*.20}{}}
+\@writefile{toc}{\contentsline {paragraph}{Loss function}{13}{section*.20}\protected@file@percent }
+\newlabel{eq:3}{{7}{13}{Loss function}{equation.7}{}}
+\newlabel{eq:SSIM}{{8}{13}{Loss function}{equation.8}{}}
+\@writefile{toc}{\contentsline {paragraph}{Others}{13}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Anchored Path Diffusion Denoising Model (APDDM)}{13}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Forward Diffusion Process}{14}{subsubsection.4.3.1}\protected@file@percent }
+\newlabel{eq:Markov chain}{{9}{14}{Forward Diffusion Process}{equation.9}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Reverse Process and Training}{14}{subsubsection.4.3.2}\protected@file@percent }
+\newlabel{eq:Markov chain}{{10}{14}{Reverse Process and Training}{equation.10}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Integration}{14}{subsubsection.4.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Model performance evaluation}{14}{section.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces  Mouse distribution across training, validation, and testing sets.}}{14}{table.caption.26}\protected@file@percent }
+\newlabel{tab:mouse_distribution}{{2}{14}{Mouse distribution across training, validation, and testing sets}{table.caption.26}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Visual comparison}{14}{subsection.5.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Schematic representation of the DDPM model from the Ho et al. paper.}}{15}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:PDDM}{{8}{15}{Schematic representation of the DDPM model from the Ho et al. paper}{figure.caption.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Schematic representation of the ADDPM model.}}{15}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:APDDM}{{9}{15}{Schematic representation of the ADDPM model}{figure.caption.23}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Forward diffusion APDDM.}}{15}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:forward APDDM}{{10}{15}{Forward diffusion APDDM}{figure.caption.24}{}}
+\citation{mseJim}
+\citation{dosselmann-2009}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Mean squared error}{16}{subsection.5.2}\protected@file@percent }
+\newlabel{eq:MSE}{{12}{16}{Mean squared error}{equation.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Structural similarity index measure}{16}{subsection.5.3}\protected@file@percent }
+\newlabel{Structural similarity index measure}{{5.3}{16}{Structural similarity index measure}{subsection.5.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Contrast-to-noise ratio}{16}{subsection.5.4}\protected@file@percent }
+\newlabel{eq:CNR}{{13}{16}{Contrast-to-noise ratio}{equation.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Example of ROI and background indication}}{16}{figure.caption.27}\protected@file@percent }
+\newlabel{fig:CNR}{{12}{16}{Example of ROI and background indication}{figure.caption.27}{}}
+\newlabel{eq:normsigma}{{14}{16}{Contrast-to-noise ratio}{equation.14}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Results}{16}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}First results}{16}{subsection.6.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Visual representation of the loss function over different epochs.}}{17}{figure.caption.28}\protected@file@percent }
+\newlabel{fig:first_loss}{{13}{17}{Visual representation of the loss function over different epochs}{figure.caption.28}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Trained hyperparameters}{17}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Results after hyperparameter training}{17}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}APDDM}{17}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Validation}{17}{subsection.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.1}Visual comparison}{17}{subsubsection.6.5.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces First results of abdomen of training mouse.}}{18}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:first_sagittal}{{14}{18}{First results of abdomen of training mouse}{figure.caption.29}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces First results of abdomen of training mouse.}}{18}{figure.caption.30}\protected@file@percent }
+\newlabel{fig:first_transax}{{15}{18}{First results of abdomen of training mouse}{figure.caption.30}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.2}MSE and SSIM}{18}{subsubsection.6.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.3}Contrast-to-noise ratio}{18}{subsubsection.6.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.4}LEGO phantom test}{18}{subsubsection.6.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Discussion}{18}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}First results}{18}{subsection.7.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces First results of abdomen of training mouse.}}{19}{figure.caption.31}\protected@file@percent }
+\newlabel{fig:first_coronal}{{16}{19}{First results of abdomen of training mouse}{figure.caption.31}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces  MSE and SSIM values. TA stands for thorax-abdomen, while HT is used for head-thorax.}}{19}{table.caption.41}\protected@file@percent }
+\newlabel{tab:MSE_SSIM}{{3}{19}{MSE and SSIM values. TA stands for thorax-abdomen, while HT is used for head-thorax}{table.caption.41}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces  Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}}{19}{table.caption.42}\protected@file@percent }
+\newlabel{tab:CNR}{{4}{19}{Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax}{table.caption.42}{}}
+\citation{features}
+\citation{springenberg2014}
+\citation{kolarik2019}
+\citation{xu2024}
+\citation{1284395}
+\citation{chavhan2009t2star}
+\citation{zhang2018unreasonableeffectivenessdeepfeatures}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Visual representation of the loss function over trials in hyperparameter tuning}}{20}{figure.caption.32}\protected@file@percent }
+\newlabel{fig:loss_hyperparameter}{{17}{20}{Visual representation of the loss function over trials in hyperparameter tuning}{figure.caption.32}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Trained hyperparameters}{20}{subsection.7.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Results after hyperparameter tuning of abdomen of training mouse.}}{21}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:second_sagittal}{{18}{21}{Results after hyperparameter tuning of abdomen of training mouse}{figure.caption.33}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Results after hyperparameter tuning of abdomen of training mouse.}}{21}{figure.caption.34}\protected@file@percent }
+\newlabel{fig:second_transax}{{19}{21}{Results after hyperparameter tuning of abdomen of training mouse}{figure.caption.34}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Results after hyperparameter tuning of abdomen of training mouse.}}{21}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:second_coronal}{{20}{21}{Results after hyperparameter tuning of abdomen of training mouse}{figure.caption.35}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Simplified APDDM model output of a coronal, head-thorax test mouse slice. }}{21}{figure.caption.36}\protected@file@percent }
+\newlabel{fig:diffusion_example}{{21}{21}{Simplified APDDM model output of a coronal, head-thorax test mouse slice}{figure.caption.36}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces Base UNet model output of a coronal, head-thorax test mouse slice. }}{21}{figure.caption.37}\protected@file@percent }
+\newlabel{fig:unet_diffusion_comparison}{{22}{21}{Base UNet model output of a coronal, head-thorax test mouse slice}{figure.caption.37}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces Sagittal view of the mouse thorax-abdomen region (Mouse01)}}{21}{figure.caption.38}\protected@file@percent }
+\newlabel{fig:val_1}{{23}{21}{Sagittal view of the mouse thorax-abdomen region (Mouse01)}{figure.caption.38}{}}
+\citation{MSE}
+\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces Sagittal view of the mouse thorax-abdomen region (Mouse06)}}{22}{figure.caption.39}\protected@file@percent }
+\newlabel{fig:val_2}{{24}{22}{Sagittal view of the mouse thorax-abdomen region (Mouse06)}{figure.caption.39}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {25}{\ignorespaces Sagittal view of the spine and pelvic region (Mouse10).}}{22}{figure.caption.40}\protected@file@percent }
+\newlabel{fig:val_3}{{25}{22}{Sagittal view of the spine and pelvic region (Mouse10)}{figure.caption.40}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Results after hyperparameter training}{22}{subsection.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}APDDM}{22}{subsection.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}Validation}{22}{subsection.7.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.5.1}Visual comparison}{22}{subsubsection.7.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.5.2}MSE and SSIM}{22}{subsubsection.7.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.5.3}Contrast-to-noise ratio}{23}{subsubsection.7.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.5.4}LEGO brick phantom}{23}{subsubsection.7.5.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {26}{\ignorespaces Results after hyperparameter tuning of LEGO phantom.}}{24}{figure.caption.44}\protected@file@percent }
+\newlabel{fig:lego_phantom_test}{{26}{24}{Results after hyperparameter tuning of LEGO phantom}{figure.caption.44}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{24}{section.8}\protected@file@percent }
+\newlabel{RF1}{25}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces  Overview of the mice, slices and planes used to obtain normalised variance in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}}{25}{table.caption.43}\protected@file@percent }
+\newlabel{tab:norm_var}{{5}{25}{Overview of the mice, slices and planes used to obtain normalised variance in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax}{table.caption.43}{}}
+\citation{*}
+\bibcite{marzola2003high}{1}
+\bibcite{grover2015mri}{2}
+\bibcite{brown2014magnetic}{3}
+\bibcite{bruker2025pharmascan}{4}
+\bibcite{mrimaster2024}{5}
+\bibcite{chavhan2009t2star}{6}
+\bibcite{verhelst2025denoising}{7}
+\bibcite{ronneberger2015unet}{8}
+\bibcite{datacamp_optuna}{9}
+\bibcite{10.1145/3292500.3330701}{10}
+\bibcite{dhanushkumar-2023}{11}
+\bibcite{unknown-author-no-date2}{12}
+\bibcite{unknown-author-2025}{13}
+\bibcite{amanrao-2023}{14}
+\bibcite{bharatiya_2019_comprehensive}{15}
+\bibcite{unknown-author-no-date3}{16}
+\bibcite{isbhargav-2020}{17}
+\bibcite{jordan_2018_setting}{18}
+\bibcite{pykes-2021}{19}
+\bibcite{sanghvirajit-2025}{20}
+\bibcite{anderson_2023_loss}{21}
+\bibcite{DDPM}{22}
+\bibcite{mseJim}{23}
+\bibcite{dosselmann-2009}{24}
+\bibcite{features}{25}
+\bibcite{springenberg2014}{26}
+\bibcite{kolarik2019}{27}
+\bibcite{xu2024}{28}
+\bibcite{1284395}{29}
+\bibcite{zhang2018unreasonableeffectivenessdeepfeatures}{30}
+\bibcite{MSE}{31}
+\bibcite{tran2025unet}{32}
+\bibcite{massed-compute-2025}{33}
+\bibcite{relu}{34}
+\@writefile{toc}{\contentsline {section}{Appendices}{28}{section*.46}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A}Appendix: Gantt chart}{28}{appendix.1.A}\protected@file@percent }
+\newlabel{appendix:Division of tasks}{{A}{28}{Appendix: Gantt chart}{appendix.1.A}{}}
+\gtt@chartextrasize{0}{177.46619pt}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Appendix: Figures Preprocessing}{29}{appendix.1.B}\protected@file@percent }
+\newlabel{Appendix: Figures Preprocessing}{{B}{29}{Appendix: Figures Preprocessing}{appendix.1.B}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {27}{\ignorespaces Example of a bad slice.}}{29}{figure.caption.47}\protected@file@percent }
+\newlabel{fig:bad_slice}{{27}{29}{Example of a bad slice}{figure.caption.47}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {28}{\ignorespaces The left figure shows the original slice, while the right figure is the cropped slice.}}{29}{figure.caption.47}\protected@file@percent }
+\newlabel{fig:comparision-cropped}{{28}{29}{The left figure shows the original slice, while the right figure is the cropped slice}{figure.caption.47}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C}Appendix: Mathematics APDDM}{30}{appendix.1.C}\protected@file@percent }
+\newlabel{appendix:Mathematics APDDM}{{C}{30}{Appendix: Mathematics APDDM}{appendix.1.C}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Ansatz: linear interpolation between image pair}{30}{subsection.1.C.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}Proposition of the Markovian process}{30}{subsection.1.C.2}\protected@file@percent }
+\newlabel{eq:f(t)}{{20}{30}{Proposition of the Markovian process}{equation.20}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {29}{\ignorespaces \textit  {Demonstration of coherent edge artifact accumulation when no rotation is applied. }}}{31}{figure.caption.48}\protected@file@percent }
+\newlabel{fig:edge artifacts}{{29}{31}{\textit {Demonstration of coherent edge artifact accumulation when no rotation is applied. }}{figure.caption.48}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Expected value of the endpoint}{31}{subsection.1.C.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.4}Variance of the endpoint}{31}{subsection.1.C.4}\protected@file@percent }
+\newlabel{appendix:var}{{C.4}{31}{Variance of the endpoint}{subsection.1.C.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5}Controlling the variance}{32}{subsection.1.C.5}\protected@file@percent }
+\newlabel{eq:beta}{{32}{32}{Controlling the variance}{equation.32}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.6}MSE stability}{32}{subsection.1.C.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {30}{\ignorespaces \textit  {Plot of $MSE(x_T, x_T^*)$ against beta. }}}{33}{figure.caption.49}\protected@file@percent }
+\newlabel{fig:beta sweep}{{30}{33}{\textit {Plot of $MSE(x_T, x_T^*)$ against beta. }}{figure.caption.49}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Appendix: Figures Results}{34}{appendix.1.D}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.1}Appendix: first results}{34}{subsection.1.D.1}\protected@file@percent }
+\newlabel{Appendix: first results}{{D.1}{34}{Appendix: first results}{subsection.1.D.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {31}{\ignorespaces First results of abdomen of test mouse.}}{34}{figure.caption.50}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {32}{\ignorespaces First results of abdomen of test mouse.}}{34}{figure.caption.51}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {33}{\ignorespaces First results of abdomen of test mouse.}}{34}{figure.caption.52}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.2}Appendix: results after hyperparameter tuning}{35}{subsection.1.D.2}\protected@file@percent }
+\newlabel{Appendix: results after tuning}{{D.2}{35}{Appendix: results after hyperparameter tuning}{subsection.1.D.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {34}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{35}{figure.caption.53}\protected@file@percent }
+\newlabel{mouse10_s_19}{{34}{35}{Results after hyperparameter tuning of abdomen of test mouse}{figure.caption.53}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {35}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{35}{figure.caption.54}\protected@file@percent }
+\newlabel{mouse10_t_16}{{35}{35}{Results after hyperparameter tuning of abdomen of test mouse}{figure.caption.54}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {36}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{35}{figure.caption.55}\protected@file@percent }
+\newlabel{mouse06_c_12}{{36}{35}{Results after hyperparameter tuning of abdomen of test mouse}{figure.caption.55}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {D.3}Appendix: APDDM Results}{36}{subsection.1.D.3}\protected@file@percent }
+\newlabel{Appendix: APDDM Results}{{D.3}{36}{Appendix: APDDM Results}{subsection.1.D.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {37}{\ignorespaces Simplified APDDM model output of a coronal, head-thorax test mouse slice. }}{36}{figure.caption.56}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {38}{\ignorespaces Base UNet model output of a coronal, head-thorax test mouse slice. }}{36}{figure.caption.57}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {39}{\ignorespaces Simplified APDDM model output of a sagittal, head-thorax test mouse slice. }}{36}{figure.caption.58}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {40}{\ignorespaces Base UNet model output of a sagittal, head-thorax test mouse slice. }}{37}{figure.caption.59}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {41}{\ignorespaces Simplified APDDM model output of a transaxial, head-thorax test mouse slice. }}{37}{figure.caption.60}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {42}{\ignorespaces Base UNet model output of a transaxial, head-thorax test mouse slice. }}{37}{figure.caption.61}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {43}{\ignorespaces Simplified APDDM model output of a coronal, thorax-abdomen test mouse slice. }}{37}{figure.caption.62}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {44}{\ignorespaces Base UNet model output of a coronal, thorax-abdomen test mouse slice. }}{37}{figure.caption.63}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {45}{\ignorespaces Simplified APDDM model output of a sagittal, thorax-abdomen test mouse slice. }}{38}{figure.caption.64}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {46}{\ignorespaces Base UNet model output of a sagittal, thorax-abdomen test mouse slice. }}{38}{figure.caption.65}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {47}{\ignorespaces Simplified APDDM model output of a transaxial, thorax-abdomen test mouse slice. }}{38}{figure.caption.66}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {48}{\ignorespaces Base UNet model output of a transaxial, thorax-abdomen test mouse slice. }}{38}{figure.caption.67}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {E}Appendix: Validation}{39}{appendix.1.E}\protected@file@percent }
+\newlabel{Appendix: val}{{E}{39}{Appendix: Validation}{appendix.1.E}{}}
+\newlabel{RF2}{40}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Overview of the mice, slices and planes used to obtain CNR and normalised variance in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}}{40}{table.caption.68}\protected@file@percent }
+\gdef \@abspage@last{41}

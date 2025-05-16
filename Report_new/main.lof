@@ -1,0 +1,48 @@
+\babel@toc {english}{}\relax 
+\contentsline {figure}{\numberline {1}{\ignorespaces MRI scan regions: head-thorax (left) and thorax-abdomen (right).}}{7}{figure.caption.5}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Schematic overview of the MRI acquisition pipeline.}}{8}{figure.caption.6}%
+\contentsline {figure}{\numberline {3}{\ignorespaces U-Net architecture.}}{10}{figure.caption.8}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Downsampling - Maxpool}}{11}{figure.caption.11}%
+\contentsline {figure}{\numberline {5}{\ignorespaces Downsampling - Meanpool}}{11}{figure.caption.12}%
+\contentsline {figure}{\numberline {6}{\ignorespaces Downsampling - convStrided}}{11}{figure.caption.13}%
+\contentsline {figure}{\numberline {7}{\ignorespaces Comparison of different learning rates}}{12}{figure.caption.18}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Schematic representation of the DDPM model from the Ho et al. paper.}}{15}{figure.caption.22}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Schematic representation of the ADDPM model.}}{15}{figure.caption.23}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Forward diffusion APDDM.}}{15}{figure.caption.24}%
+\contentsline {figure}{\numberline {12}{\ignorespaces Example of ROI and background indication}}{16}{figure.caption.27}%
+\contentsline {figure}{\numberline {13}{\ignorespaces Visual representation of the loss function over different epochs.}}{17}{figure.caption.28}%
+\contentsline {figure}{\numberline {14}{\ignorespaces First results of abdomen of training mouse.}}{18}{figure.caption.29}%
+\contentsline {figure}{\numberline {15}{\ignorespaces First results of abdomen of training mouse.}}{18}{figure.caption.30}%
+\contentsline {figure}{\numberline {16}{\ignorespaces First results of abdomen of training mouse.}}{19}{figure.caption.31}%
+\contentsline {figure}{\numberline {17}{\ignorespaces Visual representation of the loss function over trials in hyperparameter tuning}}{20}{figure.caption.32}%
+\contentsline {figure}{\numberline {18}{\ignorespaces Results after hyperparameter tuning of abdomen of training mouse.}}{21}{figure.caption.33}%
+\contentsline {figure}{\numberline {19}{\ignorespaces Results after hyperparameter tuning of abdomen of training mouse.}}{21}{figure.caption.34}%
+\contentsline {figure}{\numberline {20}{\ignorespaces Results after hyperparameter tuning of abdomen of training mouse.}}{21}{figure.caption.35}%
+\contentsline {figure}{\numberline {21}{\ignorespaces Simplified APDDM model output of a coronal, head-thorax test mouse slice. }}{21}{figure.caption.36}%
+\contentsline {figure}{\numberline {22}{\ignorespaces Base UNet model output of a coronal, head-thorax test mouse slice. }}{21}{figure.caption.37}%
+\contentsline {figure}{\numberline {23}{\ignorespaces Sagittal view of the mouse thorax-abdomen region (Mouse01)}}{21}{figure.caption.38}%
+\contentsline {figure}{\numberline {24}{\ignorespaces Sagittal view of the mouse thorax-abdomen region (Mouse06)}}{22}{figure.caption.39}%
+\contentsline {figure}{\numberline {25}{\ignorespaces Sagittal view of the spine and pelvic region (Mouse10).}}{22}{figure.caption.40}%
+\contentsline {figure}{\numberline {26}{\ignorespaces Results after hyperparameter tuning of LEGO phantom.}}{24}{figure.caption.44}%
+\contentsline {figure}{\numberline {27}{\ignorespaces Example of a bad slice.}}{29}{figure.caption.47}%
+\contentsline {figure}{\numberline {28}{\ignorespaces The left figure shows the original slice, while the right figure is the cropped slice.}}{29}{figure.caption.47}%
+\contentsline {figure}{\numberline {29}{\ignorespaces \textit {Demonstration of coherent edge artifact accumulation when no rotation is applied. }}}{31}{figure.caption.48}%
+\contentsline {figure}{\numberline {30}{\ignorespaces \textit {Plot of $MSE(x_T, x_T^*)$ against beta. }}}{33}{figure.caption.49}%
+\contentsline {figure}{\numberline {31}{\ignorespaces First results of abdomen of test mouse.}}{34}{figure.caption.50}%
+\contentsline {figure}{\numberline {32}{\ignorespaces First results of abdomen of test mouse.}}{34}{figure.caption.51}%
+\contentsline {figure}{\numberline {33}{\ignorespaces First results of abdomen of test mouse.}}{34}{figure.caption.52}%
+\contentsline {figure}{\numberline {34}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{35}{figure.caption.53}%
+\contentsline {figure}{\numberline {35}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{35}{figure.caption.54}%
+\contentsline {figure}{\numberline {36}{\ignorespaces Results after hyperparameter tuning of abdomen of test mouse.}}{35}{figure.caption.55}%
+\contentsline {figure}{\numberline {37}{\ignorespaces Simplified APDDM model output of a coronal, head-thorax test mouse slice. }}{36}{figure.caption.56}%
+\contentsline {figure}{\numberline {38}{\ignorespaces Base UNet model output of a coronal, head-thorax test mouse slice. }}{36}{figure.caption.57}%
+\contentsline {figure}{\numberline {39}{\ignorespaces Simplified APDDM model output of a sagittal, head-thorax test mouse slice. }}{36}{figure.caption.58}%
+\contentsline {figure}{\numberline {40}{\ignorespaces Base UNet model output of a sagittal, head-thorax test mouse slice. }}{37}{figure.caption.59}%
+\contentsline {figure}{\numberline {41}{\ignorespaces Simplified APDDM model output of a transaxial, head-thorax test mouse slice. }}{37}{figure.caption.60}%
+\contentsline {figure}{\numberline {42}{\ignorespaces Base UNet model output of a transaxial, head-thorax test mouse slice. }}{37}{figure.caption.61}%
+\contentsline {figure}{\numberline {43}{\ignorespaces Simplified APDDM model output of a coronal, thorax-abdomen test mouse slice. }}{37}{figure.caption.62}%
+\contentsline {figure}{\numberline {44}{\ignorespaces Base UNet model output of a coronal, thorax-abdomen test mouse slice. }}{37}{figure.caption.63}%
+\contentsline {figure}{\numberline {45}{\ignorespaces Simplified APDDM model output of a sagittal, thorax-abdomen test mouse slice. }}{38}{figure.caption.64}%
+\contentsline {figure}{\numberline {46}{\ignorespaces Base UNet model output of a sagittal, thorax-abdomen test mouse slice. }}{38}{figure.caption.65}%
+\contentsline {figure}{\numberline {47}{\ignorespaces Simplified APDDM model output of a transaxial, thorax-abdomen test mouse slice. }}{38}{figure.caption.66}%
+\contentsline {figure}{\numberline {48}{\ignorespaces Base UNet model output of a transaxial, thorax-abdomen test mouse slice. }}{38}{figure.caption.67}%

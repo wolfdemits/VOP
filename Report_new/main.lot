@@ -1,0 +1,7 @@
+\babel@toc {english}{}\relax 
+\contentsline {table}{\numberline {1}{\ignorespaces Overview of the scan and image parameters used to acquire high- and low-resolution data of mice.}}{8}{table.caption.7}%
+\contentsline {table}{\numberline {2}{\ignorespaces Mouse distribution across training, validation, and testing sets.}}{14}{table.caption.26}%
+\contentsline {table}{\numberline {3}{\ignorespaces MSE and SSIM values. TA stands for thorax-abdomen, while HT is used for head-thorax.}}{19}{table.caption.41}%
+\contentsline {table}{\numberline {4}{\ignorespaces Overview of the mice, slices and planes used to obtain CNR in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}}{19}{table.caption.42}%
+\contentsline {table}{\numberline {5}{\ignorespaces Overview of the mice, slices and planes used to obtain normalised variance in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}}{25}{table.caption.43}%
+\contentsline {table}{\numberline {6}{\ignorespaces Overview of the mice, slices and planes used to obtain CNR and normalised variance in LR, DL and HR images. TA stands for thorax-abdomen, while HT is used for head-thorax.}}{40}{table.caption.68}%
