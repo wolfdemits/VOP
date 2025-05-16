@@ -86,7 +86,7 @@ Both DL methods demonstrated improved image quality while enabling significantly
 This project was carried out by Darío Conejo Rupp, Magali De Poortere, Wolf De Mits, Fea Suy and Daan Vleurick. 
 The collaboration went smoothly and greatly contributed to achieve a successful result. Every Wednesday, the five of us came together to help each other and discuss the next steps towards our goal. 
 A detailed schedule of the work can be found in Appendix \ref{appendix:Division of tasks}. This schedule was made by the promotors and supervisors. 
-A feasible schedule was proposed and subsequently followed. \\
+It was a feasible schedule so this schedule was followed.  \\
 
 Wolf focused on the anchored path diffusion. Fea and Magali focused on the literature study, report and organization. 
 They also give their input to develop the deep learning together with Daan and Darío.
@@ -102,13 +102,13 @@ Finally, we would like to thank Niels Verhelst and Joran Courtens for acquiring 
 \twocolumn
 \section{Introduction}
 Magnetic resonance imaging (MRI) is a non‐invasive imaging technique that uses magnetic fields and radio frequency pulses to generate detailed anatomical images. 
-Dedicated micro-MRI systems are available for preclinical imaging that provides excellent soft tissue contrast for anatomical visualization in rodent models \cite{marzola2003high}. 
+Dedicated micro-MRI systems are available for preclinical imaging that provides excellent soft tissue contrast for anatomical visualization in rodent models \cite{marzola2003high}.
 To visualize the animal's anatomy with sufficient detail, a high spatial resolution is important. Reducing voxel size improves spatial resolution but also decreases the signal and lowers the signal-to-noise ratio (SNR). 
 On the other hand, increasing acquisition time can enhance signal quality and SNR \cite{grover2015mri}. However, this increases the risk of artifacts, blurring, and motion-related distortions.
 Additionally, longer scan times are often impractical in real-life imaging workflows, where efficiency and throughput are essential. 
 A good balance between spatial resolution, acquisition time and SNR is needed.
 Image processing/restoration tools can be used to improve the quality of the acquired image, but traditional techniques relied on manual tuning or fixed
-algorithms. More recently, deep learning (DL) has emerged, which can learn to restore fine details and reduce noise directly from
+algorithms. More recently, deep learning has emerged, which can learn to restore fine details and reduce noise directly from
 examples of high and low quality images which has been demonstrated to provide better results. These models address the trade-off between resolution and image quality \cite{brown2014magnetic}. 
 
 \section{Data collection}
@@ -116,7 +116,7 @@ examples of high and low quality images which has been demonstrated to provide b
 
 This research was conducted at Infinity, the pre-clinical imaging core facility of Ghent University. 
 The lab provides imaging systems of various modalities, including MRI, PET, SPECT.
-A Bruker pharmascan was used to acquire images for the DL network. To avoid contamination of the lab, the operator must wear a hairnet, face mask, lab coat, latex gloves and shoe covers. 
+We used a Bruker pharmascan to acquire images for our DL network. To avoid contamination of the lab, the operator must wear a hairnet, face mask, lab coat, latex gloves and shoe covers. 
 Metallic objects can be pulled into the MRI or disrupt the magnetic field, so they should be left outside the MRI room. 
 The Infinity lab also contains X-ray and PET/SPECT systems. 
 While X-ray exposure is monitored with personal dosimeters, the Geiger counter at the lab exit is used to detect possible contamination from radioactive tracers used in PET/SPECT imaging.
@@ -124,7 +124,7 @@ While X-ray exposure is monitored with personal dosimeters, the Geiger counter a
 \subsection{Preparation and calibration }
 
 All imaging was performed using a Bruker PharmaScan system operating at 7 Tesla designed for small animal imaging \cite{bruker2025pharmascan}. 
-A dataset of 19 mice was already acquired and provided to us. These made use of the rat brain surface coil. It this project the same coil was used to obtain additional images to maintain uniformity in data acquisition.
+A dataset of 19 mice was already acquired and provided to us. These made use of the rat brain surface coil. We made use of the same coil to obtain additional images to maintain uniformity in data acquisition
 Before the acquisition sequence began, the mouse needed to be placed inside the scanner properly. 
 Each mouse was scanned in two different fields-of-view; once with the head-thorax in the center of the FOV , and once with the thorax-abdomen region (see Figure~\ref{fig:scan-orientations}). 
 Supports and tape were used to fixate the mouse. 
@@ -182,7 +182,7 @@ To obtain matched high-low resolution data in all directions, the following sequ
 In this case ``default'' stands for a 12-minute scan and ``fast'' for a 1-minute scan as can be seen in table ~\ref{tab:mri}.
 After each image sequence is completed, they are reviewed to check for any misalignment, artifacts, or other issues to ensure accuracy and quality. 
 
-All scans were acquired using a T2-weighted rapid acquisition with refocused echoes (RARE) sequence. 
+All scans were acquired using a T2-weighted RARE (rapid acquisition with refocused echoes) sequence. 
 This sequence is often used in preclinical imaging because it produces images that have high contrast between different soft tissues. 
 T2-weighted images highlight  differences in transverse relaxation time, which reflects how quickly protons lose phase coherence after excitation by a radio frequency pulse. 
 This signal decay changes depending on its interaction within different types of tissues. 
@@ -192,7 +192,7 @@ As a result, fluids will appear brighter than muscle and fat in the image.
 From a technical perspective, the T2-weighted contrast is created by selecting an appropriate echo time (TE) and repetition time (TR). 
 The echo time is the time between the initial radio frequency pulse and the measured MRI signal. 
 A longer TE allows more time for tissues with a short T2 to lose their signal, resulting in them looking darker on the image. 
-Tissues with longer T2 values maintain more signal and will look brighter. TR refers to the time between successive excitations of the same tissue slice. 
+Tissues with longer T2 values maintain more signal and will look brighter. Repetition time (TR) refers to the time between successive excitations of the same tissue slice. 
 Specifically for T2-weighted images, a longer TR is used, minimizing the influence of T1 relaxation. For this study a TE of 37.1ms and TR of 4000ms are used. 
 This provides a strongly T2-weighted image \cite{mrimaster2024} \cite{chavhan2009t2star}.  
 
@@ -201,11 +201,11 @@ This provides a strongly T2-weighted image \cite{mrimaster2024} \cite{chavhan200
 
 In table ~\ref{tab:mri} the parameters can be found, which were used for the 1-minute low resolution and 12-minute high resolution scans. 
 These values were selected in function of the desired acquisition time, image quality and SNR. 
-The matrix size determines the level of detail in an image with the high-resolution (HR) scan (300x300 pixels) capturing finer structures compared to that of the low-resolution (LR) scan (150x150 pixels). 
+The matrix size determines the level of detail in an image with the high-resolution scan (300x300 pixels) capturing finer structures compared to that of the low-resolution scan (150x150 pixels). 
 Other parameters such as repetition time, echo time and thickness remained constant for consistency. The field of view also stays the same at 3 cm x 3 cm to capture the same region of interest. 
 An important difference between the two scans is the in-plane resolution. The lower this value, the higher resolution the visualisation. 
 The 12-minute scan (0,01 cm/pixel) is more precise while the 1-minute scan (0,02 cm/pixel) is faster but has less detail. 
-To significantly enhance SNR by reducing noise, the HR scan uses five averages per slice.\\
+To significantly enhance SNR by reducing noise, the high-resolution scan uses five averages per slice.\\
 \\
 In the summer of 2024 an internship was done by Verhelst Niels and Courtens Joran \cite{verhelst2025denoising}. 
 The data that they acquired was used in combination with the data acquired in this project. During the internship, 19 mice were scanned. 
@@ -214,7 +214,7 @@ In the project, the data of 5 mice were acquired.
 
 \begin{table}[h]
 \centering
-\caption{\label{tab:mri} Overview of the scan and image parameters used to acquire high- and LR data of mice.}
+\caption{\label{tab:mri} Overview of the scan and image parameters used to acquire high- and low-resolution data of mice.}
 \resizebox{0.8\linewidth}{!}{
 \begin{tabular}{l|c|c}
 \toprule
@@ -239,7 +239,7 @@ In total, 24 mice (19 + 5) were acquired each in two regions (head-thorax and th
 
 \section{Pre-processing and data augmentation}
 
-Pre-processing of the slices is a crucial step in preparing the data for the DL model. 
+Pre-processing of the slices is a crucial step in preparing the data for the deep learning model. 
 This stage ensures the data is uniform and optimized for training. 
 
 \subsection{Removal of bad image slices}
@@ -251,30 +251,31 @@ Once bad slices were identified, they were removed from the used dataset (see ap
 \subsection{Cropping of the image slices}
 
 Cropping is a commonly used image-manipulation process. The obtained MRI images contained lots of background noise which interferes with the performance of the model. 
-To counter this problem the images were cropped ensuring that the region of interest was intact (see appendix \ref{Appendix: Figures Preprocessing}: Figure~\ref{fig:comparision-cropped}).  
+To counter this problem the images were cropped ensuring that our region of interest was intact (see appendix \ref{Appendix: Figures Preprocessing}: Figure~\ref{fig:comparision-cropped}).  
 
 \subsection{Zarr arrays}
 
 The acquired data were first converted into Zarr arrays to compress the large volume of data while maintaining image quality. 
 Unlike other formats this enables faster access since specific slices can be loaded instead of the entire dataset.
-The LR image were upsampled using nearest-neighbor interpolation (order=0) with a zoom factor of 2 to match the HR image dimensions. 
+The low-resolution image were upsampled using nearest-neighbor interpolation (order=0) with a zoom factor of 2 to match the high-resolution image dimensions. 
 
 \subsection{Normalization}
 
-Mean normalization was performed, each LR image was divided by its mean intensity, and the same mean value was applied as a normalization factor for the corresponding HR image.  
-Both LR and HR images were converted for compatibility with PyTorch models.
+Mean normalization was performed, each low-resolution image was divided by its mean intensity, and the same mean value was applied as a normalization factor for the corresponding high-resolution image.  
+Both low-resolution and high-resolution images were converted for compatibility with PyTorch models.
 
 \subsection{Padding and random flipping}
 The images were randomly flipped horizontally and vertically with a 50\% probability, to introduce variations.
-This is done during network training and improves the model generalization. Since input may have varying dimensions, the images were padded to match the largest width and height within each batch, ensuring uniform sizes for batch processing.
+This is done during network training. 
+This improves the model generalization. Since input may have varying dimensions, the images were padded to match the largest width and height within each batch, ensuring uniform sizes for batch processing.
 
 
 \section{Neural Network and Training Process}
 \subsection{Encoder-Decoder Denoising Model}
-For the denoising DL model, a convolutional neural network based on the U-Net architecture was used. 
+For the denoising deep learning model, a convolutional neural network based on the U-Net architecture was used. 
 U-Net is a form of autoencoder, consisting of two main parts: an encoder and a decoder (see Figure~\ref{fig:U-Net}) \cite{ronneberger2015unet}.
 
-The input to the network is a LR ($150 \times 150$ pixels), which is first upsampled via interpolation to match the HR target size ($300 \times 300$ pixels). 
+The input to the network is a low-resolution ($150 \times 150$ pixels), which is first upsampled via interpolation to match the high-resolution target size ($300 \times 300$ pixels). 
 The network then processes this input to produce a denoised output with a higher signal-to-noise ratio (SNR).
 
 The encoder comprises of a series of convolutional layers with activation functions followed by downsampling steps (e.g., pooling or strided convolutions). 
@@ -300,13 +301,13 @@ The rationale behind using this U-Net structure is that the encoder condenses an
 
 
 \subsection{Encoder-Decoder Model: Hyperparameter Optimization}
-To get the best results for the DL model for micro MRI image denoising and super-resolution, the hyperparameters need to be fine-tuned. 
+To get the best results for the deep learning model for micro MRI image denoising and super-resolution, the hyperparameters need to be fine-tuned. 
 Given the number of components and interactions within the model, manual tuning would be inefficient and inconsistent. 
 Therefore, the open-source optimization software Optuna was used \cite{datacamp_optuna}. 
 
 Each trial corresponds to the training of the model with a specific set of hyperparameters. 
 The performance metrics are recorded after each trial, for example a validation loss. These metrics are used as a guide for the search. 
-A built-in sampler selects new parameter values to explore, while a pruners stops trials early if the model is clearly not improving. 
+A built-in sampler selects new parameter values to explore, while a pruner stops trials early if the model is clearly not improving. 
 This combination is especially helpful to reduce the number of trainings that need to be run, and to save computational resources. 
 
 One of the advantages of Optuna is its define-by-run approach \cite{10.1145/3292500.3330701}. 
@@ -315,7 +316,7 @@ This gives more flexibility, especially in cases where certain parameters are on
 Instead of testing all combinations blindly, Optuna can selectively explore subsets of the parameter space based on earlier decisions within the same trial. 
 The avoidance of meaningless testing makes the optimizations process  more efficient. 
 
-Overall Optuna played a key role in helping reach a well-performing model more efficiently, and ensured that the final configuration was based on data-driven search rather than trial and error.
+Overall Optuna played a key role in helping reach a well-performing model more efficiently, and ensured that our final configuration was based on data-driven search rather than trial and error.
 
 In summary, the hyperparameter optimization explored a wide variety of configurations for the network structure. 
 However, to ensure a fully optimized model, it is equally important to fine-tune the training process itself.
@@ -400,7 +401,7 @@ Without an activation function, the network would behave like a linear system an
 Different options were tested such as ReLU,  LeakyReLU, ELU and PReLu. Each of these options come with their own set of advantages and difficulties. 
 ReLU (Rectified Linear Unit) is most commonly used as an activation function because of its simplicity and computational efficiency. 
 This function \ref{eq:4} returns the positive inputs directly and zero if negative. One of the limitations is a phenomenon called `dying neurons`,  if a neuron only receives negative inputs, it will always output zero and stop learning.
-LeakyReLU addresses this problem by allowing small negative outputs \cite{relu}. This function \ref{eq:5} helps keep neurons active and keeping them active. 
+LeakyReLU addresses this problem by allowing small negative outputs \cite{relu}. This function \ref{eq:5} helps keep neurons active. 
 This technique keeps the simplicity or ReLU while improving stability. 
 ELU is similar to LeakyReLU in sense that negative outputs are generated, but in this case with a smooth exponential curve \ref{eq:6}  instead of a constant curve. 
 Finally, PReLU (Parametric ReLU) also starts from LeakyReLU but in this case the negative slope is a learnable parameter and not a fixed value. 
@@ -437,7 +438,7 @@ a x & \text{if } x < 0
 \end{equation}
 
 \paragraph{Residual learning}
-With residual learning instead of predicting the final HR images the model learns the difference between the low- and HR, this is called the residual. 
+With residual learning instead of predicting the final high-resolution images the model learns the difference between the low- and high-resolution, this is called the residual. 
 After training, the residual is added back onto the input image to produce the final image. This method has its advantages. 
 Learning the missing information is often faster and easier than predicting the entire image. This can lead to faster and better convergence. 
 In this project residual learning is an optional feature, which can be set True or False. Optuna was used to explore if enabling led to better performance.
@@ -506,7 +507,7 @@ This can result in faster convergence \cite{sanghvirajit-2025}.
 
 
 \paragraph{Loss function}\label{loss_function}
-The loss function defines how well the model is performing by evaluating the prediction against the target images. 
+The loss function defines how well our model is performing by evaluating the prediction against the target images. 
 It guides the process by providing a measure of error which then can be minimized during training. 
 Three loss functions were tested: Mean Squared Error (MSE) , Mean Absolute Error (MAE) and a hybrid loss. 
 MSE penalizes the squared difference between the predicted and true pixel values. 
@@ -561,7 +562,7 @@ Too few epochs can result in underfitting, while too many may lead to overfittin
 To complement the direct image-to-image denoising approach discussed earlier, a second model was implemented: the Anchored Path Diffusion Denoising Model (APDDM). 
 This method is based on the original DDPM framework by Ho et al. (2020) \cite{DDPM}. 
 A schematic representation can be found in Figure \ref{fig:PDDM} and Figure \ref{fig:APDDM} for DDPM and APDDM, respectively.
-Unlike DDPM, which is trained on unpaired data and gradually adds Gaussian noise until the image becomes entirely random, APDDM is adapted for use with paired high- and low-SNR MRI images, in this case, the 12-minute HR scans and the 1-minute LR scans.
+Unlike DDPM, which is trained on unpaired data and gradually adds Gaussian noise until the image becomes entirely random, APDDM is adapted for use with paired high- and low-SNR MRI images, in this case, the 12-minute high-resolution scans and the 1-minute low-resolution scans.
 Instead of diffusing toward a generic Gaussian distribution, APDDM anchors the diffusion process around the actual low-SNR image. This allows the model to introduce realistic, data-driven noise during training.
 Moreover, APDDM does not rely on variational inference, but instead follows a more controlled and interpretable forward process tailored to the dataset.
 These changes make it better suited for applications like medical imaging, where noise is often structured and non-Gaussian.
@@ -635,8 +636,8 @@ This setup allows the network to focus on denoising realistic degraded images, g
 \end{figure*}
 
 \subsubsection{Integration}
-APDDM is particularly well suited for the micro-MRI dataset that is used, where paired scans with varying SNR levels are available. 
-By using real residuals between the paired images as noise sample, the forward process creates realistic, data-driven noisy versions of the HR images. 
+APDDM is particularly well suited for our micro-MRI dataset, where paired scans with varying SNR levels are available. 
+By using real residuals between the paired images as noise sample, the forward process creates realistic, data-driven noisy versions of the high-resolution images. 
 This ensures that the denoising task is meaningful and well-aligned with the expected variation in practice. 
 Furthermore, the ability to modulate noise strength and variance offers great control over training difficulty. 
 As an example, increasing noise allows for more challenging samples, improving the model's robustness to varying noise levels in unseen data. 
@@ -667,8 +668,8 @@ In the script, the training, validation and test mice were defined. A detailed o
 
 \subsection{Visual comparison}
 A visual inspection can also be done to evaluate the quality of the reconstructed images. 
-The visual comparision will compare the residuals of HR and LR images to the residuals of HR and DL images. 
-Ideally the residual of HR and images should be close to zero in most regions, indicating an accurate reconstruction. 
+The visual comparision will compare the residuals of high-resolution and low-resolution images to the residuals of high-resolution and deep-learning images. 
+Ideally the residual of high-resolution and deep-learning images should be close to zero in most regions, indicating an accurate reconstruction. 
 
 
 \subsection{Mean squared error}
@@ -682,13 +683,13 @@ If there is no error, the MSE will become zero. Formula \ref{eq:MSE} can be used
 Here, S(i, j) is the observed value, and $\hat{S}(i, j)$  is the corresponding predicted value. 
 X represents the number of pixels in a row and y denotes the number of pixels in a column. \cite{mseJim}
 
-The MSE was calculated for the high resolution and the result of the DL model. After these calculations the ratio is taken of these two.
+The MSE was calculated for the high resolution and the result of the deep learning model. After these calculations the ratio is taken of these two.
 
 \subsection{Structural similarity index measure}\label{Structural similarity index measure}
 
 As previously introduced in section \ref{loss_function}, the structural similarity index measure (SSIM) is also used independently as an evaluation metric in this study.  
 While it forms part of the hybrid loss function, SSIM is valuable on its own for assessing perceptual image quality, as it accounts for luminance, contrast, and structural consistency.
-In this context, SSIM is used to compare the predicted images to the HR reference scans.  
+In this context, SSIM is used to compare the predicted images to the high-resolution reference scans.  
 This is particularly relevant in medical imaging, where preserving structural details is critical.  
 The SSIM score ranges from 0 to 1, with values closer to 1 indicating higher structural similarity and visual fidelity \cite{dosselmann-2009}.
 
@@ -876,7 +877,7 @@ Subtle textures, especially within and around the spine, are smoothed out.
 \end{figure*}
 
 
-In Figure \ref{fig:val_2} the yellow arrow is pointing to the lung cavity, where the DL output preserves some fine internal structures,
+In Figure \ref{fig:val_2} the yellow arrow is pointing to the lung cavity, where the deep learning output preserves some fine internal structures,
 that are obscured by noise in the LR image. This demonstrates that the DL model can retain anatomical detail in high contrast regions. 
 The green circle on the other hand highlights a region where the noisiness in the LR image is replaced by blurring in the DL output. 
 While the DL network successfully suppresses random noise, it also removes some potential subtle textures, which can be seen in the HR image. 
@@ -1014,7 +1015,7 @@ The DL output has suppressed some echo artifacts that are present in the LR imag
 \section{Discussion}
 \subsection{First results}
 After obtaining the first results, a visual validation was made. At first sight, the results were very promising. 
-Figure \ref{fig:first_sagittal}, Figure \ref{fig:first_transax} and Figure \ref{fig:first_coronal} shows that the DL image has clearly higher quality and sharper details compared to the low resolution (LR) image at the left side. 
+Figure \ref{fig:first_sagittal}, Figure \ref{fig:first_transax} and Figure \ref{fig:first_coronal} shows that the deep learning (DL) image has clearly higher quality and sharper details compared to the low resolution (LR) image at the left side. 
 The DL image approaches the high resolution (HR), but still has noise and structures that are not totally visible. 
 Also, some parts are depicted more black than in the HR.
 The maximum intensity of the DL image is always lower than the one of the HR and the one of the LR. 
@@ -1026,7 +1027,7 @@ As said, the results are very promising but there is also room for improvement. 
 
 \subsection{Trained hyperparameters}
 The results of the hyperparameter optimization provide insights into the performance of the model. 
-Several key hyperparameter choices reflect current best practices in DL for medical image restoration, while others diverge in notable ways
+Several key hyperparameter choices reflect current best practices in deep learning for medical image restoration, while others diverge in notable ways
 
 The feature dimensions were [128,128,64], this does deviate from the typical dimension used in a U-Net design where feature depth increases with depth (e.g. [64,128,256]).
 This setup resembles an `inverted` channel structure, where more filters are placed at shallow layers rather than deep layers.
@@ -1045,7 +1046,7 @@ This upsampling method does not learn to add high-frequency details \cite{kolari
 The consistent selection of bilinear upsampling in high-performing trials suggests that its simplicity and robustness were well-suited for this task.
  
 Residual connections were disabled which is an unexpected result which contrasts with many image restoration models that benefit from residual learning. 
-In this case the LR and HR images were relatively similar in structure and intensity, making transformations less complex.
+In this case the low-resolution and high-resolution images were relatively similar in structure and intensity, making transformations less complex.
 This reduces the benefit of residual modeling. 
 The U-Net's skip connections inherently serve a similar role to residuals, which likely compensated for this. 
 This allows effective feature reuse and reduces the need for a global residual link \cite{xu2024}.
@@ -1053,7 +1054,7 @@ This allows effective feature reuse and reduces the need for a global residual l
 The learning rate was consistently selected in the lower range, supporting gradual and stable learning. 
 The chosen scheduler, step learning rate, reduces the learning rate at fixed intervals. 
 This allows the network to learn quickly during early eoichs and refine weights more delicately later in training. 
-This balance is preferred for restoring subtle textures in HR data. 
+This balance is preferred for restoring subtle textures in high-resolution data. 
 
 Certain parameters were fixed prior to tuning, based on theoretical justification and preliminary experiments. 
 The activation function was set to ReLU, chosen over alternatives such as LeakyReLU, PReLU, or ELU. 
@@ -1089,7 +1090,7 @@ The loss of structural information is still present, but less than previously.
 First of all, it must be noted that the APDDM model is trained on slightly different normalisation techniques and hyperparameters, in the intrest of time. 
 It can be observed that the background noise around the mouse gets smoothed out nicely, while still preserving and sharpening the edges of the anatomy. \\
 When comparing with the results of the base UNet, the darkening of certain regions of the images is less of a problem in the case of the APDDM results, which might be attributed to the use of a different normalization technique. 
-Some parts of the anatomy do get oversmoothed like in the case of the base UNet, as discussed above, which results in some anatomical structures not being visible, while being visible on the HR images. \\
+Parts of the anatomy show signs of excessive smoothing, similar as in the case of the base UNet, as discussed above, which results in some anatomical structures not being visible, while being visible on the HR images. \\
 The most import part is that the simplfied APDDM was succesfully implemented, and was able to denoise the images, as seen by comparing HR-LR and HR-DL images.
 
 
@@ -1099,10 +1100,10 @@ The most import part is that the simplfied APDDM was succesfully implemented, an
 In all cases, the DL output appears to be smoother than the HR reference. This over-smoothing is a known effect of using MSE loss. 
 This is due to the network learning to average high-frequency patterns which results in blurred textures. 
 The residuals of DL-HR consistently have lower amplitudes than the HR-LR, this means the network shrinks the differences but is unable to restore all fine details \cite{MSE}. 
-MSE encourages finding pixel-wise averages of solutions, producing overly-smooth results. A visual inspection confirms this.
+MSE encourages finding pixel-wise averages of solutions, producing overly-smooth results. Our visual inspection confirms this.
 
 \subsubsection{MSE and SSIM}
-High SSIM values in Mouse 23 (Transax slice 4) demonstrate accurate preservation of simpler structures. The lower SSIM in Mouse 7 (Sagittal slice 11) however, suggests difficulty in accurately reconstructing its more complex anatomical details. The overall low MSE values, imply that the overall pixel intensity is preserved well in the DL reconstruction.  
+High SSIM values in Mouse 23 (Transax slice 4) demonstrate accurate preservation of simpler structures. The lower SSIM in Mouse 7 (Sagittal slice 11) however, suggests difficulty in accurately reconstructing its more complex anatomical details. The overall low MSE values, imply that the overall pixel intensity is preserved well in the deep learning reconstruction.  
 These MSE values together with the varying SSIM values, suggests that while the network correctly preserves the general appearance, the accuracy of fine anatomical details varies. Further investigation into the specific anatomical features present in the slices with lower SSIM could be a guide for how the model can be improved.
 
 \subsubsection{Contrast-to-noise ratio}
@@ -1114,7 +1115,7 @@ On the other hand, a HR image has less noise, which means the difference between
 Furthermore, interpolation is done, which results in a smoothing. This smoothing alters the intensity distribution and direclty implies CNR.
 
 After these observations were made, the normalized standard deviation was also evaluated. As shown in Table \ref{tab:norm_var}, a clear and consistent pattern emerges: the DL-normalized standard deviation is consistently the lowest across all cases, while the LR-normalized standard deviation is consistently the highest.
-This trend can be attributed to the behavior of the DL model, which is trained to reduce the noise while preserving structural information. As a result, the standard deviation of the background region is significantly reduced, while the mean background intensity remains relatively stable.
+This trend can be attributed to the behavior of the deep learning model, which is trained to reduce the noise while preserving structural information. As a result, the standard deviation of the background region is significantly reduced, while the mean background intensity remains relatively stable.
 This leads to lower normalized standard deviation values for DL images, which is indicative of improved image quality and less noise.
 Conversely, the LR image exhibit higher normalized standard deviation due to increased noise levels. In these images, the mean of the background is generally higher.
 A detailed overview is given in Appendix \ref{Appendix: val}.
@@ -1133,15 +1134,15 @@ This also provides a phantom-object of known shape and dimensions, with sharp ed
 The images discussed here can be seen in Figure \ref{fig:lego_phantom_test}.
 Visually, the model produces an output that strongly resembles both the LR and HR images. The model removes noise in the grey regions from the LR image, as well as echo artifacts that can be seen, for example, between the black LEGO pins at the top. The rectangular shapes are preserved, although the training data of mice did not contain many such shapes.
 However, comparing the residuals shows that the LR image is closer to the HR image in terms of the rectangles than the DL image. This could be due to the fact that the model was trained on mouse scans, which, as mentioned, do not contain the sharp edges characteristic of a LEGO brick, and that the model used MSE as the loss function during training. MSE penalizes large pixel errors, so the model tends to smooth out sharp changes.
-The MSE between the DL and HR images is 0.1269, and between the LR and HR images is 0.0737 (an increase of 72\% from the LR to the DL image). This means that if only the pixel-wise error is considered, the LR image remains a better approximation of the HR image than the DL image.
+The MSE between the DL and HR images is 0.1269, and between the LR and HR images is 0.0737 (an increase of 72\% from the LR to the DL image). This means that if we only consider the pixel-wise error, the LR image remains a better approximation of the HR image than the DL image.
 Another indicator of image quality is the Structural Similarity Index Measure (SSIM), as discussed in section \ref{Structural similarity index measure}. The DL and HR images have an SSIM of 0.4548, while the LR and HR images have one of 0.4624. So the SSIMs differ by only 1.6\%, indicating that according to SSIM, neither the LR nor the DL image is clearly a better approximation of the HR image. Very similar conclusions regarding MSE and SSIM can be drawn from examining other slices of the LEGO phantom.
 It is important to note that MSE and SSIM are purely quantitative metrics and should be considered as supplementary to qualitative visual assessment. Despite the DL image having a slightly higher MSE and lower SSIM than the LR image, it remains a strong approximation of the HR image due to its effective denoising and artifact suppression capabilities, also for objects different from mice.
 
 \section{Conclusion}
 
 
-The project successfully developed and validated 2 DL frameworks, U-Net and APDDM, to enhance micro-MRI images through denoising. 
-Both approaches achieved improvements in image quality, allowing for reduced acquisition times, while delivering image quality that improves anatomical visibility compared to LR input, though still not fully equivalent to HR scans. 
+The project successfully developed and validated 2 deep learning frameworks, U-Net and APDDM, to enhance micro-MRI images through denoising. 
+Both approaches achieved improvements in image quality, allowing for reduced acquisition times, while delivering image quality that improves anatomical visibility compared to low-resolution input, though still not fully equivalent to high-resolution scans. 
 
 The U-net model, after hyperparameter tuning via an optimized search framework with Optuna, demonstrated noise reduction. 
 However, due to the loss function MSE, the model showed a tendency to oversmooth fine anatomical details. 
@@ -1151,10 +1152,10 @@ The APDDM approach provided a realistic noise modeling strategy, using the noise
 While this model is still in its early development, APDDM showed very promising results in learning to reconstruct images using data-driven noise paths. 
 This offers a different and possibly more robust direction than conventional methods. 
 
-Validation through both quantitative metrics and visual inspection confirmed that the model enhances LR scans, potentially enabling 1-min scans in preclinical MRI settings, but further model optimization and more training data is required to result in more consistent and robust outcomes.
+Validation through both quantitative metrics and visual inspection confirmed that the model enhances low-resolution scans, potentially enabling 1-min scans in preclinical MRI settings, but further model optimization and more training data is required to result in more consistent and robust outcomes.
 Additionally, an external LEGO phantom scan suggested the networks’s generalization capacity, though it also exposed limitations such smoothing due to the chosen loss function. 
 
-In summary, this project forms a foundation for integrating DL into preclinical imaging workflows, aiding in faster acquisition times without sacrificing diagnostic value. 
+In summary, this project forms a foundation for integrating deep learning into preclinical imaging workflows, aiding in faster acquisition times without sacrificing diagnostic value. 
 Future improvements could explore alternative loss functions, such as SSIM or perceptual losses, and expand the training dataset to include more variation. 
 This could further improve model generalization and detail preservation.
 
@@ -1321,15 +1322,15 @@ Note: $\bold{x}_0$ and $\bold{x}_T^*$ should be normalized images:
 \end{equation}
 and $\bold{x}_T^*$ should be interpolated to match the size of $\bold{x}_0$.\\
 \\
-First a procedure is defined, where a linear interpolation is done between $\bold{x}_0$ and $\bold{x}_T^*$, and add a not yet specified noise term:
+We will start by first defining a procedure, where we linearly interpolate between $\bold{x}_0$ and $\bold{x}_T^*$, and add a not yet specified noise term:
 \begin{equation}
     x_t = (1-\alpha_t)\cdot\bold{x}_0 + \alpha_t\cdot\bold{x}_T^* + noise(t)
 \end{equation}
 
 \subsection{Proposition of the Markovian process}
-Now this is transformed into a Markovian process, by allowing the endpoint to not be exactly $\bold{x}_T$, but rather let the endpoint $\bold{x}_T$ be $\bold{x}_T^*$ in expected value.\\
+We will now transform this into a Markovian process, by allowing the endpoint to not be exactly $\bold{x}_T$, but rather let the endpoint $\bold{x}_T$ be $\bold{x}_T^*$ in expected value.\\
 \\
-If $\bold{x}_t$ is subtracted by $\bold{x}_{t-1}$, which gives:
+If we subtract $\bold{x}_t$ by $\bold{x}_{t-1}$, we get:
 \begin{equation}
     \bold{x}_t - \bold{x}_{t-1} = \alpha_t (\bold{x}_T^* - \bold{x}_0) - \alpha_{t-1} (\bold{x}_T^* - \bold{x}_0) + noise
 \end{equation}
@@ -1341,23 +1342,23 @@ $\Leftrightarrow$
 \begin{equation}
     \bold{x}_t = \bold{x}_{t-1} + \frac{1}{T} \bold{R} + noise
 \end{equation}
-By using a Markov process, a natural diffusion path is created from $\bold{x}_0$ to $\bold{x}_t$, where each step builds up on the previous one. 
-Now define the final Markov process is defined as: 
+By using a Markov process, we create a natural diffusion path from $\bold{x}_0$ to $\bold{x}_t$, where each step builds up on the previous one. 
+We now define our final Markov process as: 
 \begin{equation} \label{eq:f(t)}
     \boxed{\bold{x}_t = q(\bold{x}_{t-1}) = \bold{x}_{t-1} + \frac{1}{T} \bold{R} + f(t) \hat{\epsilon} \hspace{.1cm};\hspace{.5cm} t=1,2,...,T}
 \end{equation}
 
-Where $f(\alpha_t)$ is defined to be a function that is zero for arguments $0$ and $1$, and reaches a maximum of 1 somewhere in the range $[0,1]$. This is the noise schedule function. Let:
+Where we define $f(\alpha_t)$ to be a function that is zero for arguments $0$ and $1$, and reaches a maximum of 1 somewhere in the range $[0,1]$. This is the noise schedule function. Let:
 \begin{equation}
     f(t) = 4\alpha_t(1-\alpha_t) = 4 \frac{t}{T} (1-\frac{t}{T})
 \end{equation}
 This choice of function is arbitrary, but in this way, the noise term is gradually introduced and attenuated again so the course of the diffusion path has a natural way of going from starting point to endpoint. Below, the course of the variance throughout the path will be shown, where it will be clear why such a choice of attenuating noise schedule function is favorable. \\
 \\
-The noise term $\epsilon$ should be distributed according to the real noise in the data:
+The noise term $\epsilon$ should be distributed according to the real noise in our data:
 \begin{equation}
     \epsilon \sim P[noise]
 \end{equation}
-Approximate this empirically by sampling from all the observed residuals in the dataset:
+We will approximate this empirically by sampling from all the observed residuals in our dataset:
 \begin{equation}
     \epsilon \approx \hat{\epsilon} \stackrel{i.i.d.}{\sim} \mathcal{E}_{dataset}
 \end{equation}
@@ -1376,7 +1377,7 @@ This sampling of the noise residual can be done by i.i.d sampling residual bank 
 \subsection{Expected value of the endpoint}
 Note that generally: $\bold{x}_T \neq \bold{x}_T^*$. It will now be shown that the expected value $\mathbb{E}[\bold{x}_T]$ still is $\bold{x}_T^*$:\\
 \\
-Apply a Markov chain T times to the input $\bold{x}_0$:\\
+We apply a Markov chain T times to the input $\bold{x}_0$:\\
 \begin{equation}
     \mathbb{E}[\bold{x}_T] = \mathbb{E}[q(q(...q(\bold{x}_0)..))] = \mathbb{E}[\bold{x}_0 + \frac{T}{T} \bold{R} + \sum_{t=1}^{T} f(t) \cdot \hat{\epsilon}_t] 
 \end{equation}
@@ -1384,24 +1385,24 @@ Because $\bold{R}= \bold{x}_T^* - \bold{x}_0$:
 \begin{equation}
     \mathbb{E}[\bold{x}_T] = \mathbb{E}[\bold{x}_T^* + \sum_{t=1}^{T} f(t) \cdot \hat{\epsilon}_t] = \bold{x}_T^* + \sum_{t=1}^{T} f(t) \cdot \mathbb{E}[\hat{\epsilon}_t]
 \end{equation}
-If assuming $\mathbb{E}[\hat{\epsilon}] = 0$:
+If we assume $\mathbb{E}[\hat{\epsilon}] = 0$:
 \begin{equation}
     \boxed{\mathbb{E}[\bold{x}_T] = \bold{x}_T^*}
 \end{equation}
 
 \subsection{Variance of the endpoint}\label{appendix:var}
-Now derive the expression for the variance on the enpoint $\bold{x}_T$:
+We will now derive the expression for the variance on our enpoint $\bold{x}_T$:
 \begin{multline}
     Var[\bold{x}_T] = Var[q(q(...q(\bold{x}_0)..))] = Var[\bold{x}_0 + \bold{R} + \sum_{t=1}^{T} f(t) \cdot \hat{\epsilon}_t] = Var[\sum_{t=1}^{T} f(t) \cdot \hat{\epsilon}_t]\\ = \sum_{t=1}^{T} f(t)^2 Var[\hat{\epsilon}_t] + \sum_{i \neq j}^{T} f(i) f(j) Cov[\hat{\epsilon}_i, \hat{\epsilon}_j] = \sum_{t=1}^{T} f(t)^2 Var[\hat{\epsilon}_t]
 \end{multline}
-Where $Cov[\hat{\epsilon}_i, \hat{\epsilon}_j] = 0$ is used because the noise samples are independent. \\
-Now using the notation: $Var[\hat{\epsilon}_t] = \sigma_{\epsilon}^2$, and substituting (\ref{eq:f(t)}), which gives:
+Where we used $Cov[\hat{\epsilon}_i, \hat{\epsilon}_j] = 0$ because the noise samples are independent. \\
+Now using the notation: $Var[\hat{\epsilon}_t] = \sigma_{\epsilon}^2$, and substituting (\ref{eq:f(t)}), we get:
 \begin{equation}
     \boxed{Var[\bold{x}_T] = \sigma_{\epsilon}^2 \cdot \sum_{t=1}^{T} f(t)^2 = \frac{8}{15} \frac{T^4 - 1}{T^3} \cdot \sigma_{\epsilon}^2}
 \end{equation}
 Note that for $lim_{T->+\infty} Var[\bold{x}_T] \sim \frac{8}{15} T$.\\
 \\
-Also the general variance throughout the whole path (not just at the endpoint) can be derived:
+We can also derive the general variance throughout the whole path (not just at the endpoint):
 \begin{equation}
     Var[\bold{x}_T] = \sigma_{\epsilon}^2 \cdot \sum_{\tau=1}^{T} f(\tau)^2 = \sigma_{\epsilon}^2 \cdot \frac{8}{15} \frac{1}{T^4} t(t+1)[6t^3 - 15t^2T + 9t^2 + 10tT^2 - 15tT + t + 5T^2 - 1]
 \end{equation}
@@ -1415,17 +1416,17 @@ Also the general variance throughout the whole path (not just at the endpoint) c
 \end{center}
 This exact course of the variance has also been confirmed by numerical simulation.\\
 \\
-It can observed that the variance increases slowly in the beginning, and before the endpoint, it slows down and stabilizes again. This is the reason for the particular choice of the noise schedule function $f(t)$ discussed previously. \textbf{However, a lot of noise schedule choices can be made and should be investigated.}
+We can observe that the variance increases slowly in the beginning, and before the endpoint, it slows down and stabilizes again. This is the reason for the particular choice of the noise schedule function $f(t)$ discussed previously. \textbf{However, a lot of noise schedule choices can be made and should be investigated.}
 
 \subsection{Controlling the variance}
-I will now propose a method of controlling the variance of this path. This way, the variance of the endpoint as a variable parameter can be obtained, and even optimize the model in function of this parameter. Thus the ``degree of noise'' can be controlled.   
-First, the sampled residual $\hat{\epsilon}$ is normalized, so given the variance of the noise is 1:
+I will now propose a method of controlling the variance of this path. This way, we can have the variance of the endpoint as a variable parameter, and even optimize the model in function of this parameter. Thus the ``degree of noise'' can be controlled.   
+First, we will normalize the sampled residual $\hat{\epsilon}$, so we know the variance of the noise is 1:
 \begin{equation}
     \hat{\epsilon'} = \hat{\epsilon} / s_{n,\epsilon}
 \end{equation}
 ($s_{n,\epsilon}$ = population variance of $\mathcal{E}_{dataset}$)\\
-Additional note: an empirical noise distribution has an expected value of 0.\\
-Then the variance is controlled by adding a parameter $\sigma$:
+Additional note: we assume that an empirical noise distribution has an expected value of 0.\\
+We will then control the variance by adding a parameter $\sigma$:
 \begin{equation}
     \boxed{\bold{x}_t = q(\bold{x}_{t-1}) = \bold{x}_{t-1} + \frac{1}{T} \bold{R} + \sigma f(t) \hat{\epsilon'} \hspace{.1cm};\hspace{.5cm} t=1,2,...,T}
 \end{equation}
@@ -1433,17 +1434,17 @@ Where:
 \begin{equation} \label{eq:beta}
     \sigma = \sqrt{\frac{15}{8} * \frac{T^3}{T^4 - 1}} * \beta
 \end{equation}
-Now, the variance of the endpoint is: 
+Now, the variance of our endpoint is: 
 \begin{equation}
     Var[\bold{x}_T] = \beta^2
 \end{equation}
-Now there is full control over the variance of the endpoint, with exception to the stability criterion as described in the following section. 
+We now have full control over the variance of the endpoint, with exception to the stability criterion as described in the following section. 
 
 \subsection{MSE stability}
-Important to note is that there are some constraints on this parameter beta (and thus the variance of the noise term), if the diffusion path needs to converge to $\bold{X}_T^*$. Measuring this in the form of the MSE between $\bold{x}_T$ and $\bold{x}_T^*$, which should not be exceedingly large. \\
+Important to note is that there are some constraints on this parameter beta (and thus the variance of the noise term), if we want the diffusion path to converge to $\bold{X}_T^*$. We will measure this in the form of the MSE between $\bold{x}_T$ and $\bold{x}_T^*$, which should not be exceedingly large. \\
 An important condition that must be met, is that $\bold{x}_t$ becomes more similar to $\bold{x}_T^*$ each step.\\
 \\
- This condition will not be met if the noise term overpowers the term $\frac{1}{T}  \bold{R}$ at a certain step. In other words, the residual term magnitude should be larger than the noise term magnitude in each step, so that the diffusion path still mostly converges towards $x_T^*$. An estimation of the size of the subsequent terms will be made based on their Mean Square value $\frac{1}{i,j}\sum_{i,j} X_{i,j}^2$ (MS value). Also, let $f(t) = 1$, to have a conservative estimation.  \\
+ This condition will not be met if the noise term overpowers the term $\frac{1}{T}  \bold{R}$ at a certain step. In other words, the residual term magnitude should be larger than the noise term magnitude in each step, so that the diffusion path still mostly converges towards $x_T^*$. We will make an estimation of the size of the subsequent terms based on their Mean Square value $\frac{1}{i,j}\sum_{i,j} X_{i,j}^2$ (MS value). We will also let $f(t) = 1$, to have a conservative estimation.  \\
  The diffusion path will converge if for all steps:
 \begin{equation}
     \mathbb{E}[MS(\hat{\epsilon})] \lesssim MS(\frac{1}{T} \bold{R})
@@ -1457,12 +1458,12 @@ $\Leftrightarrow$
     \boxed{\sigma \lesssim \frac{1}{T} RMS(\bold{R}) = \sigma_{crit}}
 \end{equation}
 This last expression is a conservative MSE convergence condition. \\
-Substituting (\ref{eq:beta}) gives the criterion in terms of $\beta$:
+Substituting (\ref{eq:beta}), we get the criterion in terms of $\beta$:
 \begin{equation}
     \beta \lesssim \sqrt{\frac{8}{15} \frac{T^4-1}{T^5}} RMS(\bold{R}) = \beta_{crit}
 \end{equation}
 \\
-This result can be demonstrated by a simulation where beta is varied and the mean square error between $x_T$ and $x_T^*$ is computed over N diffusion path samples (Fig. \ref{fig:beta sweep}). It can be indeed observed that if $\beta$ is within the order of magnitude of $\beta_{crit}$, the diffusion process won't converge towards $x_T^*$ anymore, which manifests itself in an increase in the MSE. 
+This result can be demonstrated by a simulation where beta is varied and the mean square error between $x_T$ and $x_T^*$ is computed over N diffusion path samples (Fig. \ref{fig:beta sweep}). We indeed observe that if $\beta$ is within the order of magnitude of $\beta_{crit}$, the diffusion process won't converge towards $x_T^*$ anymore, which manifests itself in an increase in the MSE. 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.8\linewidth]{beta_sweep.png}
